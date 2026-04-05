@@ -1,316 +1,143 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Categorías — Terapia del Habla</title>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #fff8f0;
-    --card-bg: #ffffff;
-    --accent1: #ff6b6b;
-    --accent2: #ffd93d;
-    --accent3: #6bcb77;
-    --accent4: #4d96ff;
-    --accent5: #c77dff;
-    --accent6: #ff9f43;
-    --text: #2d2d2d;
-    --muted: #888;
-    --radius: 20px;
-    --shadow: 0 8px 30px rgba(0,0,0,0.08);
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
-  header { background: linear-gradient(135deg, #ff6b6b 0%, #ffd93d 50%, #6bcb77 100%); padding: 24px 32px 28px; text-align: center; position: relative; overflow: hidden; }
-  header::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 2px, transparent 2px, transparent 14px); }
-  header h1 { font-family: 'Baloo 2', cursive; font-size: clamp(1.8rem, 5vw, 2.8rem); font-weight: 800; color: #fff; text-shadow: 0 3px 10px rgba(0,0,0,0.15); position: relative; }
-  header p { color: rgba(255,255,255,0.9); font-size: 1rem; margin-top: 4px; position: relative; }
-  nav { display: flex; justify-content: center; gap: 8px; padding: 20px 16px 0; flex-wrap: wrap; }
-  nav button { font-family: 'Nunito', sans-serif; font-size: 0.95rem; font-weight: 700; padding: 10px 22px; border-radius: 50px; border: 2.5px solid transparent; cursor: pointer; transition: all 0.2s; background: #fff; color: var(--muted); box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-  nav button.active { background: var(--accent4); color: #fff; border-color: var(--accent4); transform: translateY(-2px); box-shadow: 0 6px 18px rgba(77,150,255,0.35); }
-  nav button:hover:not(.active) { border-color: var(--accent4); color: var(--accent4); transform: translateY(-1px); }
-  main { max-width: 1100px; margin: 0 auto; padding: 32px 20px 60px; }
-  .screen { display: none; }
-  .screen.active { display: block; }
-  .section-title { font-family: 'Baloo 2', cursive; font-size: 1.5rem; font-weight: 800; margin-bottom: 20px; color: var(--text); }
-  .cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; }
-  .cat-card { background: var(--card-bg); border-radius: var(--radius); padding: 28px 16px 20px; text-align: center; cursor: pointer; box-shadow: var(--shadow); transition: transform 0.18s, box-shadow 0.18s; border: 3px solid transparent; position: relative; overflow: hidden; }
-  .cat-card:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 16px 40px rgba(0,0,0,0.13); }
-  .cat-card .emoji { font-size: 3rem; display: block; margin-bottom: 10px; }
-  .cat-card .cat-name { font-family: 'Baloo 2', cursive; font-weight: 800; font-size: 1.05rem; color: var(--text); }
-  .cat-card .cat-count { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
-  .back-btn { display: inline-flex; align-items: center; gap: 6px; background: none; border: none; font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 700; color: var(--accent4); cursor: pointer; margin-bottom: 24px; padding: 6px 0; transition: gap 0.15s; }
-  .back-btn:hover { gap: 10px; }
-  .flashcard-area { display: flex; flex-direction: column; align-items: center; gap: 24px; }
-  .progress-bar-wrap { width: 100%; max-width: 500px; background: #e8e8e8; border-radius: 50px; height: 10px; overflow: hidden; }
-  .progress-bar-fill { height: 100%; border-radius: 50px; background: linear-gradient(90deg, var(--accent4), var(--accent5)); transition: width 0.4s; }
-  .flashcard { width: 100%; max-width: 420px; background: var(--card-bg); border-radius: 28px; box-shadow: 0 12px 50px rgba(0,0,0,0.12); padding: 48px 32px; text-align: center; position: relative; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-  @keyframes popIn { from { opacity: 0; transform: scale(0.88); } to { opacity: 1; transform: scale(1); } }
-  .flashcard .card-emoji { font-size: 5rem; }
-  .flashcard .card-word { font-family: 'Baloo 2', cursive; font-size: 2.2rem; font-weight: 800; margin-top: 16px; color: var(--text); }
-  .flashcard .card-num { position: absolute; top: 16px; right: 20px; font-size: 0.82rem; font-weight: 700; color: var(--muted); }
-  .card-controls { display: flex; gap: 12px; }
-  .btn { font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 700; padding: 14px 32px; border-radius: 50px; border: none; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; }
-  .btn:active { transform: scale(0.96); }
-  .btn-primary { background: var(--accent4); color: #fff; box-shadow: 0 6px 20px rgba(77,150,255,0.4); }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(77,150,255,0.45); }
-  .btn-secondary { background: #f0f0f0; color: var(--text); }
-  .btn-secondary:hover { background: #e4e4e4; }
-  .quiz-wrap { max-width: 600px; margin: 0 auto; }
-  .quiz-question { font-family: 'Baloo 2', cursive; font-size: 1.5rem; font-weight: 800; text-align: center; margin-bottom: 8px; }
-  .quiz-subtitle { text-align: center; color: var(--muted); font-size: 0.95rem; margin-bottom: 28px; }
-  .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  .quiz-opt { background: var(--card-bg); border-radius: 20px; padding: 24px 16px; text-align: center; cursor: pointer; border: 3px solid transparent; box-shadow: var(--shadow); transition: all 0.2s; font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 700; }
-  .quiz-opt .opt-emoji { font-size: 2.6rem; display: block; margin-bottom: 8px; }
-  .quiz-opt:hover:not(:disabled) { transform: translateY(-4px); border-color: var(--accent4); }
-  .quiz-opt.correct { border-color: var(--accent3); background: #efffef; }
-  .quiz-opt.wrong { border-color: var(--accent1); background: #fff0f0; }
-  .quiz-opt:disabled { cursor: default; }
-  .quiz-feedback { text-align: center; font-family: 'Baloo 2', cursive; font-size: 1.4rem; font-weight: 800; margin-top: 20px; min-height: 36px; }
-  .quiz-feedback.correct { color: var(--accent3); }
-  .quiz-feedback.wrong { color: var(--accent1); }
-  .quiz-nav { display: flex; justify-content: center; margin-top: 20px; }
-  .score-display { display: flex; justify-content: center; gap: 32px; margin-bottom: 28px; flex-wrap: wrap; }
-  .score-chip { background: var(--card-bg); border-radius: 16px; padding: 16px 28px; text-align: center; box-shadow: var(--shadow); }
-  .score-chip .score-num { font-family: 'Baloo 2', cursive; font-size: 2rem; font-weight: 800; }
-  .score-chip .score-label { font-size: 0.82rem; color: var(--muted); font-weight: 600; }
-  .score-chip.green .score-num { color: var(--accent3); }
-  .score-chip.red .score-num { color: var(--accent1); }
-  .score-chip.blue .score-num { color: var(--accent4); }
-  .result-screen { text-align: center; padding: 40px 20px; animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-  .result-screen .big-emoji { font-size: 6rem; }
-  .result-screen h2 { font-family: 'Baloo 2', cursive; font-size: 2.2rem; font-weight: 800; margin: 16px 0 8px; }
-  .result-screen p { color: var(--muted); font-size: 1rem; margin-bottom: 28px; }
-  .result-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-  .cat-card:nth-child(6n+1) { border-color: #ffe8e8; background: linear-gradient(160deg,#fff8f8,#fff); }
-  .cat-card:nth-child(6n+2) { border-color: #fff8d6; background: linear-gradient(160deg,#fffdf0,#fff); }
-  .cat-card:nth-child(6n+3) { border-color: #e8f8ea; background: linear-gradient(160deg,#f5fff6,#fff); }
-  .cat-card:nth-child(6n+4) { border-color: #e8f0ff; background: linear-gradient(160deg,#f5f8ff,#fff); }
-  .cat-card:nth-child(6n+5) { border-color: #f4e8ff; background: linear-gradient(160deg,#faf5ff,#fff); }
-  .cat-card:nth-child(6n+6) { border-color: #ffe8d6; background: linear-gradient(160deg,#fff9f5,#fff); }
-  @media (max-width: 480px) {
-    .flashcard { padding: 36px 20px; }
-    .flashcard .card-emoji { font-size: 4rem; }
-    .flashcard .card-word { font-size: 1.8rem; }
-    nav button { font-size: 0.85rem; padding: 8px 16px; }
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Categorías Semánticas</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Nunito:wght@400;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
-<header>
-  <h1>🌈 Categorías Semánticas</h1>
-  <p>Terapia del habla para niños</p>
-</header>
-
-<nav>
-  <button class="active" onclick="showTab('home')">🏠 Inicio</button>
-  <button onclick="showTab('flashcards')">🃏 Tarjetas</button>
-  <button onclick="showTab('quiz')">❓ Quiz</button>
-</nav>
-
-<main>
-  <div id="screen-home" class="screen active">
-    <p class="section-title">Elige una categoría</p>
-    <div class="cat-grid" id="home-grid"></div>
-  </div>
-
-  <div id="screen-flashcards" class="screen">
-    <button class="back-btn" onclick="goHome()">← Volver</button>
-    <div class="flashcard-area">
-      <div class="progress-bar-wrap">
-        <div class="progress-bar-fill" id="fc-progress"></div>
-      </div>
-      <div class="flashcard" id="flashcard">
-        <span class="card-num" id="fc-num"></span>
-        <span class="card-emoji" id="fc-emoji"></span>
-        <div class="card-word" id="fc-word"></div>
-      </div>
-      <div class="card-controls">
-        <button class="btn btn-secondary" onclick="fcPrev()">← Anterior</button>
-        <button class="btn btn-primary" onclick="fcNext()" id="fc-next-btn">Siguiente →</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="screen-quiz" class="screen">
-    <button class="back-btn" onclick="goHome()">← Volver</button>
-    <div id="quiz-game">
-      <div class="score-display">
-        <div class="score-chip green"><div class="score-num" id="q-correct">0</div><div class="score-label">✅ Correctas</div></div>
-        <div class="score-chip red"><div class="score-num" id="q-wrong">0</div><div class="score-label">❌ Incorrectas</div></div>
-        <div class="score-chip blue"><div class="score-num" id="q-total">0</div><div class="score-label">📋 Total</div></div>
-      </div>
-      <div class="quiz-wrap">
-        <div class="quiz-question" id="q-question"></div>
-        <div class="quiz-subtitle" id="q-subtitle"></div>
-        <div class="quiz-options" id="q-options"></div>
-        <div class="quiz-feedback" id="q-feedback"></div>
-        <div class="quiz-nav">
-          <button class="btn btn-primary" id="q-next" onclick="nextQuestion()" style="display:none">Siguiente →</button>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-icon">🌈</div>
+        <div>
+          <h1>Categorías Semánticas</h1>
+          <p>Terapia del habla para niños</p>
         </div>
       </div>
-    </div>
-    <div id="quiz-result" class="result-screen" style="display:none">
-      <div class="big-emoji" id="r-emoji"></div>
-      <h2 id="r-title"></h2>
-      <p id="r-msg"></p>
-      <div class="result-btns">
-        <button class="btn btn-primary" onclick="restartQuiz()">🔄 Jugar de nuevo</button>
-        <button class="btn btn-secondary" onclick="goHome()">🏠 Inicio</button>
-      </div>
-    </div>
+    </header>
+
+    <nav class="main-nav">
+      <button class="nav-btn active" onclick="showTab('home')">🏠 Inicio</button>
+      <button class="nav-btn" onclick="openDefaultFlashcards()">🃏 Tarjetas</button>
+      <button class="nav-btn" onclick="showTab('quiz')">❓ Quiz</button>
+    </nav>
+
+    <main class="main-content">
+      <!-- HOME -->
+      <section id="screen-home" class="screen active">
+        <div class="section-head">
+          <h2>Selecciona una categoría</h2>
+          <p>Toca una categoría para comenzar con las tarjetas.</p>
+        </div>
+
+        <div id="home-grid" class="cat-grid"></div>
+      </section>
+
+      <!-- FLASHCARDS -->
+      <section id="screen-flashcards" class="screen">
+        <div class="screen-top">
+          <button class="ghost-btn" onclick="goHome()">← Volver</button>
+          <div class="screen-title-wrap">
+            <h2 id="flashcard-category-title">Tarjetas</h2>
+            <p id="flashcard-category-subtitle">Escucha, observa y repite</p>
+          </div>
+        </div>
+
+        <div class="flashcard-wrap">
+          <div class="progress-wrap">
+            <div class="progress-bar" id="fc-progress"></div>
+          </div>
+
+          <div class="flashcard-card" id="flashcard">
+            <div class="card-counter" id="fc-num">1 / 1</div>
+            <div class="card-emoji" id="fc-emoji">🐶</div>
+            <div class="card-word" id="fc-word">Perro</div>
+
+            <div class="card-actions">
+              <button class="speak-btn" onclick="speakCurrentWord()">🔊 Escuchar</button>
+            </div>
+          </div>
+
+          <div class="auto-read-box">
+            <label class="toggle-row">
+              <input type="checkbox" id="autoSpeakToggle" />
+              <span>Leer automáticamente cada tarjeta</span>
+            </label>
+          </div>
+
+          <div class="controls-row">
+            <button class="secondary-btn" onclick="fcPrev()">← Anterior</button>
+            <button class="primary-btn" onclick="fcNext()" id="fc-next-btn">Siguiente →</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- QUIZ -->
+      <section id="screen-quiz" class="screen">
+        <div class="screen-top">
+          <button class="ghost-btn" onclick="goHome()">← Volver</button>
+          <div class="screen-title-wrap">
+            <h2>Quiz</h2>
+            <p>Encuentra cuál no pertenece</p>
+          </div>
+        </div>
+
+        <div id="quiz-game">
+          <div class="score-row">
+            <div class="score-box">
+              <span class="score-number" id="q-correct">0</span>
+              <span class="score-label">Correctas</span>
+            </div>
+            <div class="score-box">
+              <span class="score-number" id="q-wrong">0</span>
+              <span class="score-label">Incorrectas</span>
+            </div>
+            <div class="score-box">
+              <span class="score-number" id="q-total">0</span>
+              <span class="score-label">Respondidas</span>
+            </div>
+          </div>
+
+          <div class="quiz-card">
+            <h3 id="q-question">¿Cuál NO pertenece?</h3>
+            <p id="q-subtitle">Tema: Animales</p>
+
+            <div id="q-options" class="quiz-options"></div>
+
+            <div id="q-feedback" class="quiz-feedback"></div>
+
+            <div class="quiz-next-row">
+              <button id="q-next" class="primary-btn" onclick="nextQuestion()" style="display: none;">
+                Siguiente →
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="quiz-result" class="result-card" style="display: none;">
+          <div class="result-emoji" id="r-emoji">🏆</div>
+          <h2 id="r-title">¡Excelente!</h2>
+          <p id="r-msg">Respondiste 8 de 10 correctamente.</p>
+
+          <div class="result-actions">
+            <button class="primary-btn" onclick="restartQuiz()">🔄 Jugar de nuevo</button>
+            <button class="secondary-btn" onclick="goHome()">🏠 Inicio</button>
+          </div>
+        </div>
+      </section>
+    </main>
   </div>
-</main>
 
-<script>
-const categories = [
-  { id:'animales', name:'Animales', emoji:'🐾', items:[{word:'Perro',emoji:'🐶'},{word:'Gato',emoji:'🐱'},{word:'Vaca',emoji:'🐮'},{word:'Caballo',emoji:'🐴'},{word:'Pájaro',emoji:'🐦'},{word:'Pez',emoji:'🐟'},{word:'Conejo',emoji:'🐰'},{word:'Cerdo',emoji:'🐷'}] },
-  { id:'frutas', name:'Frutas', emoji:'🍓', items:[{word:'Manzana',emoji:'🍎'},{word:'Banana',emoji:'🍌'},{word:'Naranja',emoji:'🍊'},{word:'Fresa',emoji:'🍓'},{word:'Uvas',emoji:'🍇'},{word:'Melón',emoji:'🍈'},{word:'Piña',emoji:'🍍'},{word:'Mango',emoji:'🥭'}] },
-  { id:'ropa', name:'Ropa', emoji:'👕', items:[{word:'Camisa',emoji:'👕'},{word:'Pantalón',emoji:'👖'},{word:'Zapatos',emoji:'👟'},{word:'Sombrero',emoji:'🎩'},{word:'Vestido',emoji:'👗'},{word:'Calcetines',emoji:'🧦'},{word:'Bufanda',emoji:'🧣'},{word:'Guantes',emoji:'🧤'}] },
-  { id:'vehiculos', name:'Vehículos', emoji:'🚗', items:[{word:'Carro',emoji:'🚗'},{word:'Autobús',emoji:'🚌'},{word:'Avión',emoji:'✈️'},{word:'Barco',emoji:'🚢'},{word:'Tren',emoji:'🚂'},{word:'Bicicleta',emoji:'🚲'},{word:'Moto',emoji:'🏍️'},{word:'Helicóptero',emoji:'🚁'}] },
-  { id:'comida', name:'Comida', emoji:'🍕', items:[{word:'Pizza',emoji:'🍕'},{word:'Arroz',emoji:'🍚'},{word:'Pan',emoji:'🍞'},{word:'Huevo',emoji:'🥚'},{word:'Pollo',emoji:'🍗'},{word:'Sopa',emoji:'🍜'},{word:'Queso',emoji:'🧀'},{word:'Tacos',emoji:'🌮'}] },
-  { id:'cuerpo', name:'Cuerpo', emoji:'🧍', items:[{word:'Cabeza',emoji:'🗣️'},{word:'Ojos',emoji:'👀'},{word:'Nariz',emoji:'👃'},{word:'Boca',emoji:'👄'},{word:'Oreja',emoji:'👂'},{word:'Mano',emoji:'✋'},{word:'Pie',emoji:'🦶'},{word:'Dientes',emoji:'🦷'}] },
-  { id:'colores', name:'Colores', emoji:'🎨', items:[{word:'Rojo',emoji:'🔴'},{word:'Azul',emoji:'🔵'},{word:'Verde',emoji:'🟢'},{word:'Amarillo',emoji:'🟡'},{word:'Naranja',emoji:'🟠'},{word:'Morado',emoji:'🟣'},{word:'Negro',emoji:'⚫'},{word:'Blanco',emoji:'⚪'}] },
-  { id:'juguetes', name:'Juguetes', emoji:'🧸', items:[{word:'Pelota',emoji:'⚽'},{word:'Muñeca',emoji:'🪆'},{word:'Tren',emoji:'🚂'},{word:'Oso',emoji:'🧸'},{word:'Bloques',emoji:'🧱'},{word:'Cometa',emoji:'🪁'},{word:'Yoyo',emoji:'🪀'},{word:'Rompecabezas',emoji:'🧩'}] },
-  { id:'escuela', name:'Escuela', emoji:'✏️', items:[{word:'Lápiz',emoji:'✏️'},{word:'Libro',emoji:'📚'},{word:'Mochila',emoji:'🎒'},{word:'Tijeras',emoji:'✂️'},{word:'Regla',emoji:'📏'},{word:'Borrador',emoji:'🧹'},{word:'Cuaderno',emoji:'📓'},{word:'Goma',emoji:'📌'}] },
-  { id:'naturaleza', name:'Naturaleza', emoji:'🌿', items:[{word:'Árbol',emoji:'🌳'},{word:'Flor',emoji:'🌸'},{word:'Sol',emoji:'☀️'},{word:'Luna',emoji:'🌙'},{word:'Lluvia',emoji:'🌧️'},{word:'Montaña',emoji:'⛰️'},{word:'Río',emoji:'🏞️'},{word:'Nube',emoji:'☁️'}] },
-];
-
-let currentCat = null, fcIndex = 0;
-let quizQuestions = [], quizIndex = 0, qCorrect = 0, qWrong = 0;
-
-function buildHome() {
-  const grid = document.getElementById('home-grid');
-  grid.innerHTML = '';
-  categories.forEach(cat => {
-    const card = document.createElement('div');
-    card.className = 'cat-card';
-    card.innerHTML = `<span class="emoji">${cat.emoji}</span><div class="cat-name">${cat.name}</div><div class="cat-count">${cat.items.length} palabras</div>`;
-    card.onclick = () => openFlashcards(cat.id);
-    grid.appendChild(card);
-  });
-}
-
-function showTab(tab) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-  document.getElementById('screen-' + tab).classList.add('active');
-  document.querySelectorAll('nav button')[['home','flashcards','quiz'].indexOf(tab)].classList.add('active');
-  if (tab === 'quiz' && quizQuestions.length === 0) buildQuiz();
-}
-
-function openFlashcards(catId) {
-  currentCat = categories.find(c => c.id === catId);
-  fcIndex = 0;
-  showTab('flashcards');
-  renderFlashcard();
-}
-
-function renderFlashcard() {
-  const item = currentCat.items[fcIndex];
-  const total = currentCat.items.length;
-  document.getElementById('fc-emoji').textContent = item.emoji;
-  document.getElementById('fc-word').textContent = item.word;
-  document.getElementById('fc-num').textContent = `${fcIndex + 1} / ${total}`;
-  document.getElementById('fc-progress').style.width = ((fcIndex + 1) / total * 100) + '%';
-  document.getElementById('fc-next-btn').textContent = fcIndex === total - 1 ? '🏁 Fin' : 'Siguiente →';
-  const fc = document.getElementById('flashcard');
-  fc.style.animation = 'none'; fc.offsetHeight; fc.style.animation = 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-}
-
-function fcNext() { if (fcIndex < currentCat.items.length - 1) { fcIndex++; renderFlashcard(); } else { goHome(); } }
-function fcPrev() { if (fcIndex > 0) { fcIndex--; renderFlashcard(); } }
-
-function buildQuiz() {
-  quizQuestions = generateQuizQuestions(15);
-  quizIndex = 0; qCorrect = 0; qWrong = 0;
-  updateScoreUI();
-  document.getElementById('quiz-game').style.display = 'block';
-  document.getElementById('quiz-result').style.display = 'none';
-  renderQuestion();
-}
-
-function generateQuizQuestions(count) {
-  const qs = [];
-  for (let i = 0; i < count; i++) {
-    const mainCat = categories[Math.floor(Math.random() * categories.length)];
-    const otherCats = categories.filter(c => c.id !== mainCat.id);
-    const oddCat = otherCats[Math.floor(Math.random() * otherCats.length)];
-    const shuffledMain = [...mainCat.items].sort(() => Math.random() - 0.5).slice(0, 3);
-    const oddItem = oddCat.items[Math.floor(Math.random() * oddCat.items.length)];
-    const options = [...shuffledMain, oddItem].sort(() => Math.random() - 0.5);
-    qs.push({ mainCat: mainCat.name, options, correctIndex: options.indexOf(oddItem) });
-  }
-  return qs;
-}
-
-function renderQuestion() {
-  const q = quizQuestions[quizIndex];
-  document.getElementById('q-question').textContent = '¿Cuál NO pertenece?';
-  document.getElementById('q-subtitle').textContent = `Tema: ${q.mainCat}`;
-  document.getElementById('q-feedback').textContent = '';
-  document.getElementById('q-feedback').className = 'quiz-feedback';
-  document.getElementById('q-next').style.display = 'none';
-  const optDiv = document.getElementById('q-options');
-  optDiv.innerHTML = '';
-  q.options.forEach((item, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'quiz-opt';
-    btn.innerHTML = `<span class="opt-emoji">${item.emoji}</span>${item.word}`;
-    btn.onclick = () => selectAnswer(i);
-    optDiv.appendChild(btn);
-  });
-}
-
-function selectAnswer(selected) {
-  const q = quizQuestions[quizIndex];
-  const opts = document.querySelectorAll('.quiz-opt');
-  opts.forEach(b => b.disabled = true);
-  const fb = document.getElementById('q-feedback');
-  if (selected === q.correctIndex) {
-    opts[selected].classList.add('correct');
-    fb.textContent = '¡Muy bien! 🎉'; fb.className = 'quiz-feedback correct'; qCorrect++;
-  } else {
-    opts[selected].classList.add('wrong');
-    opts[q.correctIndex].classList.add('correct');
-    fb.textContent = `La respuesta era ${q.options[q.correctIndex].word} 😊`;
-    fb.className = 'quiz-feedback wrong'; qWrong++;
-  }
-  updateScoreUI();
-  const nextBtn = document.getElementById('q-next');
-  nextBtn.style.display = 'inline-flex';
-  if (quizIndex === quizQuestions.length - 1) nextBtn.textContent = '🏁 Ver resultado';
-}
-
-function nextQuestion() {
-  quizIndex++;
-  if (quizIndex >= quizQuestions.length) showResult();
-  else renderQuestion();
-}
-
-function updateScoreUI() {
-  document.getElementById('q-correct').textContent = qCorrect;
-  document.getElementById('q-wrong').textContent = qWrong;
-  const shown = document.getElementById('q-next').style.display !== 'none' ? 1 : 0;
-  document.getElementById('q-total').textContent = quizIndex + shown;
-}
-
-function showResult() {
-  document.getElementById('quiz-game').style.display = 'none';
-  document.getElementById('quiz-result').style.display = 'block';
-  const pct = Math.round(qCorrect / quizQuestions.length * 100);
-  const data = pct >= 90 ? ['🏆','¡Excelente!'] : pct >= 70 ? ['🌟','¡Muy bien!'] : pct >= 50 ? ['😊','¡Buen intento!'] : ['💪','¡A practicar!'];
-  document.getElementById('r-emoji').textContent = data[0];
-  document.getElementById('r-title').textContent = data[1];
-  document.getElementById('r-msg').textContent = `Respondiste ${qCorrect} de ${quizQuestions.length} correctamente.`;
-}
-
-function restartQuiz() { buildQuiz(); }
-function goHome() { showTab('home'); }
-
-buildHome();
-</script>
+  <script src="script.js"></script>
 </body>
 </html>
