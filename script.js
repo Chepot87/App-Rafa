@@ -176,31 +176,42 @@ function buildHome() {
   });
 }
 
-function showTab(tab) {
-  document.querySelectorAll(".screen").forEach((screen) => {
-    screen.classList.remove("active");
-  });
-
-  document.querySelectorAll(".nav-btn").forEach((btn) => {
-    btn.classList.remove("active");
-  });
-
-  document.getElementById(`screen-${tab}`).classList.add("active");
-
-  const navMap = {
+function setActiveNav(tab) {
+  const map = {
     home: 0,
     flashcards: 1,
     quiz: 2
   };
 
-  const navButtons = document.querySelectorAll(".nav-btn");
-  navButtons[navMap[tab]].classList.add("active");
+  document.querySelectorAll(".nav-btn").forEach((btn) => {
+    btn.classList.remove("active");
+  });
+
+  const buttons = document.querySelectorAll(".nav-btn");
+  const index = map[tab];
+
+  if (buttons[index]) {
+    buttons[index].classList.add("active");
+  }
+}
+
+function showTab(tab) {
+  document.querySelectorAll(".screen").forEach((screen) => {
+    screen.classList.remove("active");
+  });
+
+  const target = document.getElementById(`screen-${tab}`);
+  if (target) {
+    target.classList.add("active");
+  }
+
+  setActiveNav(tab);
 
   if (tab === "flashcards" && currentCat) {
     renderFlashcard();
   }
 
-  if (tab === "quiz" && quizQuestions.length === 0) {
+  if (tab === "quiz") {
     buildQuiz();
   }
 }
@@ -213,7 +224,6 @@ function openFlashcards(catId) {
   currentCat = categories.find((cat) => cat.id === catId);
   fcIndex = 0;
   showTab("flashcards");
-  renderFlashcard();
 }
 
 function openDefaultFlashcards() {
@@ -223,7 +233,6 @@ function openDefaultFlashcards() {
   }
 
   showTab("flashcards");
-  renderFlashcard();
 }
 
 function renderFlashcard() {
@@ -247,10 +256,11 @@ function renderFlashcard() {
   card.offsetHeight;
   card.style.animation = "fadePop 0.28s ease";
 
-  if (document.getElementById("autoSpeakToggle").checked) {
+  const autoSpeak = document.getElementById("autoSpeakToggle");
+  if (autoSpeak && autoSpeak.checked) {
     setTimeout(() => {
       speakCurrentWord();
-    }, 200);
+    }, 180);
   }
 }
 
@@ -306,9 +316,11 @@ function speakText(text) {
   window.speechSynthesis.speak(utterance);
 }
 
-window.speechSynthesis.onvoiceschanged = () => {
-  window.speechSynthesis.getVoices();
-};
+if ("speechSynthesis" in window) {
+  window.speechSynthesis.onvoiceschanged = () => {
+    window.speechSynthesis.getVoices();
+  };
+}
 
 function buildQuiz() {
   quizQuestions = generateQuizQuestions(10);
@@ -331,15 +343,21 @@ function generateQuizQuestions(count) {
     const otherCats = categories.filter((cat) => cat.id !== mainCat.id);
     const oddCat = otherCats[Math.floor(Math.random() * otherCats.length)];
 
-    const mainItems = [...mainCat.items].sort(() => Math.random() - 0.5).slice(0, 3);
-    const oddItem = oddCat.items[Math.floor(Math.random() * oddCat.items.length)];
+    const mainItems = [...mainCat.items]
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 3);
+
+    const oddItem =
+      oddCat.items[Math.floor(Math.random() * oddCat.items.length)];
 
     const options = [...mainItems, oddItem].sort(() => Math.random() - 0.5);
 
     questions.push({
       mainCat: mainCat.name,
       options,
-      correctIndex: options.findIndex((item) => item.word === oddItem.word && item.emoji === oddItem.emoji)
+      correctIndex: options.findIndex(
+        (item) => item.word === oddItem.word && item.emoji === oddItem.emoji
+      )
     });
   }
 
@@ -348,6 +366,7 @@ function generateQuizQuestions(count) {
 
 function renderQuestion() {
   const q = quizQuestions[quizIndex];
+  if (!q) return;
 
   document.getElementById("q-question").textContent = "¿Cuál NO pertenece?";
   document.getElementById("q-subtitle").textContent = `Tema: ${q.mainCat}`;
@@ -372,6 +391,8 @@ function renderQuestion() {
 
 function selectAnswer(selectedIndex) {
   const q = quizQuestions[quizIndex];
+  if (!q) return;
+
   const buttons = document.querySelectorAll(".quiz-opt");
   const feedback = document.getElementById("q-feedback");
 
@@ -393,8 +414,10 @@ function selectAnswer(selectedIndex) {
   }
 
   updateScoreUI();
-  document.getElementById("q-next").style.display = "inline-flex";
-  document.getElementById("q-next").textContent =
+
+  const nextBtn = document.getElementById("q-next");
+  nextBtn.style.display = "inline-flex";
+  nextBtn.textContent =
     quizIndex === quizQuestions.length - 1 ? "Ver resultado" : "Siguiente →";
 }
 
@@ -438,7 +461,8 @@ function showResult() {
 
   document.getElementById("r-emoji").textContent = emoji;
   document.getElementById("r-title").textContent = title;
-  document.getElementById("r-msg").textContent = `Respondiste ${qCorrect} de ${total} correctamente.`;
+  document.getElementById("r-msg").textContent =
+    `Respondiste ${qCorrect} de ${total} correctamente.`;
 }
 
 function restartQuiz() {

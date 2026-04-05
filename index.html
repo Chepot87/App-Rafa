@@ -47,6 +47,7 @@
       <section id="screen-flashcards" class="screen">
         <div class="screen-top">
           <button class="ghost-btn" onclick="goHome()">← Volver</button>
+
           <div class="screen-title-wrap">
             <h2 id="flashcard-category-title">Tarjetas</h2>
             <p id="flashcard-category-subtitle">Escucha, observa y repite</p>
@@ -86,6 +87,7 @@
       <section id="screen-quiz" class="screen">
         <div class="screen-top">
           <button class="ghost-btn" onclick="goHome()">← Volver</button>
+
           <div class="screen-title-wrap">
             <h2>Quiz</h2>
             <p>Encuentra cuál no pertenece</p>
@@ -98,10 +100,12 @@
               <span class="score-number" id="q-correct">0</span>
               <span class="score-label">Correctas</span>
             </div>
+
             <div class="score-box">
               <span class="score-number" id="q-wrong">0</span>
               <span class="score-label">Incorrectas</span>
             </div>
+
             <div class="score-box">
               <span class="score-number" id="q-total">0</span>
               <span class="score-label">Respondidas</span>
@@ -117,7 +121,12 @@
             <div id="q-feedback" class="quiz-feedback"></div>
 
             <div class="quiz-next-row">
-              <button id="q-next" class="primary-btn" onclick="nextQuestion()" style="display: none;">
+              <button
+                id="q-next"
+                class="primary-btn"
+                onclick="nextQuestion()"
+                style="display: none;"
+              >
                 Siguiente →
               </button>
             </div>
