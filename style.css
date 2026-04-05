@@ -48,7 +48,7 @@ body {
 .topbar {
   background: linear-gradient(135deg, #ff7e6b 0%, #ffcf4a 45%, #7cd67c 100%);
   border-radius: 32px;
-  padding: 28px;
+  padding: 28px 36px;
   box-shadow: var(--shadow);
   position: relative;
   overflow: hidden;
@@ -74,15 +74,15 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 18px;
+  gap: 24px;
   width: 100%;
-  max-width: 900px;
+  max-width: 980px;
   margin: 0 auto;
 }
 
 .brand-icon {
-  width: 92px;
-  height: 92px;
+  width: 120px;
+  height: 120px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -98,6 +98,7 @@ body {
 
 .brand-copy {
   min-width: 0;
+  text-align: left;
 }
 
 .brand-copy h1,
@@ -543,11 +544,13 @@ body {
   .brand {
     gap: 12px;
     align-items: center;
+    justify-content: center;
+    max-width: 100%;
   }
 
   .brand-icon {
-    width: 58px;
-    height: 58px;
+    width: 78px;
+    height: 78px;
   }
 
   .brand h1 {
@@ -706,13 +709,15 @@ body {
 
   .brand {
     gap: 10px;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
   }
 
   .brand-icon {
-    width: 48px;
-    height: 48px;
-    margin-top: 2px;
+    width: 64px;
+    height: 64px;
+    margin-top: 0;
   }
 
   .brand h1 {
