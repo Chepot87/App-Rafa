@@ -33,6 +33,7 @@
       <button class="nav-btn active" onclick="showTab('home')">🏠 Inicio</button>
       <button class="nav-btn" onclick="openDefaultFlashcards()">🃏 Tarjetas</button>
       <button class="nav-btn" onclick="showTab('quiz')">❓ Quiz</button>
+      <button class="nav-btn" onclick="showTab('match')">🔗 Empareja</button>
     </nav>
 
     <main class="main-content">
@@ -147,6 +148,60 @@
           </div>
         </div>
       </section>
+
+      <!-- EMPAREJA -->
+      <section id="screen-match" class="screen">
+        <div class="screen-top">
+          <button class="ghost-btn" onclick="goHome()">← Volver</button>
+          <div class="screen-title-wrap">
+            <h2>Empareja</h2>
+            <p>¿A qué categoría pertenece?</p>
+          </div>
+        </div>
+
+        <div id="match-game">
+          <div class="score-row">
+            <div class="score-box">
+              <span class="score-number" id="m-correct">0</span>
+              <span class="score-label">Correctas</span>
+            </div>
+            <div class="score-box">
+              <span class="score-number" id="m-wrong">0</span>
+              <span class="score-label">Incorrectas</span>
+            </div>
+            <div class="score-box">
+              <span class="score-number" id="m-total">0</span>
+              <span class="score-label">Respondidas</span>
+            </div>
+          </div>
+
+          <div class="match-card">
+            <p class="match-prompt">¿A qué categoría pertenece?</p>
+            <div class="match-item-display">
+              <div class="match-emoji" id="m-emoji">🍎</div>
+              <div class="match-word" id="m-word">Manzana</div>
+            </div>
+            <div id="m-options" class="match-options"></div>
+            <div id="m-feedback" class="quiz-feedback"></div>
+            <div class="quiz-next-row">
+              <button id="m-next" class="primary-btn" onclick="nextMatchQuestion()" style="display:none">
+                Siguiente →
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="match-result" class="result-card" style="display:none">
+          <div class="result-emoji" id="mr-emoji">🏆</div>
+          <h2 id="mr-title">¡Excelente!</h2>
+          <p id="mr-msg"></p>
+          <div class="result-actions">
+            <button class="primary-btn" onclick="buildMatch()">🔄 Jugar de nuevo</button>
+            <button class="secondary-btn" onclick="goHome()">🏠 Inicio</button>
+          </div>
+        </div>
+      </section>
+
     </main>
   </div>
 

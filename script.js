@@ -180,7 +180,8 @@ function setActiveNav(tab) {
   const map = {
     home: 0,
     flashcards: 1,
-    quiz: 2
+    quiz: 2,
+    match: 3
   };
 
   document.querySelectorAll(".nav-btn").forEach((btn) => {
@@ -213,6 +214,10 @@ function showTab(tab) {
 
   if (tab === "quiz") {
     buildQuiz();
+  }
+
+  if (tab === "match") {
+    buildMatch();
   }
 }
 
@@ -467,6 +472,149 @@ function showResult() {
 
 function restartQuiz() {
   buildQuiz();
+}
+
+// ── EMPAREJA ──────────────────────────────────────────────────────────────────
+
+let matchQuestions = [];
+let matchIndex = 0;
+let mCorrect = 0;
+let mWrong = 0;
+
+function buildMatch() {
+  matchQuestions = generateMatchQuestions(12);
+  matchIndex = 0;
+  mCorrect = 0;
+  mWrong = 0;
+
+  document.getElementById("match-game").style.display = "block";
+  document.getElementById("match-result").style.display = "none";
+
+  updateMatchScore();
+  renderMatchQuestion();
+}
+
+function generateMatchQuestions(count) {
+  const questions = [];
+
+  for (let i = 0; i < count; i++) {
+    const correctCat = categories[Math.floor(Math.random() * categories.length)];
+    const item = correctCat.items[Math.floor(Math.random() * correctCat.items.length)];
+
+    const others = categories
+      .filter((c) => c.id !== correctCat.id)
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 3);
+
+    const options = [...others, correctCat].sort(() => Math.random() - 0.5);
+
+    questions.push({
+      item,
+      correctId: correctCat.id,
+      options: options.map((c) => ({ id: c.id, name: c.name, emoji: c.emoji }))
+    });
+  }
+
+  return questions;
+}
+
+function renderMatchQuestion() {
+  const q = matchQuestions[matchIndex];
+  if (!q) return;
+
+  document.getElementById("m-emoji").textContent = q.item.emoji;
+  document.getElementById("m-word").textContent = q.item.word;
+  document.getElementById("m-feedback").textContent = "";
+  document.getElementById("m-feedback").className = "quiz-feedback";
+  document.getElementById("m-next").style.display = "none";
+
+  const wrap = document.getElementById("m-options");
+  wrap.innerHTML = "";
+
+  q.options.forEach((opt) => {
+    const btn = document.createElement("button");
+    btn.className = "match-opt";
+    btn.dataset.id = opt.id;
+    btn.innerHTML = `<span class="opt-cat-emoji">${opt.emoji}</span>${opt.name}`;
+    btn.onclick = () => selectMatchAnswer(opt.id);
+    wrap.appendChild(btn);
+  });
+}
+
+function selectMatchAnswer(selectedId) {
+  const q = matchQuestions[matchIndex];
+  if (!q) return;
+
+  const buttons = document.querySelectorAll(".match-opt");
+  const feedback = document.getElementById("m-feedback");
+
+  buttons.forEach((btn) => {
+    btn.disabled = true;
+    if (btn.dataset.id === q.correctId) btn.classList.add("correct");
+    else if (btn.dataset.id === selectedId) btn.classList.add("wrong");
+  });
+
+  if (selectedId === q.correctId) {
+    feedback.textContent = "¡Correcto! 🎉";
+    feedback.className = "quiz-feedback correct";
+    mCorrect++;
+  } else {
+    const correctOpt = q.options.find((o) => o.id === q.correctId);
+    feedback.textContent = `Pertenece a: ${correctOpt.name}`;
+    feedback.className = "quiz-feedback wrong";
+    mWrong++;
+  }
+
+  updateMatchScore();
+
+  const nextBtn = document.getElementById("m-next");
+  nextBtn.style.display = "inline-flex";
+  nextBtn.textContent =
+    matchIndex === matchQuestions.length - 1 ? "Ver resultado" : "Siguiente →";
+}
+
+function nextMatchQuestion() {
+  matchIndex++;
+
+  if (matchIndex >= matchQuestions.length) {
+    showMatchResult();
+    return;
+  }
+
+  renderMatchQuestion();
+}
+
+function updateMatchScore() {
+  document.getElementById("m-correct").textContent = mCorrect;
+  document.getElementById("m-wrong").textContent = mWrong;
+  document.getElementById("m-total").textContent = mCorrect + mWrong;
+}
+
+function showMatchResult() {
+  document.getElementById("match-game").style.display = "none";
+  document.getElementById("match-result").style.display = "block";
+
+  const total = matchQuestions.length;
+  const percent = Math.round((mCorrect / total) * 100);
+
+  let emoji = "💪";
+  let title = "¡Sigue practicando!";
+
+  if (percent >= 90) {
+    emoji = "🏆";
+    title = "¡Excelente!";
+  } else if (percent >= 70) {
+    emoji = "🌟";
+    title = "¡Muy bien!";
+  } else if (percent >= 50) {
+    emoji = "😊";
+    title = "¡Vas bien!";
+  }
+
+  document.getElementById("mr-emoji").textContent = emoji;
+  document.getElementById("mr-title").textContent = title;
+  document.getElementById("mr-msg").textContent =
+    `Respondiste ${mCorrect} de ${total} correctamente.`;
 }
 
 buildHome();

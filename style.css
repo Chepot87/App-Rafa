@@ -530,6 +530,97 @@ body {
   font-size: 5rem;
 }
 
+/* ── EMPAREJA ─────────────────────────────── */
+
+.match-card {
+  max-width: 620px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.82);
+  border-radius: 32px;
+  padding: 28px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(16px);
+  text-align: center;
+}
+
+.match-prompt {
+  font-family: "Baloo 2", cursive;
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin: 0 0 16px;
+}
+
+.match-item-display {
+  background: var(--bg);
+  border-radius: 22px;
+  padding: 24px 16px;
+  margin-bottom: 22px;
+  display: inline-block;
+  min-width: 180px;
+}
+
+.match-emoji {
+  font-size: 5rem;
+  line-height: 1;
+}
+
+.match-word {
+  font-family: "Baloo 2", cursive;
+  font-size: 2rem;
+  font-weight: 800;
+  margin-top: 10px;
+}
+
+.match-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.match-opt {
+  border: none;
+  border-radius: 20px;
+  padding: 18px 12px;
+  background: #fff;
+  box-shadow: 0 10px 24px rgba(30, 40, 80, 0.08);
+  cursor: pointer;
+  font-family: "Nunito", sans-serif;
+  font-weight: 800;
+  font-size: 1.1rem;
+  transition: 0.2s ease;
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.match-opt .opt-cat-emoji {
+  font-size: 2rem;
+}
+
+.match-opt:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 28px rgba(30, 40, 80, 0.13);
+}
+
+.match-opt.correct {
+  outline: 3px solid var(--green);
+  background: #effcef;
+}
+
+.match-opt.wrong {
+  outline: 3px solid var(--red);
+  background: #fff0f0;
+}
+
+.match-opt:disabled {
+  cursor: default;
+}
+
+/* ── RESPONSIVE ───────────────────────────── */
+
 @media (max-width: 768px) {
   .app-shell {
     width: calc(100% - 20px);
@@ -693,6 +784,15 @@ body {
 
   .opt-emoji {
     font-size: 2.4rem;
+  }
+
+  .match-card {
+    padding: 22px 16px;
+    border-radius: 24px;
+  }
+
+  .match-options {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -869,5 +969,23 @@ body {
 
   .result-emoji {
     font-size: 4rem;
+  }
+
+  .match-emoji {
+    font-size: 3.8rem;
+  }
+
+  .match-word {
+    font-size: 1.6rem;
+  }
+
+  .match-opt {
+    padding: 14px 10px;
+    font-size: 1rem;
+  }
+
+  .match-card {
+    padding: 18px 12px;
+    border-radius: 20px;
   }
 }
