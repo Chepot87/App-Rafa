@@ -1,155 +1,51 @@
-const categories = [
-  {
-    id: "animales",
-    name: "Animales",
-    emoji: "🐾",
-    items: [
-      { word: "Perro", emoji: "🐶" },
-      { word: "Gato", emoji: "🐱" },
-      { word: "Vaca", emoji: "🐮" },
-      { word: "Caballo", emoji: "🐴" },
-      { word: "Pájaro", emoji: "🐦" },
-      { word: "Pez", emoji: "🐟" },
-      { word: "Conejo", emoji: "🐰" },
-      { word: "Cerdo", emoji: "🐷" }
-    ]
-  },
-  {
-    id: "frutas",
-    name: "Frutas",
-    emoji: "🍓",
-    items: [
-      { word: "Manzana", emoji: "🍎" },
-      { word: "Banana", emoji: "🍌" },
-      { word: "Naranja", emoji: "🍊" },
-      { word: "Fresa", emoji: "🍓" },
-      { word: "Uvas", emoji: "🍇" },
-      { word: "Piña", emoji: "🍍" },
-      { word: "Mango", emoji: "🥭" },
-      { word: "Melón", emoji: "🍈" }
-    ]
-  },
-  {
-    id: "ropa",
-    name: "Ropa",
-    emoji: "👕",
-    items: [
-      { word: "Camisa", emoji: "👕" },
-      { word: "Pantalón", emoji: "👖" },
-      { word: "Zapatos", emoji: "👟" },
-      { word: "Vestido", emoji: "👗" },
-      { word: "Sombrero", emoji: "🎩" },
-      { word: "Calcetines", emoji: "🧦" },
-      { word: "Bufanda", emoji: "🧣" },
-      { word: "Guantes", emoji: "🧤" }
-    ]
-  },
-  {
-    id: "vehiculos",
-    name: "Vehículos",
-    emoji: "🚗",
-    items: [
-      { word: "Carro", emoji: "🚗" },
-      { word: "Autobús", emoji: "🚌" },
-      { word: "Avión", emoji: "✈️" },
-      { word: "Barco", emoji: "🚢" },
-      { word: "Tren", emoji: "🚂" },
-      { word: "Bicicleta", emoji: "🚲" },
-      { word: "Moto", emoji: "🏍️" },
-      { word: "Helicóptero", emoji: "🚁" }
-    ]
-  },
-  {
-    id: "comida",
-    name: "Comida",
-    emoji: "🍕",
-    items: [
-      { word: "Pizza", emoji: "🍕" },
-      { word: "Arroz", emoji: "🍚" },
-      { word: "Pan", emoji: "🍞" },
-      { word: "Pollo", emoji: "🍗" },
-      { word: "Huevo", emoji: "🥚" },
-      { word: "Queso", emoji: "🧀" },
-      { word: "Sopa", emoji: "🍜" },
-      { word: "Tacos", emoji: "🌮" }
-    ]
-  },
-  {
-    id: "cuerpo",
-    name: "Cuerpo",
-    emoji: "🧍",
-    items: [
-      { word: "Cabeza", emoji: "🙂" },
-      { word: "Ojos", emoji: "👀" },
-      { word: "Nariz", emoji: "👃" },
-      { word: "Boca", emoji: "👄" },
-      { word: "Oreja", emoji: "👂" },
-      { word: "Mano", emoji: "✋" },
-      { word: "Pie", emoji: "🦶" },
-      { word: "Dientes", emoji: "🦷" }
-    ]
-  },
-  {
-    id: "colores",
-    name: "Colores",
-    emoji: "🎨",
-    items: [
-      { word: "Rojo", emoji: "🔴" },
-      { word: "Azul", emoji: "🔵" },
-      { word: "Verde", emoji: "🟢" },
-      { word: "Amarillo", emoji: "🟡" },
-      { word: "Naranja", emoji: "🟠" },
-      { word: "Morado", emoji: "🟣" },
-      { word: "Negro", emoji: "⚫" },
-      { word: "Blanco", emoji: "⚪" }
-    ]
-  },
-  {
-    id: "juguetes",
-    name: "Juguetes",
-    emoji: "🧸",
-    items: [
-      { word: "Pelota", emoji: "⚽" },
-      { word: "Muñeca", emoji: "🪆" },
-      { word: "Oso", emoji: "🧸" },
-      { word: "Bloques", emoji: "🧱" },
-      { word: "Cometa", emoji: "🪁" },
-      { word: "Yoyó", emoji: "🪀" },
-      { word: "Rompecabezas", emoji: "🧩" },
-      { word: "Tren", emoji: "🚂" }
-    ]
-  },
-  {
-    id: "escuela",
-    name: "Escuela",
-    emoji: "✏️",
-    items: [
-      { word: "Lápiz", emoji: "✏️" },
-      { word: "Libro", emoji: "📚" },
-      { word: "Mochila", emoji: "🎒" },
-      { word: "Cuaderno", emoji: "📓" },
-      { word: "Regla", emoji: "📏" },
-      { word: "Tijeras", emoji: "✂️" },
-      { word: "Borrador", emoji: "🧽" },
-      { word: "Marcador", emoji: "🖍️" }
-    ]
-  },
-  {
-    id: "naturaleza",
-    name: "Naturaleza",
-    emoji: "🌿",
-    items: [
-      { word: "Árbol", emoji: "🌳" },
-      { word: "Flor", emoji: "🌸" },
-      { word: "Sol", emoji: "☀️" },
-      { word: "Luna", emoji: "🌙" },
-      { word: "Lluvia", emoji: "🌧️" },
-      { word: "Nube", emoji: "☁️" },
-      { word: "Montaña", emoji: "⛰️" },
-      { word: "Río", emoji: "🏞️" }
-    ]
+let activeTab = 'home';
+let speechTimer = null;
+let activeUtterance = null;
+let quizAnswered = false;
+let matchAnswered = false;
+
+function shuffle(items) {
+  const result = [...items];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
   }
-];
+  return result;
+}
+
+function distinctCategories(a, b) {
+  return a.id !== b.id && !overlappingCategories.some(pair => pair.includes(a.id) && pair.includes(b.id));
+}
+
+// Each visual has an adjacent word label, so avoid announcing it twice.
+function renderVisual(container, item) {
+  container.replaceChildren();
+  container.setAttribute('aria-hidden', 'true');
+  if (!item.image) { container.textContent = item.emoji || '🖼️'; return; }
+  const img = document.createElement('img');
+  img.alt = '';
+  img.className = 'vocabulary-image';
+  img.onerror = () => {
+    if (img.parentNode !== container) return;
+    container.replaceChildren();
+    container.textContent = item.emoji || '🖼️';
+  };
+  img.src = item.image;
+  container.appendChild(img);
+}
+
+function focusElement(element) {
+  if (!element) return;
+  element.tabIndex = -1;
+  element.focus();
+}
+
+function stopSpeech() {
+  clearTimeout(speechTimer);
+  speechTimer = null;
+  activeUtterance = null;
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+}
 
 let currentCat = null;
 let fcIndex = 0;
@@ -164,12 +60,13 @@ function buildHome() {
   grid.innerHTML = "";
 
   categories.forEach((cat) => {
-    const card = document.createElement("div");
+    const card = document.createElement("button");
+    card.type = 'button';
     card.className = "cat-card";
     card.innerHTML = `
-      <span class="emoji">${cat.emoji}</span>
-      <div class="cat-name">${cat.name}</div>
-      <div class="cat-count">${cat.items.length} palabras</div>
+      <span class="emoji" aria-hidden="true">${cat.emoji}</span>
+      <span class="cat-name">${cat.name}</span>
+      <span class="cat-count">${cat.items.length} palabras</span>
     `;
     card.onclick = () => openFlashcards(cat.id);
     grid.appendChild(card);
@@ -186,6 +83,7 @@ function setActiveNav(tab) {
 
   document.querySelectorAll(".nav-btn").forEach((btn) => {
     btn.classList.remove("active");
+    btn.removeAttribute('aria-current');
   });
 
   const buttons = document.querySelectorAll(".nav-btn");
@@ -193,10 +91,14 @@ function setActiveNav(tab) {
 
   if (buttons[index]) {
     buttons[index].classList.add("active");
+    buttons[index].setAttribute('aria-current', 'page');
   }
 }
 
 function showTab(tab) {
+  if (!document.getElementById(`screen-${tab}`)) return;
+  stopSpeech();
+  activeTab = tab;
   document.querySelectorAll(".screen").forEach((screen) => {
     screen.classList.remove("active");
   });
@@ -212,13 +114,14 @@ function showTab(tab) {
     renderFlashcard();
   }
 
-  if (tab === "quiz") {
+  if (tab === "quiz" && quizQuestions.length === 0) {
     buildQuiz();
   }
 
-  if (tab === "match") {
+  if (tab === "match" && matchQuestions.length === 0) {
     buildMatch();
   }
+  focusElement(target.querySelector('h2'));
 }
 
 function goHome() {
@@ -226,7 +129,9 @@ function goHome() {
 }
 
 function openFlashcards(catId) {
-  currentCat = categories.find((cat) => cat.id === catId);
+  const category = categories.find((cat) => cat.id === catId);
+  if (!category) return;
+  currentCat = category;
   fcIndex = 0;
   showTab("flashcards");
 }
@@ -241,6 +146,7 @@ function openDefaultFlashcards() {
 }
 
 function renderFlashcard() {
+  stopSpeech();
   if (!currentCat || currentCat.items.length === 0) return;
 
   const item = currentCat.items[fcIndex];
@@ -249,7 +155,8 @@ function renderFlashcard() {
   document.getElementById("flashcard-category-title").textContent = currentCat.name;
   document.getElementById("flashcard-category-subtitle").textContent = "Escucha, observa y repite";
   document.getElementById("fc-num").textContent = `${fcIndex + 1} / ${total}`;
-  document.getElementById("fc-emoji").textContent = item.emoji;
+  renderVisual(document.getElementById("fc-emoji"), item);
+  document.getElementById('fc-prev-btn').disabled = fcIndex === 0;
   document.getElementById("fc-word").textContent = item.word;
   document.getElementById("fc-progress").style.width = `${((fcIndex + 1) / total) * 100}%`;
 
@@ -263,8 +170,8 @@ function renderFlashcard() {
 
   const autoSpeak = document.getElementById("autoSpeakToggle");
   if (autoSpeak && autoSpeak.checked) {
-    setTimeout(() => {
-      speakCurrentWord();
+    speechTimer = setTimeout(() => {
+      if (activeTab === 'flashcards' && autoSpeak.checked) speakCurrentWord();
     }, 180);
   }
 }
@@ -297,34 +204,43 @@ function speakCurrentWord() {
 }
 
 function speakText(text) {
-  if (!("speechSynthesis" in window)) {
-    alert("Este navegador no soporta lectura por voz.");
+  stopSpeech();
+  const status = document.getElementById('speech-status');
+  status.textContent = '';
+  if (!("speechSynthesis" in window) || !('SpeechSynthesisUtterance' in window)) {
+    status.textContent = 'La lectura por voz no está disponible en este navegador.';
     return;
   }
+  try {
+    const utterance = new SpeechSynthesisUtterance(text);
+    activeUtterance = utterance;
+    utterance.lang = "es-ES";
+    utterance.rate = 0.85;
+    utterance.pitch = 1;
+    utterance.volume = 1;
 
-  window.speechSynthesis.cancel();
+    const voices = window.speechSynthesis.getVoices();
+    const spanishVoice =
+      voices.find(voice => voice.lang.toLowerCase() === 'es-es') ||
+      voices.find(voice => /^es(?:-|$)/i.test(voice.lang)) || null;
 
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "es-ES";
-  utterance.rate = 0.85;
-  utterance.pitch = 1;
-  utterance.volume = 1;
-
-  const voices = window.speechSynthesis.getVoices();
-  const spanishVoice =
-    voices.find((voice) => voice.lang.toLowerCase().includes("es")) || null;
-
-  if (spanishVoice) {
-    utterance.voice = spanishVoice;
+    if (spanishVoice) {
+      utterance.voice = spanishVoice;
+      utterance.lang = spanishVoice.lang;
+    }
+    utterance.onend = () => { if (activeUtterance === utterance) activeUtterance = null; };
+    utterance.onerror = event => {
+      if (activeUtterance !== utterance) return;
+      activeUtterance = null;
+      if (!['canceled', 'interrupted'].includes(event.error)) {
+        status.textContent = 'No se pudo reproducir la voz. Pulsa Escuchar para intentarlo de nuevo.';
+      }
+    };
+    window.speechSynthesis.speak(utterance);
+  } catch {
+    activeUtterance = null;
+    status.textContent = 'No se pudo iniciar la lectura por voz en este navegador.';
   }
-
-  window.speechSynthesis.speak(utterance);
-}
-
-if ("speechSynthesis" in window) {
-  window.speechSynthesis.onvoiceschanged = () => {
-    window.speechSynthesis.getVoices();
-  };
 }
 
 function buildQuiz() {
@@ -338,6 +254,7 @@ function buildQuiz() {
 
   updateScoreUI();
   renderQuestion();
+  focusElement(document.getElementById("q-subtitle"));
 }
 
 function generateQuizQuestions(count) {
@@ -345,23 +262,23 @@ function generateQuizQuestions(count) {
 
   for (let i = 0; i < count; i++) {
     const mainCat = categories[Math.floor(Math.random() * categories.length)];
-    const otherCats = categories.filter((cat) => cat.id !== mainCat.id);
+    const otherCats = categories.filter((cat) => distinctCategories(cat, mainCat));
     const oddCat = otherCats[Math.floor(Math.random() * otherCats.length)];
 
-    const mainItems = [...mainCat.items]
-      .sort(() => Math.random() - 0.5)
-      .slice(0, 3);
+    const mainItems = shuffle(mainCat.items).slice(0, 3);
 
-    const oddItem =
-      oddCat.items[Math.floor(Math.random() * oddCat.items.length)];
+    const candidates = oddCat.items.filter(item => !mainItems.some(other => other.word === item.word || other.emoji === item.emoji));
+    const oddItem = candidates[Math.floor(Math.random() * candidates.length)];
 
-    const options = [...mainItems, oddItem].sort(() => Math.random() - 0.5);
+    const options = shuffle([...mainItems, oddItem]);
 
     questions.push({
       mainCat: mainCat.name,
+      mainCatId: mainCat.id,
+      oddCatId: oddCat.id,
       options,
       correctIndex: options.findIndex(
-        (item) => item.word === oddItem.word && item.emoji === oddItem.emoji
+        (item) => item.id === oddItem.id
       )
     });
   }
@@ -370,11 +287,12 @@ function generateQuizQuestions(count) {
 }
 
 function renderQuestion() {
+  quizAnswered = false;
   const q = quizQuestions[quizIndex];
   if (!q) return;
 
   document.getElementById("q-question").textContent = "¿Cuál NO pertenece?";
-  document.getElementById("q-subtitle").textContent = `Tema: ${q.mainCat}`;
+  document.getElementById("q-subtitle").textContent = `Pregunta ${quizIndex + 1} de ${quizQuestions.length} · Tema: ${q.mainCat}`;
   document.getElementById("q-feedback").textContent = "";
   document.getElementById("q-feedback").className = "quiz-feedback";
   document.getElementById("q-next").style.display = "none";
@@ -385,10 +303,12 @@ function renderQuestion() {
   q.options.forEach((item, index) => {
     const btn = document.createElement("button");
     btn.className = "quiz-opt";
-    btn.innerHTML = `
-      <span class="opt-emoji">${item.emoji}</span>
-      <span>${item.word}</span>
-    `;
+    const visual = document.createElement('span');
+    visual.className = 'opt-emoji';
+    renderVisual(visual, item);
+    const label = document.createElement('span');
+    label.textContent = item.word;
+    btn.append(visual, label);
     btn.onclick = () => selectAnswer(index);
     optionsWrap.appendChild(btn);
   });
@@ -396,7 +316,8 @@ function renderQuestion() {
 
 function selectAnswer(selectedIndex) {
   const q = quizQuestions[quizIndex];
-  if (!q) return;
+  if (!q || quizAnswered || !Number.isInteger(selectedIndex) || !q.options[selectedIndex]) return;
+  quizAnswered = true;
 
   const buttons = document.querySelectorAll(".quiz-opt");
   const feedback = document.getElementById("q-feedback");
@@ -424,9 +345,11 @@ function selectAnswer(selectedIndex) {
   nextBtn.style.display = "inline-flex";
   nextBtn.textContent =
     quizIndex === quizQuestions.length - 1 ? "Ver resultado" : "Siguiente →";
+  nextBtn.focus();
 }
 
 function nextQuestion() {
+  if (!quizAnswered || quizIndex >= quizQuestions.length) return;
   quizIndex++;
 
   if (quizIndex >= quizQuestions.length) {
@@ -435,6 +358,7 @@ function nextQuestion() {
   }
 
   renderQuestion();
+  focusElement(document.getElementById("q-subtitle"));
 }
 
 function updateScoreUI() {
@@ -468,6 +392,7 @@ function showResult() {
   document.getElementById("r-title").textContent = title;
   document.getElementById("r-msg").textContent =
     `Respondiste ${qCorrect} de ${total} correctamente.`;
+  focusElement(document.getElementById("r-msg"));
 }
 
 function restartQuiz() {
@@ -492,6 +417,7 @@ function buildMatch() {
 
   updateMatchScore();
   renderMatchQuestion();
+  focusElement(document.getElementById("m-word"));
 }
 
 function generateMatchQuestions(count) {
@@ -501,12 +427,9 @@ function generateMatchQuestions(count) {
     const correctCat = categories[Math.floor(Math.random() * categories.length)];
     const item = correctCat.items[Math.floor(Math.random() * correctCat.items.length)];
 
-    const others = categories
-      .filter((c) => c.id !== correctCat.id)
-      .sort(() => Math.random() - 0.5)
-      .slice(0, 3);
+    const others = shuffle(categories.filter(c => distinctCategories(c, correctCat))).slice(0, 3);
 
-    const options = [...others, correctCat].sort(() => Math.random() - 0.5);
+    const options = shuffle([...others, correctCat]);
 
     questions.push({
       item,
@@ -519,10 +442,12 @@ function generateMatchQuestions(count) {
 }
 
 function renderMatchQuestion() {
+  matchAnswered = false;
   const q = matchQuestions[matchIndex];
   if (!q) return;
 
-  document.getElementById("m-emoji").textContent = q.item.emoji;
+  renderVisual(document.getElementById("m-emoji"), q.item);
+  document.getElementById('m-progress').textContent = `Pregunta ${matchIndex + 1} de ${matchQuestions.length}`;
   document.getElementById("m-word").textContent = q.item.word;
   document.getElementById("m-feedback").textContent = "";
   document.getElementById("m-feedback").className = "quiz-feedback";
@@ -535,7 +460,7 @@ function renderMatchQuestion() {
     const btn = document.createElement("button");
     btn.className = "match-opt";
     btn.dataset.id = opt.id;
-    btn.innerHTML = `<span class="opt-cat-emoji">${opt.emoji}</span>${opt.name}`;
+    btn.innerHTML = `<span class="opt-cat-emoji" aria-hidden="true">${opt.emoji}</span>${opt.name}`;
     btn.onclick = () => selectMatchAnswer(opt.id);
     wrap.appendChild(btn);
   });
@@ -543,7 +468,8 @@ function renderMatchQuestion() {
 
 function selectMatchAnswer(selectedId) {
   const q = matchQuestions[matchIndex];
-  if (!q) return;
+  if (!q || matchAnswered || !q.options.some(opt => opt.id === selectedId)) return;
+  matchAnswered = true;
 
   const buttons = document.querySelectorAll(".match-opt");
   const feedback = document.getElementById("m-feedback");
@@ -571,9 +497,11 @@ function selectMatchAnswer(selectedId) {
   nextBtn.style.display = "inline-flex";
   nextBtn.textContent =
     matchIndex === matchQuestions.length - 1 ? "Ver resultado" : "Siguiente →";
+  nextBtn.focus();
 }
 
 function nextMatchQuestion() {
+  if (!matchAnswered || matchIndex >= matchQuestions.length) return;
   matchIndex++;
 
   if (matchIndex >= matchQuestions.length) {
@@ -582,6 +510,7 @@ function nextMatchQuestion() {
   }
 
   renderMatchQuestion();
+  focusElement(document.getElementById("m-word"));
 }
 
 function updateMatchScore() {
@@ -615,6 +544,14 @@ function showMatchResult() {
   document.getElementById("mr-title").textContent = title;
   document.getElementById("mr-msg").textContent =
     `Respondiste ${mCorrect} de ${total} correctamente.`;
+  focusElement(document.getElementById("mr-msg"));
 }
 
 buildHome();
+
+document.getElementById('autoSpeakToggle').addEventListener('change', event => {
+  stopSpeech();
+  if (event.target.checked && activeTab === 'flashcards') speakCurrentWord();
+});
+document.addEventListener('visibilitychange', () => { if (document.hidden) stopSpeech(); });
+window.addEventListener('pagehide', stopSpeech);

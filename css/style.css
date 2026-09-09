@@ -989,3 +989,38 @@ body {
     border-radius: 20px;
   }
 }
+/* Interaction, image support and narrow-screen refinements. */
+button { font-family: inherit; touch-action: manipulation; }
+button:focus-visible, input:focus-visible, [tabindex="-1"]:focus-visible {
+  outline: 3px solid #244fa3;
+  outline-offset: 4px;
+}
+button:disabled { cursor: default; }
+.controls-row button:disabled { opacity: .5; transform: none; }
+.cat-card { color: var(--text); min-width: 0; }
+.cat-name, .cat-count { display: block; }
+.vocabulary-image { width: 100%; height: 100%; object-fit: contain; display: block; }
+.card-emoji:has(img) { width: min(220px, 100%); height: 200px; margin: 0 auto; }
+.opt-emoji:has(img) { height: 110px; }
+.match-emoji:has(img) { width: min(200px, 100%); height: 160px; margin: 0 auto; }
+.card-word, .match-word, .quiz-opt, .match-opt { overflow-wrap: anywhere; }
+.match-item-display { max-width: 100%; min-width: min(180px, 100%); }
+.match-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+#speech-status, #m-progress { color: var(--muted); font-weight: 700; }
+#speech-status:empty { display: none; }
+.restart-btn { display: block; margin: 0 0 12px auto; min-height: 44px; padding: 8px; }
+.ghost-btn { color: #285ca8; }
+.primary-btn, .nav-btn.active { background: #285ca8; }
+.speak-btn { background: #a64a0a; }
+.quiz-feedback.correct { color: #287339; }
+.quiz-feedback.wrong { color: #b83232; }
+.brand h1 { color: #243044; }
+.brand p { color: #344052; }
+@media (max-width: 480px) {
+  .nav-btn { min-height: 44px; }
+  .card-emoji:has(img) { height: 160px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .cat-card:hover, button:hover { transform: none; }
+}

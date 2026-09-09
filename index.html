@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Categorías Semánticas</title>
+  <title>App Rafa · Categorías Semánticas</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -12,14 +12,15 @@
     rel="stylesheet"
   />
 
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
+  <noscript>Activa JavaScript para utilizar las actividades de App Rafa.</noscript>
   <div class="app-shell">
     <header class="topbar">
       <div class="brand">
         <div class="brand-icon">
-          <img src="img/logo.png" alt="Logo Categorías Semánticas" />
+          <img src="img/branding/logo.png" width="1536" height="1024" alt="Logo Categorías Semánticas" />
         </div>
 
         <div class="brand-copy">
@@ -29,8 +30,8 @@
       </div>
     </header>
 
-    <nav class="main-nav">
-      <button class="nav-btn active" onclick="showTab('home')">🏠 Inicio</button>
+    <nav class="main-nav" aria-label="Actividades">
+      <button class="nav-btn active" aria-current="page" onclick="showTab('home')">🏠 Inicio</button>
       <button class="nav-btn" onclick="openDefaultFlashcards()">🃏 Tarjetas</button>
       <button class="nav-btn" onclick="showTab('quiz')">❓ Quiz</button>
       <button class="nav-btn" onclick="showTab('match')">🔗 Empareja</button>
@@ -66,13 +67,14 @@
           <div class="flashcard-card" id="flashcard">
             <div class="card-counter" id="fc-num">1 / 1</div>
             <div class="card-emoji" id="fc-emoji">🐶</div>
-            <div class="card-word" id="fc-word">Perro</div>
+            <div class="card-word" id="fc-word" aria-live="polite" aria-atomic="true">Perro</div>
 
             <div class="card-actions">
               <button class="speak-btn" onclick="speakCurrentWord()">🔊 Escuchar</button>
             </div>
           </div>
 
+          <p id="speech-status" role="status"></p>
           <div class="auto-read-box">
             <label class="toggle-row">
               <input type="checkbox" id="autoSpeakToggle" />
@@ -81,7 +83,7 @@
           </div>
 
           <div class="controls-row">
-            <button class="secondary-btn" onclick="fcPrev()">← Anterior</button>
+            <button class="secondary-btn" id="fc-prev-btn" onclick="fcPrev()">← Anterior</button>
             <button class="primary-btn" onclick="fcNext()" id="fc-next-btn">Siguiente →</button>
           </div>
         </div>
@@ -99,6 +101,7 @@
         </div>
 
         <div id="quiz-game">
+          <button class="ghost-btn restart-btn" onclick="restartQuiz()">↻ Reiniciar quiz</button>
           <div class="score-row">
             <div class="score-box">
               <span class="score-number" id="q-correct">0</span>
@@ -122,7 +125,7 @@
 
             <div id="q-options" class="quiz-options"></div>
 
-            <div id="q-feedback" class="quiz-feedback"></div>
+            <div id="q-feedback" class="quiz-feedback" role="status" aria-atomic="true"></div>
 
             <div class="quiz-next-row">
               <button
@@ -160,6 +163,7 @@
         </div>
 
         <div id="match-game">
+          <button class="ghost-btn restart-btn" onclick="buildMatch()">↻ Reiniciar empareja</button>
           <div class="score-row">
             <div class="score-box">
               <span class="score-number" id="m-correct">0</span>
@@ -177,12 +181,13 @@
 
           <div class="match-card">
             <p class="match-prompt">¿A qué categoría pertenece?</p>
+            <p id="m-progress"></p>
             <div class="match-item-display">
               <div class="match-emoji" id="m-emoji">🍎</div>
               <div class="match-word" id="m-word">Manzana</div>
             </div>
             <div id="m-options" class="match-options"></div>
-            <div id="m-feedback" class="quiz-feedback"></div>
+            <div id="m-feedback" class="quiz-feedback" role="status" aria-atomic="true"></div>
             <div class="quiz-next-row">
               <button id="m-next" class="primary-btn" onclick="nextMatchQuestion()" style="display:none">
                 Siguiente →
@@ -205,6 +210,7 @@
     </main>
   </div>
 
-  <script src="script.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>
