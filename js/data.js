@@ -39,7 +39,7 @@ const categories = [
       { id: "ropa-zapatos", word: "Zapatos", emoji: "👟", image: null },
       { id: "ropa-vestido", word: "Vestido", emoji: "👗", image: null },
       { id: "ropa-sombrero", word: "Sombrero", emoji: "🎩", image: null },
-      { id: "ropa-calcetines", word: "Calcetines", emoji: "🧦", image: null },
+      { id: "ropa-calcetines", word: "Medias", emoji: "🧦", image: null },
       { id: "ropa-bufanda", word: "Bufanda", emoji: "🧣", image: null },
       { id: "ropa-guantes", word: "Guantes", emoji: "🧤", image: null }
     ]
@@ -79,7 +79,7 @@ const categories = [
     name: "Cuerpo",
     emoji: "🧍",
     items: [
-      { id: "cuerpo-cabeza", word: "Cabeza", emoji: "🙂", image: null },
+      { id: "cuerpo-cabeza", word: "Cabeza", emoji: "🙂", image: "img/categories/cuerpo/cabeza.png" },
       { id: "cuerpo-ojos", word: "Ojos", emoji: "👀", image: null },
       { id: "cuerpo-nariz", word: "Nariz", emoji: "👃", image: null },
       { id: "cuerpo-boca", word: "Boca", emoji: "👄", image: null },
