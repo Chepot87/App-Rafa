@@ -8,30 +8,29 @@
 - Mezcla Fisher–Yates, identificación por ID y exclusiones conservadoras de categorías relacionadas.
 - Protección contra contabilizar dos veces o avanzar sin responder.
 - Partidas conservadas durante la navegación y reinicio explícito.
-- Cancelación de lectura pendiente/activa, preferencia de voz española y errores en pantalla.
+- Actividades orales guiadas por un adulto, sin síntesis de voz del navegador.
 - Categorías operables con teclado, foco gestionado, anuncios de feedback, contraste mejorado y movimiento reducido.
 
 ## Antes de entregar al cliente
 
-### Nueva actividad: Escucha y elige
+### Público inicial
 
-- Diez palabras sin repetir, tres imágenes distintas por pregunta y etiquetas accesibles sin texto visible en las opciones.
-- Voz al entrar y avanzar, botón para repetir, intentos sin penalización y ayuda desplegable para lectura por un adulto.
-- Conserva la partida al cambiar de actividad; Reiniciar y Jugar de nuevo crean otra partida.
-- Verificación: las 10 pruebas automatizadas pasan, incluidas generación sin imágenes o palabras duplicadas, reintentos, repetición, navegación, finalización, reinicio y errores de voz. El audio y el diseño en dispositivos reales siguen pendientes.
+- La primera etapa de App Rafa se enfoca en niños de 3 a 8 años y en habilidades de lenguaje emergente o inicial.
+- La edad es orientativa: la terapeuta o el adulto debe elegir el nivel según las habilidades lingüísticas actuales del niño.
+- La actividad «Sigue la instrucción» trabaja comprensión auditiva y secuenciación con niveles de uno, dos y tres pasos.
 
 ### Comprobaciones manuales
 
 1. Probar en navegador de escritorio y móviles reales (Safari iOS y Chrome Android): Inicio, las 80 tarjetas, Quiz completo, Empareja completo, respuestas correctas e incorrectas, resultados, reinicios y regreso a una partida.
 2. Verificar 320, 375, 768 y 1280 píxeles, orientación horizontal, zoom al 200 %, palabras largas, teclado, lector de pantalla y movimiento reducido. Confirmar que no hay desbordamientos y que el foco resulta comprensible.
-3. Escuchar voz manual y automática; probar navegación rápida, desactivar lectura, cambiar de actividad y ocultar la página. Confirmar el acento preferido con la cliente.
+3. Observar una sesión guiada por un adulto y confirmar que las instrucciones visibles son naturales, fáciles de leer y no revelan información innecesaria al niño.
 4. Validar vocabulario, etiquetas e incompatibilidades con la terapeuta. Las reglas son conservadoras, no una taxonomía clínica validada. El tren se mantiene en las dos categorías, pero Vehículos y Juguetes no se enfrentan en una pregunta. También se excluyen otras relaciones amplias como Frutas/Comida y Animales/Naturaleza.
 5. Aprobar estilo de ilustración y sustituir emojis gradualmente. Revisar etiquetas como Oso de juguete, Borrador y Marcador junto a las imágenes finales.
 6. Optimizar el logo original (aproximadamente 2,1 MB) después de revisar visualmente el resultado. No se ha alterado su contenido.
-7. Validar recursos y voz en el alojamiento final HTTPS y documentar su entrega.
+7. Validar los recursos en el alojamiento final HTTPS y documentar su entrega.
 
 ## Límites de verificación
 
-La política de seguridad del navegador de esta sesión bloqueó la apertura de la URL local `file:` durante la inspección inicial. No se intentó eludir ese bloqueo. Las pruebas automatizadas usan un DOM y una voz simulados: la validación visual, táctil y de audio real sigue pendiente. No considerar esta revisión una certificación de compatibilidad móvil ni una versión ya publicada.
+La política de seguridad del navegador de esta sesión bloqueó la apertura de la URL local `file:` durante la inspección inicial. No se intentó eludir ese bloqueo. Las pruebas automatizadas usan un DOM simulado: la validación visual y táctil en dispositivos reales sigue pendiente. No considerar esta revisión una certificación de compatibilidad móvil ni una versión ya publicada.
 
-No se han generado ilustraciones, añadido cuentas, guardado datos de pacientes ni creado servicios backend. La persistencia entre recargas queda fuera de esta revisión.
+Se generó una ilustración para Cabeza. No se han añadido cuentas, guardado datos de pacientes ni creado servicios backend. La persistencia entre recargas queda fuera de esta revisión.

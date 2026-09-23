@@ -6,7 +6,7 @@ const path = require('node:path');
 const vm = require('node:vm');
 const root = path.join(__dirname, '..');
 
-function setup(speech = true) {
+function setup() {
   class Element {
     constructor() {
       this.children = []; this.style = {}; this.dataset = {}; this.attributes = {};
@@ -47,19 +47,13 @@ function setup(speech = true) {
   };
   let timerId = 0;
   const timers = new Map();
-  const spoken = [];
   const window = { addEventListener() {} };
-  function Utterance(text) { this.text = text; }
-  if (speech) {
-    window.SpeechSynthesisUtterance = Utterance;
-    window.speechSynthesis = { cancel() {}, getVoices: () => [{ lang: 'en-US' }, { lang: 'es-MX' }, { lang: 'es-ES' }], speak: u => spoken.push(u) };
-  }
-  const context = vm.createContext({ document, window, SpeechSynthesisUtterance: Utterance,
+  const context = vm.createContext({ document, window,
     setTimeout: fn => { timers.set(++timerId, fn); return timerId; }, clearTimeout: id => timers.delete(id) });
   const run = source => vm.runInContext(source, context);
   run(fs.readFileSync(path.join(root, 'js/data.js'), 'utf8'));
   run(fs.readFileSync(path.join(root, 'js/app.js'), 'utf8'));
-  return { ids, run, timers, spoken, listeners, document };
+  return { ids, run, timers, listeners, document };
 }
 
 test('all vocabulary has unique IDs; generated questions have one distinct answer', () => {
@@ -122,29 +116,6 @@ test('quiz and matching scores, duplicate-answer guards, resume, results and rep
   assert.equal(run('mCorrect + mWrong'), 0);
 });
 
-test('speech timers cancel on navigation, manual playback and toggle-off', () => {
-  const { ids, run, timers, spoken } = setup();
-  ids.autoSpeakToggle.checked = true;
-  run("openFlashcards('animales'); fcNext(); fcNext()");
-  assert.equal(timers.size, 1);
-  run('speakCurrentWord()');
-  assert.equal(timers.size, 0);
-  assert.equal(spoken[0].text, 'Vaca');
-  assert.equal(spoken[0].lang, 'es-ES');
-  run('fcNext(); goHome()');
-  assert.equal(timers.size, 0);
-  run("openFlashcards('frutas')");
-  ids.autoSpeakToggle.checked = false;
-  ids.autoSpeakToggle.listeners.change({ target: ids.autoSpeakToggle });
-  assert.equal(timers.size, 0);
-});
-
-test('unsupported speech reports an inline message', () => {
-  const { ids, run } = setup(false);
-  run("openFlashcards('animales'); speakCurrentWord()");
-  assert.match(ids['speech-status'].textContent, /no está disponible/);
-});
-
 test('local HTML asset references resolve after the folder move', () => {
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
   const refs = [...html.matchAll(/(?:src|href)="([^"]+)"/g)].map(m => m[1]).filter(ref => !/^https?:/.test(ref));
@@ -165,65 +136,76 @@ test('images fall back on failure; stale image errors cannot overwrite the next 
   assert.equal(ids['fc-emoji'].textContent, '🐱');
 });
 
-test('listening rounds have distinct pictures, words and targets', () => {
+test('the interface and script contain no synthetic voice controls', () => {
+  const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+  const app = fs.readFileSync(path.join(root, 'js/app.js'), 'utf8');
+  assert.doesNotMatch(html, /speechSynthesis|Escucha y elige|Ajustar voz|speak-btn/);
+  assert.doesNotMatch(app, /speechSynthesis|SpeechSynthesisUtterance|speakText|listenQuestions/);
+});
+
+test('direction levels generate valid ordered instructions and distinct choices', () => {
   const { run } = setup();
-  assert.equal(run(`Array.from({length: 200}, () => generateListenQuestions(10)).every(rounds =>
-    rounds.length === 10 && new Set(rounds.map(q => q.item.word)).size === 10 &&
-    rounds.every(q => q.options.length === 3 && new Set(q.options.map(i => i.emoji)).size === 3 &&
-      new Set(q.options.map(i => i.word)).size === 3 && q.options[q.correctIndex].id === q.item.id))`), true);
+  for (const level of [1, 2, 3]) {
+    assert.equal(run(`Array.from({length: 200}, () => generateDirectionQuestions(6, ${level})).every(rounds =>
+      rounds.length === 6 && rounds.every(q =>
+        q.sequence.length === ${level} && q.options.length === ${Math.max(3, level + 1)} &&
+        new Set(q.options.map(i => i.id)).size === q.options.length &&
+        q.sequence.every(target => q.options.some(option => option.id === target.id))))`), true);
+  }
+  assert.equal(run("directionInstruction([{word:'Gato'}])"), 'Toca la imagen de gato.');
+  assert.match(run("directionInstruction([{word:'Gato'}, {word:'Manzana'}, {word:'Carro'}])"), /Primero.+Luego.+Al final/);
+  assert.equal(run("directionInstruction([categories.find(c => c.id === 'colores').items.find(i => i.word === 'Negro')])"), 'Toca el color negro.');
 });
 
-test('listening supports retries, replay, resume, completion and restart', () => {
-  const { run, ids, spoken } = setup();
-  run("showTab('listen'); nextListenQuestion()");
-  assert.equal(run('listenIndex'), 0);
-  assert.equal(spoken[0].text, run('listenQuestions[0].item.word'));
-  assert.equal(ids['l-options'].children.length, 3);
-  assert.ok(ids['l-options'].children.every(button => button.attributes['aria-label'] && button.children.length === 1));
-  run('selectListenAnswer(-1); selectListenAnswer((listenQuestions[0].correctIndex + 1) % 3); nextListenQuestion()');
-  assert.equal(run('listenIndex'), 0);
-  assert.equal(run('listenAnswered'), false);
-  assert.match(ids['l-feedback'].textContent, /otra vez/);
-  run('speakListenWord()');
-  assert.equal(spoken.length, 3);
-  run('selectListenAnswer(listenQuestions[0].correctIndex); selectListenAnswer(listenQuestions[0].correctIndex)');
-  assert.equal(run('listenAnswered'), true);
-  assert.ok(ids['l-options'].children.every(button => button.disabled));
-  run("goHome(); showTab('listen')");
-  assert.equal(run('listenAnswered'), true);
-  run('nextListenQuestion()');
-  assert.equal(ids['l-help'].open, false);
-  const word = run('listenQuestions[1].item.word');
-  run("goHome(); showTab('listen')");
-  assert.equal(spoken.at(-1).text, word);
-  run('for (let i = 1; i < 10; i++) { selectListenAnswer(listenQuestions[listenIndex].correctIndex); nextListenQuestion(); } nextListenQuestion()');
-  assert.equal(run('listenIndex'), 10);
-  assert.equal(ids['listen-result'].style.display, 'block');
-  assert.match(ids['lr-msg'].textContent, /10 palabras/);
-  run("goHome(); showTab('listen')");
-  assert.equal(ids['listen-result'].style.display, 'block');
-  run('buildListen()');
-  assert.equal(run('listenIndex'), 0);
-  assert.equal(run('listenAnswered'), false);
-  assert.equal(ids['listen-result'].style.display, 'none');
+test('following directions supports ordered steps, gentle retries, resume and adult summary', () => {
+  const { run, ids } = setup();
+  run("showTab('directions'); nextDirectionQuestion(); startDirections(2)");
+  assert.equal(run('directionIndex'), 0);
+  assert.equal(ids['d-options'].children.length, 3);
+  assert.equal(ids['d-adult-instruction'].textContent, run('directionInstruction(directionsQuestions[0].sequence)'));
+  assert.ok(ids['d-options'].children.every(button => button.attributes['aria-label']));
+
+  run(`selectDirectionItem(directionsQuestions[0].options.findIndex(item =>
+    item.id !== directionsQuestions[0].sequence[0].id))`);
+  assert.equal(run('directionStepIndex'), 0);
+  assert.equal(run('directionHadSupport'), true);
+  assert.match(ids['d-feedback'].textContent, /comenzar desde el principio/);
+
+  run(`selectDirectionItem(directionsQuestions[0].options.findIndex(item =>
+    item.id === directionsQuestions[0].sequence[0].id))`);
+  assert.equal(run('directionStepIndex'), 1);
+  assert.equal(run('directionAnswered'), false);
+  assert.equal(ids['d-step-progress'].children[0].textContent, '✓');
+  run(`selectDirectionItem(directionsQuestions[0].options.findIndex(item =>
+    item.id === directionsQuestions[0].sequence[1].id))`);
+  assert.equal(run('directionAnswered'), true);
+  assert.equal(run('directionsWithSupport'), 1);
+
+  const instructionBeforeResume = ids['d-adult-instruction'].textContent;
+  run("goHome(); showTab('directions')");
+  assert.equal(ids['d-adult-instruction'].textContent, instructionBeforeResume);
+  run('nextDirectionQuestion()');
+  assert.equal(run('directionIndex'), 1);
+  assert.equal(ids['d-adult-instruction'].textContent, run('directionInstruction(directionsQuestions[1].sequence)'));
+
+  run(`for (let round = 1; round < 6; round++) {
+    const q = directionsQuestions[directionIndex];
+    q.sequence.forEach(target => selectDirectionItem(q.options.findIndex(item => item.id === target.id)));
+    nextDirectionQuestion();
+  }`);
+  assert.equal(ids['directions-result'].style.display, 'block');
+  assert.equal(ids['dr-msg'].textContent, 'Nivel 2: 5 al primer intento y 1 con repetición o apoyo.');
+  run('restartDirections()');
+  assert.equal(run('directionIndex + directionsFirstTry + directionsWithSupport'), 0);
+  run('showDirectionsSetup()');
+  assert.equal(run('directionsQuestions.length'), 0);
+  assert.equal(ids['directions-setup'].style.display, 'block');
 });
 
-test('listening voice errors stay in the activity and stale errors are ignored', () => {
-  const unavailable = setup(false);
-  unavailable.run("showTab('listen')");
-  assert.match(unavailable.ids['l-speech-status'].textContent, /no está disponible/);
-  assert.equal(unavailable.ids['l-adult-word'].textContent, unavailable.run('listenQuestions[0].item.word'));
-  const { run, ids, spoken, document, listeners } = setup();
-  run("showTab('listen')");
-  spoken[0].onerror({ error: 'network' });
-  assert.match(ids['l-speech-status'].textContent, /No se pudo/);
-  run('speakListenWord()');
-  const old = spoken.at(-1);
-  run('nextListenQuestion(); goHome()');
-  old.onerror({ error: 'network' });
-  assert.equal(ids['l-speech-status'].textContent, '');
-  run("showTab('listen')");
-  document.hidden = true;
-  listeners.visibilitychange();
-  assert.equal(run('activeUtterance'), null);
+test('three-step directions expose four choices and a complete adult prompt', () => {
+  const { run, ids } = setup();
+  run("showTab('directions'); startDirections(3)");
+  assert.equal(ids['d-options'].children.length, 4);
+  assert.equal(ids['d-step-progress'].children.length, 3);
+  assert.match(ids['d-adult-instruction'].textContent, /Al final/);
 });

@@ -7,10 +7,10 @@ Aplicación web en español para practicar categorías semánticas y vocabulario
 Abre `index.html` en un navegador moderno. Para probar mediante HTTP, utiliza el servidor estático de tu editor desde la raíz del proyecto. No hace falta instalar dependencias de la aplicación.
 
 - Inicio: 10 categorías con 8 palabras cada una.
-- Tarjetas: anterior/siguiente, lectura manual y automática. Finalizar regresa a Inicio.
+- Tarjetas: anterior/siguiente para observar, nombrar y repetir con el acompañamiento de un adulto. Finalizar regresa a Inicio.
 - Quiz: 10 preguntas para identificar el elemento que no pertenece.
 - Empareja: 12 preguntas para elegir la categoría de una palabra.
-- Escucha: 10 palabras con tres imágenes (emoji de reserva), voz automática al entrar y avanzar, repetición manual e intentos sin penalización. Las opciones no muestran texto; conservan etiquetas para lectores de pantalla. «Ayuda para el adulto» permite leer la palabra si falla la voz.
+- Sigue la instrucción: 6 instrucciones guiadas por un adulto, con niveles de uno, dos o tres pasos para edades de referencia de 3 a 8 años. Registra finalización al primer intento o con apoyo únicamente como resumen de la práctica, no como evaluación clínica.
 - Las partidas se conservan al cambiar de actividad. Los botones Reiniciar y Jugar de nuevo comienzan otra partida. Recargar la página borra el progreso; no se guardan datos personales ni historiales.
 
 ## Estructura
@@ -35,14 +35,14 @@ Cuando haya ilustraciones aprobadas, crea `img/categories/<categoria>/` y usa ru
 
 `overlappingCategories` excluye combinaciones ambiguas de ambos juegos. Revisa estas reglas con la terapeuta al cambiar el contenido. Conserva al menos tres palabras por categoría y tres categorías de respuesta compatibles por categoría. El conjunto actual cumple esas condiciones.
 
-## Voz y conexión
+## Conexión
 
-La voz utiliza la síntesis del navegador: prefiere `es-ES`, después otra voz española disponible y finalmente solicita español al sistema. La disponibilidad y pronunciación dependen del dispositivo; algunas voces pueden requerir conexión. La lectura automática se detiene al salir de las tarjetas, ocultar la página o desactivar la opción.
+La aplicación no utiliza síntesis de voz. Las actividades orales están diseñadas para que el adulto modele las palabras e instrucciones con pronunciación natural.
 
 Google Fonts se carga por Internet. Si no está disponible, se usan las fuentes de reserva. La aplicación no garantiza funcionamiento completamente sin conexión.
 
 ## Comprobaciones
 
-Con Node.js instalado, ejecuta `node --test tests/app.test.cjs`. Las pruebas no instalan paquetes y comprueban generación, puntuación, navegación lógica, voz simulada e imágenes de reserva. No sustituyen las pruebas visuales ni de voz real.
+Con Node.js instalado, ejecuta `node --test tests/app.test.cjs`. Las pruebas no instalan paquetes y comprueban generación, puntuación, navegación lógica, ausencia de síntesis de voz e imágenes de reserva. No sustituyen las pruebas visuales y táctiles en dispositivos reales.
 
 Consulta `docs/project-notes.md` para las comprobaciones pendientes antes de la entrega. Para publicar, sirve estos archivos en un alojamiento estático HTTPS; no se ha publicado ninguna versión desde esta revisión.

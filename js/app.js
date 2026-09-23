@@ -1,6 +1,4 @@
 let activeTab = 'home';
-let speechTimer = null;
-let activeUtterance = null;
 let quizAnswered = false;
 let matchAnswered = false;
 
@@ -40,13 +38,6 @@ function focusElement(element) {
   element.focus();
 }
 
-function stopSpeech() {
-  clearTimeout(speechTimer);
-  speechTimer = null;
-  activeUtterance = null;
-  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-}
-
 let currentCat = null;
 let fcIndex = 0;
 
@@ -79,7 +70,7 @@ function setActiveNav(tab) {
     flashcards: 1,
     quiz: 2,
     match: 3,
-    listen: 4
+    directions: 4
   };
 
   document.querySelectorAll(".nav-btn").forEach((btn) => {
@@ -98,7 +89,6 @@ function setActiveNav(tab) {
 
 function showTab(tab) {
   if (!document.getElementById(`screen-${tab}`)) return;
-  stopSpeech();
   activeTab = tab;
   document.querySelectorAll(".screen").forEach((screen) => {
     screen.classList.remove("active");
@@ -121,10 +111,6 @@ function showTab(tab) {
 
   if (tab === "match" && matchQuestions.length === 0) {
     buildMatch();
-  }
-  if (tab === 'listen') {
-    if (listenQuestions.length === 0) buildListen();
-    else if (!listenAnswered) speakListenWord();
   }
   focusElement(target.querySelector('h2'));
 }
@@ -151,14 +137,13 @@ function openDefaultFlashcards() {
 }
 
 function renderFlashcard() {
-  stopSpeech();
   if (!currentCat || currentCat.items.length === 0) return;
 
   const item = currentCat.items[fcIndex];
   const total = currentCat.items.length;
 
   document.getElementById("flashcard-category-title").textContent = currentCat.name;
-  document.getElementById("flashcard-category-subtitle").textContent = "Escucha, observa y repite";
+  document.getElementById("flashcard-category-subtitle").textContent = "Observa, nombra y repite";
   document.getElementById("fc-num").textContent = `${fcIndex + 1} / ${total}`;
   renderVisual(document.getElementById("fc-emoji"), item);
   document.getElementById('fc-prev-btn').disabled = fcIndex === 0;
@@ -173,12 +158,6 @@ function renderFlashcard() {
   card.offsetHeight;
   card.style.animation = "fadePop 0.28s ease";
 
-  const autoSpeak = document.getElementById("autoSpeakToggle");
-  if (autoSpeak && autoSpeak.checked) {
-    speechTimer = setTimeout(() => {
-      if (activeTab === 'flashcards' && autoSpeak.checked) speakCurrentWord();
-    }, 180);
-  }
 }
 
 function fcNext() {
@@ -198,53 +177,6 @@ function fcPrev() {
   if (fcIndex > 0) {
     fcIndex--;
     renderFlashcard();
-  }
-}
-
-function speakCurrentWord() {
-  if (!currentCat) return;
-
-  const item = currentCat.items[fcIndex];
-  speakText(item.word);
-}
-
-function speakText(text, statusId = 'speech-status') {
-  stopSpeech();
-  const status = document.getElementById(statusId);
-  status.textContent = '';
-  if (!("speechSynthesis" in window) || !('SpeechSynthesisUtterance' in window)) {
-    status.textContent = 'La lectura por voz no está disponible en este navegador.';
-    return;
-  }
-  try {
-    const utterance = new SpeechSynthesisUtterance(text);
-    activeUtterance = utterance;
-    utterance.lang = "es-ES";
-    utterance.rate = 0.85;
-    utterance.pitch = 1;
-    utterance.volume = 1;
-
-    const voices = window.speechSynthesis.getVoices();
-    const spanishVoice =
-      voices.find(voice => voice.lang.toLowerCase() === 'es-es') ||
-      voices.find(voice => /^es(?:-|$)/i.test(voice.lang)) || null;
-
-    if (spanishVoice) {
-      utterance.voice = spanishVoice;
-      utterance.lang = spanishVoice.lang;
-    }
-    utterance.onend = () => { if (activeUtterance === utterance) activeUtterance = null; };
-    utterance.onerror = event => {
-      if (activeUtterance !== utterance) return;
-      activeUtterance = null;
-      if (!['canceled', 'interrupted'].includes(event.error)) {
-        status.textContent = 'No se pudo reproducir la voz. Pulsa Escuchar para intentarlo de nuevo.';
-      }
-    };
-    window.speechSynthesis.speak(utterance);
-  } catch {
-    activeUtterance = null;
-    status.textContent = 'No se pudo iniciar la lectura por voz en este navegador.';
   }
 }
 
@@ -552,105 +484,179 @@ function showMatchResult() {
   focusElement(document.getElementById("mr-msg"));
 }
 
-// Listening uses picture-only choices; accessible names remain available.
-let listenQuestions = [];
-let listenIndex = 0;
-let listenAnswered = false;
+// ── SIGUE LA INSTRUCCIÓN ────────────────────────────────────────────────────
 
-function generateListenQuestions(count) {
+let directionsQuestions = [];
+let directionsLevel = 1;
+let directionIndex = 0;
+let directionStepIndex = 0;
+let directionAnswered = false;
+let directionHadSupport = false;
+let directionsFirstTry = 0;
+let directionsWithSupport = 0;
+
+function directionVocabulary() {
   const vocabulary = categories.flatMap(cat => cat.items);
-  const unique = vocabulary.filter((item, index) => vocabulary.findIndex(other =>
+  return vocabulary.filter((item, index) => vocabulary.findIndex(other =>
     other.word === item.word || other.emoji === item.emoji ||
     (item.image && other.image === item.image)) === index);
-  return shuffle(unique).slice(0, count).map(item => {
-    const options = shuffle([item, ...shuffle(unique.filter(other => other.id !== item.id)).slice(0, 2)]);
-    return { item, options, correctIndex: options.findIndex(other => other.id === item.id) };
+}
+
+function directionInstruction(sequence) {
+  const phrases = sequence.map(item => {
+    const category = categories.find(cat => cat.items.some(candidate => candidate.id === item.id));
+    const name = item.word.toLocaleLowerCase('es');
+    return category && category.id === 'colores' ? `el color ${name}` : `la imagen de ${name}`;
   });
+  if (phrases.length === 1) return `Toca ${phrases[0]}.`;
+  if (phrases.length === 2) {
+    return `Primero toca ${phrases[0]}. Después, ${phrases[1]}.`;
+  }
+  return `Primero toca ${phrases[0]}. Luego, ${phrases[1]}. Al final, ${phrases[2]}.`;
 }
 
-function buildListen() {
-  stopSpeech();
-  listenQuestions = generateListenQuestions(10);
-  listenIndex = 0;
-  document.getElementById('listen-game').style.display = 'block';
-  document.getElementById('listen-result').style.display = 'none';
-  renderListenQuestion();
+function generateDirectionQuestions(count, level) {
+  const steps = Math.max(1, Math.min(3, Number(level) || 1));
+  const vocabulary = directionVocabulary();
+  const targets = shuffle(vocabulary).slice(0, count * steps);
+  const questions = [];
+  for (let i = 0; i < count; i++) {
+    const sequence = targets.slice(i * steps, (i + 1) * steps);
+    const optionCount = Math.max(3, steps + 1);
+    const distractors = shuffle(vocabulary.filter(item =>
+      !sequence.some(target => target.id === item.id))).slice(0, optionCount - steps);
+    questions.push({ sequence, options: shuffle([...sequence, ...distractors]) });
+  }
+  return questions;
 }
 
-function renderListenQuestion() {
-  listenAnswered = false;
-  const q = listenQuestions[listenIndex];
-  document.getElementById('l-progress').textContent = `Palabra ${listenIndex + 1} de ${listenQuestions.length}`;
-  document.getElementById('l-feedback').textContent = '';
-  document.getElementById('l-feedback').className = 'quiz-feedback';
-  document.getElementById('l-next').style.display = 'none';
-  document.getElementById('l-help').open = false;
-  document.getElementById('l-adult-word').textContent = q.item.word;
-  const wrap = document.getElementById('l-options');
+function showDirectionsSetup() {
+  directionsQuestions = [];
+  directionIndex = 0;
+  document.getElementById('directions-setup').style.display = 'block';
+  document.getElementById('directions-game').style.display = 'none';
+  document.getElementById('directions-result').style.display = 'none';
+  focusElement(document.getElementById('directions-setup').querySelector('h3'));
+}
+
+function startDirections(level) {
+  directionsLevel = Math.max(1, Math.min(3, Number(level) || 1));
+  directionsQuestions = generateDirectionQuestions(6, directionsLevel);
+  directionIndex = 0;
+  directionsFirstTry = 0;
+  directionsWithSupport = 0;
+  document.getElementById('directions-setup').style.display = 'none';
+  document.getElementById('directions-game').style.display = 'block';
+  document.getElementById('directions-result').style.display = 'none';
+  renderDirectionQuestion();
+}
+
+function restartDirections() {
+  startDirections(directionsLevel);
+}
+
+function renderDirectionQuestion() {
+  const question = directionsQuestions[directionIndex];
+  if (!question) return;
+  directionStepIndex = 0;
+  directionAnswered = false;
+  directionHadSupport = false;
+  const instruction = directionInstruction(question.sequence);
+  document.getElementById('d-progress').textContent =
+    `Instrucción ${directionIndex + 1} de ${directionsQuestions.length} · Nivel ${directionsLevel}`;
+  document.getElementById('d-adult-instruction').textContent = instruction;
+  document.getElementById('d-feedback').textContent = '';
+  document.getElementById('d-feedback').className = 'quiz-feedback';
+  document.getElementById('d-next').style.display = 'none';
+  renderDirectionSteps();
+
+  const wrap = document.getElementById('d-options');
   wrap.replaceChildren();
-  q.options.forEach((item, index) => {
+  question.options.forEach((item, index) => {
     const button = document.createElement('button');
     button.type = 'button';
-    button.className = 'listen-opt';
+    button.className = 'direction-opt';
     button.setAttribute('aria-label', item.word);
     const visual = document.createElement('span');
-    visual.className = 'listen-visual';
+    visual.className = 'direction-visual';
     renderVisual(visual, item);
     button.appendChild(visual);
-    button.onclick = () => selectListenAnswer(index);
+    button.onclick = () => selectDirectionItem(index);
     wrap.appendChild(button);
   });
-  document.getElementById('l-play').focus();
-  speakListenWord();
+  focusElement(document.getElementById('d-adult-instruction'));
 }
 
-function speakListenWord() {
-  const q = listenQuestions[listenIndex];
-  if (activeTab !== 'listen' || !q || document.hidden) return;
-  speakText(q.item.word, 'l-speech-status');
+function renderDirectionSteps() {
+  const question = directionsQuestions[directionIndex];
+  const wrap = document.getElementById('d-step-progress');
+  wrap.replaceChildren();
+  question.sequence.forEach((item, index) => {
+    const step = document.createElement('span');
+    step.className = index < directionStepIndex ? 'step-dot complete' : 'step-dot';
+    step.textContent = index < directionStepIndex ? '✓' : String(index + 1);
+    wrap.appendChild(step);
+  });
 }
 
-function selectListenAnswer(index) {
-  const q = listenQuestions[listenIndex];
-  if (activeTab !== 'listen' || !q || listenAnswered || !Number.isInteger(index) || !q.options[index]) return;
-  const feedback = document.getElementById('l-feedback');
-  if (index !== q.correctIndex) {
-    feedback.textContent = 'Vamos a intentarlo otra vez. Escucha de nuevo y elige otra imagen.';
-    speakListenWord();
+function resetDirectionAttempt() {
+  directionStepIndex = 0;
+  Array.from(document.getElementById('d-options').children).forEach(button => {
+    button.disabled = false;
+    button.classList.remove('selected');
+  });
+  renderDirectionSteps();
+}
+
+function selectDirectionItem(index) {
+  const question = directionsQuestions[directionIndex];
+  if (activeTab !== 'directions' || !question || directionAnswered ||
+      !Number.isInteger(index) || !question.options[index]) return;
+  const selected = question.options[index];
+  const expected = question.sequence[directionStepIndex];
+  const feedback = document.getElementById('d-feedback');
+  if (selected.id !== expected.id) {
+    directionHadSupport = true;
+    resetDirectionAttempt();
+    feedback.textContent = 'Vamos a leer la instrucción otra vez y comenzar desde el principio.';
+    feedback.className = 'quiz-feedback';
     return;
   }
-  stopSpeech();
-  listenAnswered = true;
-  const buttons = document.getElementById('l-options').children;
-  Array.from(buttons).forEach(button => { button.disabled = true; });
-  buttons[index].classList.add('correct');
-  feedback.textContent = `¡Muy bien! Es ${q.item.word}.`;
+
+  const button = document.getElementById('d-options').children[index];
+  button.disabled = true;
+  button.classList.add('selected');
+  directionStepIndex++;
+  renderDirectionSteps();
+  if (directionStepIndex < question.sequence.length) {
+    feedback.textContent = '¡Bien! Continúa con el próximo paso.';
+    return;
+  }
+
+  directionAnswered = true;
+  if (directionHadSupport) directionsWithSupport++;
+  else directionsFirstTry++;
+  feedback.textContent = '¡Muy bien! Seguiste toda la instrucción.';
   feedback.className = 'quiz-feedback correct';
-  const next = document.getElementById('l-next');
-  next.textContent = listenIndex === listenQuestions.length - 1 ? 'Finalizar' : 'Siguiente →';
+  Array.from(document.getElementById('d-options').children).forEach(option => { option.disabled = true; });
+  const next = document.getElementById('d-next');
+  next.textContent = directionIndex === directionsQuestions.length - 1 ? 'Ver resumen' : 'Siguiente →';
   next.style.display = 'inline-flex';
   next.focus();
 }
 
-function nextListenQuestion() {
-  if (activeTab !== 'listen' || !listenAnswered || listenIndex >= listenQuestions.length) return;
-  stopSpeech();
-  listenIndex++;
-  if (listenIndex < listenQuestions.length) {
-    renderListenQuestion();
+function nextDirectionQuestion() {
+  if (activeTab !== 'directions' || !directionAnswered || directionIndex >= directionsQuestions.length) return;
+  directionIndex++;
+  if (directionIndex < directionsQuestions.length) {
+    renderDirectionQuestion();
     return;
   }
-  document.getElementById('listen-game').style.display = 'none';
-  document.getElementById('listen-result').style.display = 'block';
-  document.getElementById('lr-msg').textContent = `Practicaste ${listenQuestions.length} palabras. ¡Sigue escuchando y aprendiendo!`;
-  focusElement(document.getElementById('lr-msg'));
+  document.getElementById('directions-game').style.display = 'none';
+  document.getElementById('directions-result').style.display = 'block';
+  document.getElementById('dr-msg').textContent =
+    `Nivel ${directionsLevel}: ${directionsFirstTry} al primer intento y ${directionsWithSupport} con repetición o apoyo.`;
+  focusElement(document.getElementById('dr-msg'));
 }
 
 buildHome();
-
-document.getElementById('autoSpeakToggle').addEventListener('change', event => {
-  stopSpeech();
-  if (event.target.checked && activeTab === 'flashcards') speakCurrentWord();
-});
-document.addEventListener('visibilitychange', () => { if (document.hidden) stopSpeech(); });
-window.addEventListener('pagehide', stopSpeech);
