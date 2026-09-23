@@ -13,6 +13,15 @@
 
 ## Antes de entregar al cliente
 
+### Nueva actividad: Escucha y elige
+
+- Diez palabras sin repetir, tres imágenes distintas por pregunta y etiquetas accesibles sin texto visible en las opciones.
+- Voz al entrar y avanzar, botón para repetir, intentos sin penalización y ayuda desplegable para lectura por un adulto.
+- Conserva la partida al cambiar de actividad; Reiniciar y Jugar de nuevo crean otra partida.
+- Verificación: las 10 pruebas automatizadas pasan, incluidas generación sin imágenes o palabras duplicadas, reintentos, repetición, navegación, finalización, reinicio y errores de voz. El audio y el diseño en dispositivos reales siguen pendientes.
+
+### Comprobaciones manuales
+
 1. Probar en navegador de escritorio y móviles reales (Safari iOS y Chrome Android): Inicio, las 80 tarjetas, Quiz completo, Empareja completo, respuestas correctas e incorrectas, resultados, reinicios y regreso a una partida.
 2. Verificar 320, 375, 768 y 1280 píxeles, orientación horizontal, zoom al 200 %, palabras largas, teclado, lector de pantalla y movimiento reducido. Confirmar que no hay desbordamientos y que el foco resulta comprensible.
 3. Escuchar voz manual y automática; probar navegación rápida, desactivar lectura, cambiar de actividad y ocultar la página. Confirmar el acento preferido con la cliente.

@@ -30,7 +30,7 @@ function setup(speech = true) {
   }
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
   const ids = Object.fromEntries([...html.matchAll(/id="([^"]+)"/g)].map(m => [m[1], new Element()]));
-  const nav = Array.from({ length: 4 }, () => new Element());
+  const nav = Array.from({ length: 5 }, () => new Element());
   const listeners = {};
   const document = {
     hidden: false,
@@ -163,4 +163,67 @@ test('images fall back on failure; stale image errors cannot overwrite the next 
   run("renderVisual(document.getElementById('fc-emoji'), {emoji:'🐱'})");
   old.onerror();
   assert.equal(ids['fc-emoji'].textContent, '🐱');
+});
+
+test('listening rounds have distinct pictures, words and targets', () => {
+  const { run } = setup();
+  assert.equal(run(`Array.from({length: 200}, () => generateListenQuestions(10)).every(rounds =>
+    rounds.length === 10 && new Set(rounds.map(q => q.item.word)).size === 10 &&
+    rounds.every(q => q.options.length === 3 && new Set(q.options.map(i => i.emoji)).size === 3 &&
+      new Set(q.options.map(i => i.word)).size === 3 && q.options[q.correctIndex].id === q.item.id))`), true);
+});
+
+test('listening supports retries, replay, resume, completion and restart', () => {
+  const { run, ids, spoken } = setup();
+  run("showTab('listen'); nextListenQuestion()");
+  assert.equal(run('listenIndex'), 0);
+  assert.equal(spoken[0].text, run('listenQuestions[0].item.word'));
+  assert.equal(ids['l-options'].children.length, 3);
+  assert.ok(ids['l-options'].children.every(button => button.attributes['aria-label'] && button.children.length === 1));
+  run('selectListenAnswer(-1); selectListenAnswer((listenQuestions[0].correctIndex + 1) % 3); nextListenQuestion()');
+  assert.equal(run('listenIndex'), 0);
+  assert.equal(run('listenAnswered'), false);
+  assert.match(ids['l-feedback'].textContent, /otra vez/);
+  run('speakListenWord()');
+  assert.equal(spoken.length, 3);
+  run('selectListenAnswer(listenQuestions[0].correctIndex); selectListenAnswer(listenQuestions[0].correctIndex)');
+  assert.equal(run('listenAnswered'), true);
+  assert.ok(ids['l-options'].children.every(button => button.disabled));
+  run("goHome(); showTab('listen')");
+  assert.equal(run('listenAnswered'), true);
+  run('nextListenQuestion()');
+  assert.equal(ids['l-help'].open, false);
+  const word = run('listenQuestions[1].item.word');
+  run("goHome(); showTab('listen')");
+  assert.equal(spoken.at(-1).text, word);
+  run('for (let i = 1; i < 10; i++) { selectListenAnswer(listenQuestions[listenIndex].correctIndex); nextListenQuestion(); } nextListenQuestion()');
+  assert.equal(run('listenIndex'), 10);
+  assert.equal(ids['listen-result'].style.display, 'block');
+  assert.match(ids['lr-msg'].textContent, /10 palabras/);
+  run("goHome(); showTab('listen')");
+  assert.equal(ids['listen-result'].style.display, 'block');
+  run('buildListen()');
+  assert.equal(run('listenIndex'), 0);
+  assert.equal(run('listenAnswered'), false);
+  assert.equal(ids['listen-result'].style.display, 'none');
+});
+
+test('listening voice errors stay in the activity and stale errors are ignored', () => {
+  const unavailable = setup(false);
+  unavailable.run("showTab('listen')");
+  assert.match(unavailable.ids['l-speech-status'].textContent, /no está disponible/);
+  assert.equal(unavailable.ids['l-adult-word'].textContent, unavailable.run('listenQuestions[0].item.word'));
+  const { run, ids, spoken, document, listeners } = setup();
+  run("showTab('listen')");
+  spoken[0].onerror({ error: 'network' });
+  assert.match(ids['l-speech-status'].textContent, /No se pudo/);
+  run('speakListenWord()');
+  const old = spoken.at(-1);
+  run('nextListenQuestion(); goHome()');
+  old.onerror({ error: 'network' });
+  assert.equal(ids['l-speech-status'].textContent, '');
+  run("showTab('listen')");
+  document.hidden = true;
+  listeners.visibilitychange();
+  assert.equal(run('activeUtterance'), null);
 });

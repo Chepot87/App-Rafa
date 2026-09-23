@@ -10,6 +10,7 @@ Abre `index.html` en un navegador moderno. Para probar mediante HTTP, utiliza el
 - Tarjetas: anterior/siguiente, lectura manual y automática. Finalizar regresa a Inicio.
 - Quiz: 10 preguntas para identificar el elemento que no pertenece.
 - Empareja: 12 preguntas para elegir la categoría de una palabra.
+- Escucha: 10 palabras con tres imágenes (emoji de reserva), voz automática al entrar y avanzar, repetición manual e intentos sin penalización. Las opciones no muestran texto; conservan etiquetas para lectores de pantalla. «Ayuda para el adulto» permite leer la palabra si falla la voz.
 - Las partidas se conservan al cambiar de actividad. Los botones Reiniciar y Jugar de nuevo comienzan otra partida. Recargar la página borra el progreso; no se guardan datos personales ni historiales.
 
 ## Estructura

@@ -35,6 +35,7 @@
       <button class="nav-btn" onclick="openDefaultFlashcards()">🃏 Tarjetas</button>
       <button class="nav-btn" onclick="showTab('quiz')">❓ Quiz</button>
       <button class="nav-btn" onclick="showTab('match')">🔗 Empareja</button>
+      <button class="nav-btn" onclick="showTab('listen')">🔊 Escucha</button>
     </nav>
 
     <main class="main-content">
@@ -207,6 +208,41 @@
         </div>
       </section>
 
+      <section id="screen-listen" class="screen">
+        <div class="screen-top">
+          <button class="ghost-btn" onclick="goHome()">← Volver</button>
+          <div class="screen-title-wrap">
+            <h2>Escucha y elige</h2>
+            <p>Escucha la palabra y toca su imagen.</p>
+          </div>
+        </div>
+        <div id="listen-game">
+          <button class="ghost-btn restart-btn" onclick="buildListen()">↻ Reiniciar escucha</button>
+          <div class="quiz-card">
+            <p id="l-progress"></p>
+            <button id="l-play" class="speak-btn" onclick="speakListenWord()">🔊 Escuchar de nuevo</button>
+            <p id="l-speech-status" role="status"></p>
+            <details id="l-help" class="listen-help">
+              <summary>Ayuda para el adulto</summary>
+              <p>Si no se oye la voz, lee esta palabra en voz alta: <strong id="l-adult-word"></strong>.</p>
+            </details>
+            <div id="l-options" class="listen-options" role="group" aria-label="Elige la imagen que escuchaste"></div>
+            <div id="l-feedback" class="quiz-feedback" role="status" aria-atomic="true"></div>
+            <div class="quiz-next-row">
+              <button id="l-next" class="primary-btn" onclick="nextListenQuestion()" style="display:none">Siguiente →</button>
+            </div>
+          </div>
+        </div>
+        <div id="listen-result" class="result-card" style="display:none">
+          <div class="result-emoji" aria-hidden="true">🌟</div>
+          <h2>¡Muy bien! Terminaste la práctica</h2>
+          <p id="lr-msg"></p>
+          <div class="result-actions">
+            <button class="primary-btn" onclick="buildListen()">🔄 Jugar de nuevo</button>
+            <button class="secondary-btn" onclick="goHome()">🏠 Inicio</button>
+          </div>
+        </div>
+      </section>
     </main>
   </div>
 

@@ -989,6 +989,21 @@ body {
     border-radius: 20px;
   }
 }
+.listen-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 24px; }
+.listen-opt { border: 2px solid #dce5ee; background: white; border-radius: 20px; padding: 20px 8px; min-width: 0; cursor: pointer; }
+.listen-opt:hover:not(:disabled) { background: #f0f6ff; border-color: #285ca8; }
+.listen-opt.correct { border-color: #287339; background: #effcef; outline: 2px solid #287339; }
+.listen-visual { display: block; font-size: clamp(2.8rem, 8vw, 5rem); }
+.listen-visual:has(img) { height: 120px; }
+.listen-help { margin-top: 18px; color: var(--muted); font-size: .95rem; }
+.listen-help summary { cursor: pointer; padding: 12px; }
+#l-progress, #l-speech-status { color: var(--muted); font-weight: 700; }
+#l-speech-status:empty { display: none; }
+@media (max-width: 480px) {
+  .listen-options { gap: 8px; }
+  .listen-opt { padding: 16px 4px; border-radius: 14px; }
+  .listen-visual:has(img) { height: 80px; }
+}
 /* Interaction, image support and narrow-screen refinements. */
 button { font-family: inherit; touch-action: manipulation; }
 button:focus-visible, input:focus-visible, [tabindex="-1"]:focus-visible {
