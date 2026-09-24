@@ -30,7 +30,7 @@ function setup() {
   }
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
   const ids = Object.fromEntries([...html.matchAll(/id="([^"]+)"/g)].map(m => [m[1], new Element()]));
-  const nav = Array.from({ length: 5 }, () => new Element());
+  const nav = Array.from({ length: 6 }, () => new Element());
   const listeners = {};
   const document = {
     hidden: false,
@@ -208,4 +208,55 @@ test('three-step directions expose four choices and a complete adult prompt', ()
   assert.equal(ids['d-options'].children.length, 4);
   assert.equal(ids['d-step-progress'].children.length, 3);
   assert.match(ids['d-adult-instruction'].textContent, /Al final/);
+});
+
+test('expressive-language content resolves to the vocabulary and creates unique sessions', () => {
+  const { run } = setup();
+  assert.equal(run('expressiveProfiles.length'), 24);
+  assert.equal(run('new Set(expressiveProfiles.map(profile => profile.id)).size'), 24);
+  assert.equal(run(`expressiveProfiles.every(profile =>
+    vocabularyItemById(profile.id) && profile.category && profile.attributes.length >= 3 &&
+    profile.function && profile.location && profile.model)`), true);
+  assert.equal(run(`expressiveComparePairs.every(pair =>
+    pair.ids.length === 2 && pair.ids.every(vocabularyItemById) &&
+    pair.same && pair.different && pair.model)`), true);
+  for (const level of ['name', 'describe', 'compare']) {
+    assert.equal(run(`Array.from({length: 100}, () => generateExpressiveQuestions(6, '${level}')).every(rounds =>
+      rounds.length === 6 && new Set(rounds.map(q => q.id || q.ids.join('|'))).size === 6)`), true);
+  }
+});
+
+test('describe and compare reveals optional supports and records adult-observed outcomes', () => {
+  const { run, ids } = setup();
+  run("showTab('expressive'); nextExpressiveQuestion(); startExpressive('name')");
+  assert.equal(run('expressiveIndex'), 0);
+  assert.equal(ids['e-stage'].children.length, 1);
+  assert.equal(ids['e-stage'].children[0].children.length, 1);
+  assert.equal(ids['e-support'].style.display, 'none');
+
+  run('showExpressiveSupport()');
+  assert.equal(run('expressiveSupportShown'), true);
+  assert.equal(ids['e-support'].style.display, 'block');
+  assert.ok(ids['e-support'].children.length >= 3);
+  run("recordExpressiveOutcome('invalid'); recordExpressiveOutcome('cue'); recordExpressiveOutcome('cue')");
+  assert.equal(run('expressiveCounts.cue'), 1);
+  const promptBeforeResume = ids['e-prompt'].textContent;
+  run("goHome(); showTab('expressive')");
+  assert.equal(ids['e-prompt'].textContent, promptBeforeResume);
+  run('nextExpressiveQuestion()');
+  assert.equal(run('expressiveIndex'), 1);
+
+  run(`for (let round = 1; round < 6; round++) {
+    recordExpressiveOutcome(round === 5 ? 'practice' : 'independent');
+    nextExpressiveQuestion();
+  }`);
+  assert.equal(ids['expressive-result'].style.display, 'block');
+  assert.equal(ids['er-msg'].textContent, 'Nombra: 4 sin ayuda, 1 con una pista, 0 repitiendo un modelo y 1 para seguir practicando.');
+
+  run("restartExpressive(); showExpressiveSetup(); startExpressive('compare')");
+  assert.equal(ids['e-stage'].children.length, 2);
+  assert.equal(ids['e-stage'].children[0].children.length, 2);
+  assert.match(ids['e-prompt'].textContent, /se parecen/);
+  run('showExpressiveSupport()');
+  assert.equal(ids['e-support'].children.length, 4);
 });

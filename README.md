@@ -11,6 +11,7 @@ Abre `index.html` en un navegador moderno. Para probar mediante HTTP, utiliza el
 - Quiz: 10 preguntas para identificar el elemento que no pertenece.
 - Empareja: 12 preguntas para elegir la categoría de una palabra.
 - Sigue la instrucción: 6 instrucciones guiadas por un adulto, con niveles de uno, dos o tres pasos para edades de referencia de 3 a 8 años. Registra finalización al primer intento o con apoyo únicamente como resumen de la práctica, no como evaluación clínica.
+- Describe y compara: 6 oportunidades guiadas para nombrar, describir atributos y funciones, o explicar semejanzas y diferencias. El adulto puede revelar pistas y registra el nivel de apoyo utilizado; el resumen no es una evaluación clínica.
 - Las partidas se conservan al cambiar de actividad. Los botones Reiniciar y Jugar de nuevo comienzan otra partida. Recargar la página borra el progreso; no se guardan datos personales ni historiales.
 
 ## Estructura
@@ -43,6 +44,6 @@ Google Fonts se carga por Internet. Si no está disponible, se usan las fuentes 
 
 ## Comprobaciones
 
-Con Node.js instalado, ejecuta `node --test tests/app.test.cjs`. Las pruebas no instalan paquetes y comprueban generación, puntuación, navegación lógica, ausencia de síntesis de voz e imágenes de reserva. No sustituyen las pruebas visuales y táctiles en dispositivos reales.
+Con Node.js instalado, ejecuta `node --test tests/app.test.cjs`. Las pruebas no instalan paquetes y comprueban generación, puntuación, navegación lógica, lenguaje expresivo, ausencia de síntesis de voz e imágenes de reserva. No sustituyen las pruebas visuales y táctiles en dispositivos reales.
 
 Consulta `docs/project-notes.md` para las comprobaciones pendientes antes de la entrega. Para publicar, sirve estos archivos en un alojamiento estático HTTPS; no se ha publicado ninguna versión desde esta revisión.

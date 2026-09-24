@@ -36,6 +36,7 @@
       <button class="nav-btn" onclick="showTab('quiz')">❓ Quiz</button>
       <button class="nav-btn" onclick="showTab('match')">🔗 Empareja</button>
       <button class="nav-btn" onclick="showTab('directions')">👆 Sigue</button>
+      <button class="nav-btn" onclick="showTab('expressive')">💬 Describe</button>
     </nav>
 
     <main class="main-content">
@@ -259,6 +260,84 @@
           <div class="result-actions">
             <button class="primary-btn" onclick="restartDirections()">🔄 Repetir nivel</button>
             <button class="secondary-btn" onclick="showDirectionsSetup()">⚙ Elegir otro nivel</button>
+            <button class="secondary-btn" onclick="goHome()">🏠 Inicio</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- LENGUAJE EXPRESIVO -->
+      <section id="screen-expressive" class="screen">
+        <div class="screen-top">
+          <button class="ghost-btn" onclick="goHome()">← Volver</button>
+          <div class="screen-title-wrap">
+            <h2>Describe y compara</h2>
+            <p>Practica vocabulario, atributos, funciones y semejanzas con el apoyo de un adulto.</p>
+          </div>
+        </div>
+
+        <div id="expressive-setup" class="directions-setup">
+          <div class="quiz-card">
+            <h3>Elige cómo practicar</h3>
+            <p class="adult-note">Para el adulto: acepta respuestas correctas expresadas con las palabras del niño. Amplía su frase sin exigir que repita exactamente el modelo.</p>
+            <div class="level-options expressive-levels">
+              <button class="level-btn" onclick="startExpressive('name')">
+                <strong>Nombra · ¿Qué es?</strong>
+                <span>Referencia: 3–4 años o lenguaje emergente</span>
+              </button>
+              <button class="level-btn" onclick="startExpressive('describe')">
+                <strong>Describe · Dime dos cosas</strong>
+                <span>Referencia: 4–6 años</span>
+              </button>
+              <button class="level-btn" onclick="startExpressive('compare')">
+                <strong>Compara · Se parecen y se diferencian</strong>
+                <span>Referencia: 6–8 años</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="expressive-game" style="display:none">
+          <div class="directions-toolbar">
+            <button class="ghost-btn" onclick="showExpressiveSetup()">⚙ Cambiar nivel</button>
+            <button class="ghost-btn" onclick="restartExpressive()">↻ Reiniciar práctica</button>
+          </div>
+          <div class="quiz-card expressive-card">
+            <p id="e-progress"></p>
+            <div class="adult-instruction">
+              <span>Para el adulto, pregunta:</span>
+              <strong id="e-prompt"></strong>
+            </div>
+            <div id="e-stage" class="expressive-stage" aria-live="polite"></div>
+            <button id="e-support-btn" class="secondary-btn support-toggle" onclick="showExpressiveSupport()">💡 Mostrar apoyo</button>
+            <div id="e-support" class="expressive-support" style="display:none" role="status"></div>
+            <div class="outcome-panel">
+              <p>¿Cuánto apoyo necesitó?</p>
+              <div id="e-outcomes" class="outcome-options">
+                <button onclick="recordExpressiveOutcome('independent')">🌟 Lo dijo solo</button>
+                <button onclick="recordExpressiveOutcome('cue')">💡 Con una pista</button>
+                <button onclick="recordExpressiveOutcome('model')">🗣️ Repitió el modelo</button>
+                <button onclick="recordExpressiveOutcome('practice')">🌱 Necesita más práctica</button>
+              </div>
+            </div>
+            <div id="e-feedback" class="quiz-feedback" role="status" aria-atomic="true"></div>
+            <div class="quiz-next-row">
+              <button id="e-next" class="primary-btn" onclick="nextExpressiveQuestion()" style="display:none">Siguiente →</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="expressive-result" class="result-card" style="display:none">
+          <div class="result-emoji" aria-hidden="true">💬</div>
+          <h2>¡Práctica completada!</h2>
+          <p>Completaron seis oportunidades de lenguaje expresivo.</p>
+          <div class="adult-summary">
+            <h3>Resumen para el adulto</h3>
+            <p id="er-msg"></p>
+            <p>Este resumen describe el apoyo utilizado hoy; no es una evaluación ni un diagnóstico.</p>
+          </div>
+          <div class="result-actions">
+            <button class="primary-btn" onclick="restartExpressive()">🔄 Repetir nivel</button>
+            <button class="secondary-btn" onclick="showExpressiveSetup()">⚙ Elegir otro nivel</button>
             <button class="secondary-btn" onclick="goHome()">🏠 Inicio</button>
           </div>
         </div>

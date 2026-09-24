@@ -157,3 +157,50 @@ const overlappingCategories = [
  ['frutas','naturaleza'], ['vehiculos','juguetes'], ['animales','juguetes'],
  ['escuela','juguetes'], ['frutas','colores']
 ];
+
+// Initial expressive-language set. These are examples for adult cueing, not an
+// exhaustive list of acceptable answers. Review wording with the therapist.
+const expressiveProfiles = [
+  { id: 'animales-perro', category: 'animal', attributes: ['tiene cuatro patas', 'tiene pelo', 'ladra'], function: 'puede acompañar y jugar con las personas', location: 'puede vivir en una casa', model: 'El perro es un animal con cuatro patas que puede vivir con las personas.' },
+  { id: 'animales-gato', category: 'animal', attributes: ['tiene cuatro patas', 'tiene pelo', 'maúlla'], function: 'puede acompañar y jugar con las personas', location: 'puede vivir en una casa', model: 'El gato es un animal con pelo que maúlla.' },
+  { id: 'animales-pajaro', category: 'animal', attributes: ['tiene plumas', 'tiene alas', 'tiene pico'], function: 'vuela y canta', location: 'puede vivir en un nido', model: 'El pájaro es un animal con alas y plumas que puede volar.' },
+
+  { id: 'frutas-manzana', category: 'fruta', attributes: ['es redonda', 'puede ser roja o verde', 'es dulce'], function: 'se come', location: 'crece en un árbol', model: 'La manzana es una fruta redonda que se come.' },
+  { id: 'frutas-banana', category: 'fruta', attributes: ['es larga', 'es amarilla cuando madura', 'tiene cáscara'], function: 'se come', location: 'crece en una planta', model: 'La banana es una fruta larga con cáscara.' },
+  { id: 'frutas-fresa', category: 'fruta', attributes: ['es pequeña', 'es roja', 'tiene semillas por fuera'], function: 'se come', location: 'crece en una planta', model: 'La fresa es una fruta pequeña y roja.' },
+
+  { id: 'ropa-camisa', category: 'ropa', attributes: ['tiene mangas', 'cubre el torso', 'puede tener botones'], function: 'se usa para vestir', location: 'se guarda en el clóset', model: 'La camisa es ropa que usamos en la parte de arriba del cuerpo.' },
+  { id: 'ropa-zapatos', category: 'ropa', attributes: ['se usan en pares', 'cubren los pies', 'pueden tener cordones'], function: 'protegen los pies', location: 'se guardan en el clóset', model: 'Los zapatos protegen los pies cuando caminamos.' },
+  { id: 'ropa-sombrero', category: 'ropa', attributes: ['se usa en la cabeza', 'puede tener ala', 'puede ser de muchos colores'], function: 'protege la cabeza del sol', location: 'se guarda con la ropa', model: 'El sombrero se usa en la cabeza y puede protegernos del sol.' },
+
+  { id: 'vehiculos-carro', category: 'vehículo', attributes: ['tiene ruedas', 'tiene puertas', 'lleva pasajeros'], function: 'sirve para transportarnos', location: 'se mueve por la carretera', model: 'El carro es un vehículo con ruedas que nos transporta.' },
+  { id: 'vehiculos-autobus', category: 'vehículo', attributes: ['es grande', 'tiene muchas sillas', 'lleva varias personas'], function: 'transporta grupos de personas', location: 'se mueve por la carretera', model: 'El autobús es un vehículo grande que lleva muchas personas.' },
+  { id: 'vehiculos-bicicleta', category: 'vehículo', attributes: ['tiene dos ruedas', 'tiene pedales', 'tiene manubrio'], function: 'sirve para transportarnos y hacer ejercicio', location: 'se usa en caminos y ciclovías', model: 'La bicicleta tiene dos ruedas y se mueve cuando pedaleamos.' },
+
+  { id: 'comida-pizza', category: 'comida', attributes: ['puede ser redonda', 'lleva queso', 'se corta en pedazos'], function: 'se come', location: 'se prepara en la cocina', model: 'La pizza es una comida que suele llevar queso y se corta en pedazos.' },
+  { id: 'comida-pan', category: 'comida', attributes: ['es suave', 'puede tener corteza', 'se puede cortar'], function: 'se come solo o con otros alimentos', location: 'se prepara en una panadería o cocina', model: 'El pan es un alimento que podemos comer solo o con otros alimentos.' },
+  { id: 'comida-sopa', category: 'comida', attributes: ['es líquida', 'se sirve caliente o fría', 'se come con cuchara'], function: 'se come', location: 'se prepara en una olla', model: 'La sopa es una comida líquida que comemos con cuchara.' },
+
+  { id: 'cuerpo-ojos', category: 'parte del cuerpo', attributes: ['son dos', 'tienen párpados', 'pueden ser de distintos colores'], function: 'sirven para ver', location: 'están en la cara', model: 'Los ojos están en la cara y los usamos para ver.' },
+  { id: 'cuerpo-mano', category: 'parte del cuerpo', attributes: ['tiene dedos', 'tiene palma', 'puede abrirse y cerrarse'], function: 'sirve para agarrar y tocar', location: 'está al final del brazo', model: 'La mano tiene dedos y nos ayuda a agarrar objetos.' },
+  { id: 'cuerpo-dientes', category: 'parte del cuerpo', attributes: ['son duros', 'son varios', 'deben limpiarse'], function: 'sirven para morder y masticar', location: 'están dentro de la boca', model: 'Los dientes están en la boca y sirven para masticar.' },
+
+  { id: 'juguetes-pelota', category: 'juguete', attributes: ['es redonda', 'puede rebotar', 'puede rodar'], function: 'sirve para jugar y practicar deportes', location: 'se usa en la casa o al aire libre', model: 'La pelota es un juguete redondo que puede rodar y rebotar.' },
+  { id: 'juguetes-bloques', category: 'juguete', attributes: ['son piezas', 'se pueden apilar', 'tienen distintas formas'], function: 'sirven para construir y jugar', location: 'se usan en el piso o una mesa', model: 'Los bloques son piezas que podemos apilar para construir.' },
+  { id: 'juguetes-rompecabezas', category: 'juguete', attributes: ['tiene varias piezas', 'forma una imagen', 'requiere buscar dónde encaja cada pieza'], function: 'sirve para jugar y resolver problemas', location: 'se arma en una mesa o el piso', model: 'El rompecabezas tiene piezas que unimos para formar una imagen.' },
+
+  { id: 'escuela-lapiz', category: 'material escolar', attributes: ['es largo y delgado', 'tiene punta', 'se puede borrar'], function: 'sirve para escribir y dibujar', location: 'se usa en la escuela o en casa', model: 'El lápiz es un material escolar que sirve para escribir y dibujar.' },
+  { id: 'escuela-libro', category: 'material escolar', attributes: ['tiene páginas', 'tiene una portada', 'puede tener palabras e imágenes'], function: 'sirve para leer y aprender', location: 'se encuentra en la escuela, biblioteca o casa', model: 'El libro tiene páginas y sirve para leer y aprender.' },
+  { id: 'escuela-mochila', category: 'material escolar', attributes: ['tiene tirantes', 'puede tener bolsillos', 'se lleva en la espalda'], function: 'sirve para guardar y llevar materiales', location: 'se usa para ir a la escuela', model: 'La mochila sirve para llevar los materiales de la escuela.' }
+];
+
+const expressiveComparePairs = [
+  { ids: ['animales-perro', 'animales-gato'], same: 'Los dos son animales con cuatro patas y pelo.', different: 'El perro ladra y el gato maúlla.', model: 'El perro y el gato son animales, pero producen sonidos diferentes.' },
+  { ids: ['frutas-manzana', 'frutas-banana'], same: 'Las dos son frutas que se comen.', different: 'La manzana es redonda y la banana es larga.', model: 'Las dos son frutas, pero tienen formas diferentes.' },
+  { ids: ['ropa-camisa', 'ropa-zapatos'], same: 'Los dos son ropa que usamos en el cuerpo.', different: 'La camisa va en el torso y los zapatos van en los pies.', model: 'Los dos sirven para vestirnos, pero se usan en partes diferentes del cuerpo.' },
+  { ids: ['vehiculos-carro', 'vehiculos-autobus'], same: 'Los dos son vehículos con ruedas que van por la carretera.', different: 'El autobús puede llevar más personas que el carro.', model: 'El carro y el autobús nos transportan, pero el autobús es más grande.' },
+  { ids: ['comida-pizza', 'comida-sopa'], same: 'Las dos son comidas.', different: 'La pizza se puede agarrar y la sopa se come con cuchara.', model: 'Las dos son comidas, pero se comen de maneras diferentes.' },
+  { ids: ['cuerpo-ojos', 'cuerpo-dientes'], same: 'Los dos son partes del cuerpo que debemos cuidar.', different: 'Los ojos sirven para ver y los dientes para masticar.', model: 'Los ojos y los dientes son partes del cuerpo, pero tienen funciones diferentes.' },
+  { ids: ['juguetes-pelota', 'juguetes-bloques'], same: 'Los dos son juguetes.', different: 'La pelota rueda y los bloques se apilan.', model: 'Los dos sirven para jugar, pero hacemos cosas diferentes con cada uno.' },
+  { ids: ['escuela-lapiz', 'escuela-libro'], same: 'Los dos son materiales que usamos para aprender.', different: 'Con el lápiz escribimos y el libro lo leemos.', model: 'Los dos se usan en la escuela, pero tienen funciones diferentes.' }
+];

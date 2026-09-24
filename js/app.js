@@ -70,7 +70,8 @@ function setActiveNav(tab) {
     flashcards: 1,
     quiz: 2,
     match: 3,
-    directions: 4
+    directions: 4,
+    expressive: 5
   };
 
   document.querySelectorAll(".nav-btn").forEach((btn) => {
@@ -657,6 +658,184 @@ function nextDirectionQuestion() {
   document.getElementById('dr-msg').textContent =
     `Nivel ${directionsLevel}: ${directionsFirstTry} al primer intento y ${directionsWithSupport} con repetición o apoyo.`;
   focusElement(document.getElementById('dr-msg'));
+}
+
+// ── DESCRIBE Y COMPARA ─────────────────────────────────────────────────────
+
+let expressiveQuestions = [];
+let expressiveLevel = 'name';
+let expressiveIndex = 0;
+let expressiveAnswered = false;
+let expressiveSupportShown = false;
+let expressiveCounts = { independent: 0, cue: 0, model: 0, practice: 0 };
+
+function vocabularyItemById(id) {
+  return categories.flatMap(category => category.items).find(item => item.id === id);
+}
+
+function generateExpressiveQuestions(count, level) {
+  const safeCount = Math.max(0, Number(count) || 0);
+  if (level === 'compare') {
+    return shuffle(expressiveComparePairs).slice(0, safeCount).map(pair => ({
+      ...pair,
+      items: pair.ids.map(vocabularyItemById)
+    }));
+  }
+  return shuffle(expressiveProfiles).slice(0, safeCount).map(profile => ({
+    ...profile,
+    item: vocabularyItemById(profile.id)
+  }));
+}
+
+function expressiveLevelName(level) {
+  return { name: 'Nombra', describe: 'Describe', compare: 'Compara' }[level] || 'Nombra';
+}
+
+function showExpressiveSetup() {
+  expressiveQuestions = [];
+  expressiveIndex = 0;
+  document.getElementById('expressive-setup').style.display = 'block';
+  document.getElementById('expressive-game').style.display = 'none';
+  document.getElementById('expressive-result').style.display = 'none';
+  focusElement(document.getElementById('expressive-setup').querySelector('h3'));
+}
+
+function startExpressive(level) {
+  expressiveLevel = ['name', 'describe', 'compare'].includes(level) ? level : 'name';
+  expressiveQuestions = generateExpressiveQuestions(6, expressiveLevel);
+  expressiveIndex = 0;
+  expressiveCounts = { independent: 0, cue: 0, model: 0, practice: 0 };
+  document.getElementById('expressive-setup').style.display = 'none';
+  document.getElementById('expressive-game').style.display = 'block';
+  document.getElementById('expressive-result').style.display = 'none';
+  renderExpressiveQuestion();
+}
+
+function restartExpressive() {
+  startExpressive(expressiveLevel);
+}
+
+function createExpressiveVisual(item, showWord) {
+  const card = document.createElement('div');
+  card.className = 'expressive-visual-card';
+  card.setAttribute('aria-label', item.word);
+  const visual = document.createElement('div');
+  visual.className = 'expressive-visual';
+  renderVisual(visual, item);
+  card.appendChild(visual);
+  if (showWord) {
+    const word = document.createElement('strong');
+    word.className = 'expressive-word';
+    word.textContent = item.word;
+    card.appendChild(word);
+  }
+  return card;
+}
+
+function expressivePrompt(question) {
+  if (expressiveLevel === 'name') return '¿Qué es?';
+  if (expressiveLevel === 'describe') return `Dime dos cosas sobre ${question.item.word.toLocaleLowerCase('es')}.`;
+  return '¿En qué se parecen y en qué son diferentes?';
+}
+
+function renderExpressiveQuestion() {
+  const question = expressiveQuestions[expressiveIndex];
+  if (!question) return;
+  expressiveAnswered = false;
+  expressiveSupportShown = false;
+  document.getElementById('e-progress').textContent =
+    `${expressiveLevelName(expressiveLevel)} · Oportunidad ${expressiveIndex + 1} de ${expressiveQuestions.length}`;
+  document.getElementById('e-prompt').textContent = expressivePrompt(question);
+  document.getElementById('e-feedback').textContent = '';
+  document.getElementById('e-feedback').className = 'quiz-feedback';
+  document.getElementById('e-next').style.display = 'none';
+  const support = document.getElementById('e-support');
+  support.style.display = 'none';
+  support.replaceChildren();
+  const supportButton = document.getElementById('e-support-btn');
+  supportButton.style.display = 'inline-flex';
+  supportButton.disabled = false;
+  Array.from(document.getElementById('e-outcomes').children).forEach(button => { button.disabled = false; });
+
+  const stage = document.getElementById('e-stage');
+  stage.replaceChildren();
+  if (expressiveLevel === 'compare') {
+    question.items.forEach(item => stage.appendChild(createExpressiveVisual(item, true)));
+  } else {
+    stage.appendChild(createExpressiveVisual(question.item, expressiveLevel === 'describe'));
+  }
+  focusElement(document.getElementById('e-prompt'));
+}
+
+function addSupportLine(container, label, text) {
+  const line = document.createElement('p');
+  const strong = document.createElement('strong');
+  strong.textContent = `${label}: `;
+  line.append(strong);
+  const content = document.createElement('span');
+  content.textContent = text;
+  line.append(content);
+  container.appendChild(line);
+}
+
+function showExpressiveSupport() {
+  const question = expressiveQuestions[expressiveIndex];
+  if (!question || expressiveAnswered) return;
+  expressiveSupportShown = true;
+  const support = document.getElementById('e-support');
+  support.replaceChildren();
+  const note = document.createElement('p');
+  note.className = 'support-note';
+  note.textContent = 'Son ejemplos de apoyo; otras respuestas correctas también cuentan.';
+  support.appendChild(note);
+  if (expressiveLevel === 'compare') {
+    addSupportLine(support, 'Se parecen', question.same);
+    addSupportLine(support, 'Son diferentes', question.different);
+    addSupportLine(support, 'Modelo', question.model);
+  } else {
+    addSupportLine(support, 'Categoría', `Es ${question.category}.`);
+    if (expressiveLevel === 'describe') {
+      addSupportLine(support, 'Atributos', question.attributes.join(', '));
+      addSupportLine(support, 'Función', question.function);
+      addSupportLine(support, 'Lugar', question.location);
+    }
+    addSupportLine(support, 'Modelo', question.model);
+  }
+  support.style.display = 'block';
+  document.getElementById('e-support-btn').style.display = 'none';
+  focusElement(support);
+}
+
+function recordExpressiveOutcome(outcome) {
+  const valid = ['independent', 'cue', 'model', 'practice'];
+  if (activeTab !== 'expressive' || expressiveAnswered || !valid.includes(outcome) || !expressiveQuestions[expressiveIndex]) return;
+  expressiveAnswered = true;
+  expressiveCounts[outcome]++;
+  Array.from(document.getElementById('e-outcomes').children).forEach(button => { button.disabled = true; });
+  document.getElementById('e-support-btn').disabled = true;
+  const feedback = document.getElementById('e-feedback');
+  feedback.textContent = outcome === 'practice'
+    ? 'Anotado. Pueden modelar una frase corta y seguir practicando.'
+    : '¡Muy bien! Respuesta registrada para el resumen de hoy.';
+  feedback.className = 'quiz-feedback correct';
+  const next = document.getElementById('e-next');
+  next.textContent = expressiveIndex === expressiveQuestions.length - 1 ? 'Ver resumen' : 'Siguiente →';
+  next.style.display = 'inline-flex';
+  next.focus();
+}
+
+function nextExpressiveQuestion() {
+  if (activeTab !== 'expressive' || !expressiveAnswered || expressiveIndex >= expressiveQuestions.length) return;
+  expressiveIndex++;
+  if (expressiveIndex < expressiveQuestions.length) {
+    renderExpressiveQuestion();
+    return;
+  }
+  document.getElementById('expressive-game').style.display = 'none';
+  document.getElementById('expressive-result').style.display = 'block';
+  document.getElementById('er-msg').textContent =
+    `${expressiveLevelName(expressiveLevel)}: ${expressiveCounts.independent} sin ayuda, ${expressiveCounts.cue} con una pista, ${expressiveCounts.model} repitiendo un modelo y ${expressiveCounts.practice} para seguir practicando.`;
+  focusElement(document.getElementById('er-msg'));
 }
 
 buildHome();
