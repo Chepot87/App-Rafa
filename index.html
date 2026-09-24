@@ -31,12 +31,30 @@
     </header>
 
     <nav class="main-nav" aria-label="Actividades">
-      <button class="nav-btn active" aria-current="page" onclick="showTab('home')">🏠 Inicio</button>
-      <button class="nav-btn" onclick="openDefaultFlashcards()">🃏 Tarjetas</button>
-      <button class="nav-btn" onclick="showTab('quiz')">❓ Quiz</button>
-      <button class="nav-btn" onclick="showTab('match')">🔗 Empareja</button>
-      <button class="nav-btn" onclick="showTab('directions')">👆 Sigue</button>
-      <button class="nav-btn" onclick="showTab('expressive')">💬 Describe</button>
+      <button class="nav-btn active" aria-current="page" onclick="showTab('home')">
+        <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 10.8 12 3l9 7.8"/><path d="M5.5 9.5V21h13V9.5M9 21v-7h6v7"/></svg></span>
+        <span>Inicio</span>
+      </button>
+      <button class="nav-btn" onclick="openDefaultFlashcards()">
+        <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M9 8h6M9 12h6M9 16h3"/></svg></span>
+        <span>Tarjetas</span>
+      </button>
+      <button class="nav-btn" onclick="showTab('quiz')">
+        <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.7 9a2.4 2.4 0 1 1 3.4 2.2c-.8.4-1.1.9-1.1 1.8M12 17h.01"/></svg></span>
+        <span>Quiz</span>
+      </button>
+      <button class="nav-btn" onclick="showTab('match')">
+        <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m9.5 14.5 5-5"/><path d="m7.2 17.8-1 1a3.5 3.5 0 0 1-5-5l3-3a3.5 3.5 0 0 1 5 0"/><path d="m16.8 6.2 1-1a3.5 3.5 0 0 1 5 5l-3 3a3.5 3.5 0 0 1-5 0"/></svg></span>
+        <span>Empareja</span>
+      </button>
+      <button class="nav-btn" onclick="showTab('directions')">
+        <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m4 6 2 2 4-4M4 12l2 2 4-4M4 18l2 2 4-4M13 6h7M13 12h7M13 18h7"/></svg></span>
+        <span>Sigue</span>
+      </button>
+      <button class="nav-btn" onclick="showTab('expressive')">
+        <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 15a4 4 0 0 1-4 4H8l-5 3 1.5-4.5A7.5 7.5 0 0 1 3 13V9a6 6 0 0 1 6-6h7a5 5 0 0 1 5 5v3"/><path d="M8 9h8M8 13h5"/></svg></span>
+        <span>Describe</span>
+      </button>
     </nav>
 
     <main class="main-content">

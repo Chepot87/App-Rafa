@@ -123,35 +123,78 @@ body {
 }
 
 .main-nav {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
   margin: 22px 0 26px;
+  padding: 8px;
+  border: 1px solid rgba(255, 255, 255, .92);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, .7);
+  box-shadow: 0 14px 36px rgba(33, 47, 80, .1), inset 0 1px 0 #fff;
+  backdrop-filter: blur(18px);
 }
 
 .nav-btn {
-  border: none;
-  background: rgba(255, 255, 255, 0.78);
-  color: var(--muted);
-  padding: 14px 24px;
-  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-width: 0;
+  min-height: 58px;
+  padding: 9px 10px;
+  border: 1px solid transparent;
+  border-radius: 17px;
+  background: transparent;
+  color: #536078;
   font-weight: 800;
-  font-size: 1rem;
+  font-size: .94rem;
   cursor: pointer;
-  box-shadow: 0 8px 24px rgba(30, 40, 80, 0.08);
-  transition: 0.2s ease;
-  backdrop-filter: blur(12px);
+  transition: transform .2s ease, color .2s ease, background .2s ease, box-shadow .2s ease;
 }
 
 .nav-btn:hover {
   transform: translateY(-2px);
+  border-color: rgba(48, 94, 166, .1);
+  background: rgba(238, 245, 255, .82);
+  color: #244f90;
 }
 
 .nav-btn.active {
-  background: linear-gradient(135deg, var(--blue), #6aa7ff);
+  border-color: rgba(255, 255, 255, .3);
+  background: linear-gradient(145deg, #356fc8, #24539d);
   color: white;
-  box-shadow: 0 14px 28px rgba(77, 150, 255, 0.35);
+  box-shadow: 0 10px 22px rgba(36, 83, 157, .27), inset 0 1px 0 rgba(255, 255, 255, .3);
+}
+
+.nav-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(70, 91, 125, .12);
+  border-radius: 11px;
+  background: rgba(255, 255, 255, .78);
+  color: #356fc8;
+  box-shadow: 0 4px 10px rgba(39, 57, 91, .07);
+}
+
+.nav-icon svg {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.nav-btn.active .nav-icon {
+  border-color: rgba(255, 255, 255, .22);
+  background: rgba(255, 255, 255, .15);
+  color: white;
+  box-shadow: none;
 }
 
 .main-content {
@@ -621,13 +664,14 @@ body {
   }
 
   .main-nav {
-    gap: 10px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
     margin: 18px 0 22px;
   }
 
   .nav-btn {
-    padding: 12px 18px;
-    font-size: 0.95rem;
+    padding: 8px;
+    font-size: 0.9rem;
   }
 
   .section-head h2,
@@ -787,14 +831,31 @@ body {
   }
 
   .main-nav {
-    gap: 8px;
+    gap: 5px;
     margin: 16px 0 18px;
+    padding: 6px;
+    border-radius: 20px;
   }
 
   .nav-btn {
-    padding: 10px 14px;
-    font-size: 0.88rem;
-    border-radius: 999px;
+    flex-direction: column;
+    gap: 4px;
+    min-height: 68px;
+    padding: 7px 4px 6px;
+    font-size: 0.76rem;
+    border-radius: 15px;
+  }
+
+  .nav-icon {
+    width: 30px;
+    height: 30px;
+    flex-basis: 30px;
+    border-radius: 10px;
+  }
+
+  .nav-icon svg {
+    width: 17px;
+    height: 17px;
   }
 
   .section-head {
@@ -985,13 +1046,13 @@ button:disabled { cursor: default; }
 #m-progress { color: var(--muted); font-weight: 700; }
 .restart-btn { display: block; margin: 0 0 12px auto; min-height: 44px; padding: 8px; }
 .ghost-btn { color: #285ca8; }
-.primary-btn, .nav-btn.active { background: #285ca8; }
+.primary-btn { background: #285ca8; }
 .quiz-feedback.correct { color: #287339; }
 .quiz-feedback.wrong { color: #b83232; }
 .brand h1 { color: #243044; }
 .brand p { color: #344052; }
 @media (max-width: 480px) {
-  .nav-btn { min-height: 44px; }
+  .nav-btn { min-height: 68px; }
   .card-emoji:has(img) { height: 160px; }
 }
 @media (prefers-reduced-motion: reduce) {
