@@ -109,7 +109,7 @@ const enLocale = {
     matchQuestion: "Question {number} of {total}",
     matchGood: "Correct! 🎉", matchWrong: "It belongs to: {category}",
     matchTry: "Keep practicing!",
-    imagePhrase: "the picture of {word}", colorPhrase: "the color {word}",
+    imagePhrase: "the picture of the {word}", colorPhrase: "the color {word}",
     directionOne: "Tap {first}.",
     directionTwo: "First tap {first}. Then tap {second}.",
     directionThree: "First tap {first}. Then tap {second}. Finally, tap {third}.",
