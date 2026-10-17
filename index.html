@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <noscript>Activa JavaScript para utilizar las actividades de App Rafa.</noscript>
+  <noscript data-i18n="Activa JavaScript para utilizar las actividades de App Rafa.">Activa JavaScript para utilizar las actividades de App Rafa.</noscript>
   <div class="app-shell">
     <header class="topbar">
       <div class="brand">
@@ -24,36 +24,45 @@
         </div>
 
         <div class="brand-copy">
-          <h1>Categorías Semánticas</h1>
-          <p>Terapia del habla para niños</p>
+          <h1 data-i18n="Categorías Semánticas">Categorías Semánticas</h1>
+          <p data-i18n="Terapia del habla para niños">Terapia del habla para niños</p>
         </div>
+      </div>
+      <div class="locale-control">
+        <label for="language-select" id="language-label">🌐 Idioma</label>
+        <select id="language-select" aria-labelledby="language-label" onchange="setLanguage(this.value)">
+          <option value="es">🇵🇷 Español</option>
+          <option value="en">🇺🇸 English</option>
+          <option value="pt">🇧🇷 Português</option>
+        </select>
+        <small id="language-notice">Cambiar de idioma reinicia las actividades.</small>
       </div>
     </header>
 
     <nav class="main-nav" aria-label="Actividades">
       <button class="nav-btn active" aria-current="page" onclick="showTab('home')">
         <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 10.8 12 3l9 7.8"/><path d="M5.5 9.5V21h13V9.5M9 21v-7h6v7"/></svg></span>
-        <span>Inicio</span>
+        <span data-i18n="Inicio">Inicio</span>
       </button>
       <button class="nav-btn" onclick="openDefaultFlashcards()">
         <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M9 8h6M9 12h6M9 16h3"/></svg></span>
-        <span>Tarjetas</span>
+        <span data-i18n="Tarjetas">Tarjetas</span>
       </button>
       <button class="nav-btn" onclick="showTab('quiz')">
         <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.7 9a2.4 2.4 0 1 1 3.4 2.2c-.8.4-1.1.9-1.1 1.8M12 17h.01"/></svg></span>
-        <span>Quiz</span>
+        <span data-i18n="Quiz">Quiz</span>
       </button>
       <button class="nav-btn" onclick="showTab('match')">
         <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m9.5 14.5 5-5"/><path d="m7.2 17.8-1 1a3.5 3.5 0 0 1-5-5l3-3a3.5 3.5 0 0 1 5 0"/><path d="m16.8 6.2 1-1a3.5 3.5 0 0 1 5 5l-3 3a3.5 3.5 0 0 1-5 0"/></svg></span>
-        <span>Empareja</span>
+        <span data-i18n="Empareja">Empareja</span>
       </button>
       <button class="nav-btn" onclick="showTab('directions')">
         <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m4 6 2 2 4-4M4 12l2 2 4-4M4 18l2 2 4-4M13 6h7M13 12h7M13 18h7"/></svg></span>
-        <span>Sigue</span>
+        <span data-i18n="Sigue">Sigue</span>
       </button>
       <button class="nav-btn" onclick="showTab('expressive')">
         <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 15a4 4 0 0 1-4 4H8l-5 3 1.5-4.5A7.5 7.5 0 0 1 3 13V9a6 6 0 0 1 6-6h7a5 5 0 0 1 5 5v3"/><path d="M8 9h8M8 13h5"/></svg></span>
-        <span>Describe</span>
+        <span data-i18n="Describe">Describe</span>
       </button>
     </nav>
 
@@ -61,8 +70,8 @@
       <!-- HOME -->
       <section id="screen-home" class="screen active">
         <div class="section-head">
-          <h2>Selecciona una categoría</h2>
-          <p>Toca una categoría para comenzar con las tarjetas.</p>
+          <h2 data-i18n="Selecciona una categoría">Selecciona una categoría</h2>
+          <p data-i18n="Toca una categoría para comenzar con las tarjetas.">Toca una categoría para comenzar con las tarjetas.</p>
         </div>
 
         <div id="home-grid" class="cat-grid"></div>
@@ -71,11 +80,11 @@
       <!-- FLASHCARDS -->
       <section id="screen-flashcards" class="screen">
         <div class="screen-top">
-          <button class="ghost-btn" onclick="goHome()">← Volver</button>
+          <button class="ghost-btn" onclick="goHome()" data-i18n="← Volver">← Volver</button>
 
           <div class="screen-title-wrap">
-            <h2 id="flashcard-category-title">Tarjetas</h2>
-            <p id="flashcard-category-subtitle">Observa, nombra y repite</p>
+            <h2 id="flashcard-category-title" data-i18n="Tarjetas">Tarjetas</h2>
+            <p id="flashcard-category-subtitle" data-i18n="Observa, nombra y repite">Observa, nombra y repite</p>
           </div>
         </div>
 
@@ -92,8 +101,8 @@
           </div>
 
           <div class="controls-row">
-            <button class="secondary-btn" id="fc-prev-btn" onclick="fcPrev()">← Anterior</button>
-            <button class="primary-btn" onclick="fcNext()" id="fc-next-btn">Siguiente →</button>
+            <button class="secondary-btn" id="fc-prev-btn" onclick="fcPrev()" data-i18n="← Anterior">← Anterior</button>
+            <button class="primary-btn" onclick="fcNext()" id="fc-next-btn" data-i18n="Siguiente →">Siguiente →</button>
           </div>
         </div>
       </section>
@@ -101,36 +110,36 @@
       <!-- QUIZ -->
       <section id="screen-quiz" class="screen">
         <div class="screen-top">
-          <button class="ghost-btn" onclick="goHome()">← Volver</button>
+          <button class="ghost-btn" onclick="goHome()" data-i18n="← Volver">← Volver</button>
 
           <div class="screen-title-wrap">
-            <h2>Quiz</h2>
-            <p>Encuentra cuál no pertenece</p>
+            <h2 data-i18n="Quiz">Quiz</h2>
+            <p data-i18n="Encuentra cuál no pertenece">Encuentra cuál no pertenece</p>
           </div>
         </div>
 
         <div id="quiz-game">
-          <button class="ghost-btn restart-btn" onclick="restartQuiz()">↻ Reiniciar quiz</button>
+          <button class="ghost-btn restart-btn" onclick="restartQuiz()" data-i18n="↻ Reiniciar quiz">↻ Reiniciar quiz</button>
           <div class="score-row">
             <div class="score-box">
               <span class="score-number" id="q-correct">0</span>
-              <span class="score-label">Correctas</span>
+              <span class="score-label" data-i18n="Correctas">Correctas</span>
             </div>
 
             <div class="score-box">
               <span class="score-number" id="q-wrong">0</span>
-              <span class="score-label">Incorrectas</span>
+              <span class="score-label" data-i18n="Incorrectas">Incorrectas</span>
             </div>
 
             <div class="score-box">
               <span class="score-number" id="q-total">0</span>
-              <span class="score-label">Respondidas</span>
+              <span class="score-label" data-i18n="Respondidas">Respondidas</span>
             </div>
           </div>
 
           <div class="quiz-card">
-            <h3 id="q-question">¿Cuál NO pertenece?</h3>
-            <p id="q-subtitle">Tema: Animales</p>
+            <h3 id="q-question" data-i18n="¿Cuál NO pertenece?">¿Cuál NO pertenece?</h3>
+            <p id="q-subtitle" data-i18n="Tema: Animales">Tema: Animales</p>
 
             <div id="q-options" class="quiz-options"></div>
 
@@ -142,7 +151,7 @@
                 class="primary-btn"
                 onclick="nextQuestion()"
                 style="display: none;"
-              >
+               data-i18n="Siguiente →">
                 Siguiente →
               </button>
             </div>
@@ -151,12 +160,12 @@
 
         <div id="quiz-result" class="result-card" style="display: none;">
           <div class="result-emoji" id="r-emoji">🏆</div>
-          <h2 id="r-title">¡Excelente!</h2>
-          <p id="r-msg">Respondiste 8 de 10 correctamente.</p>
+          <h2 id="r-title" data-i18n="¡Excelente!">¡Excelente!</h2>
+          <p id="r-msg" data-i18n="Respondiste 8 de 10 correctamente.">Respondiste 8 de 10 correctamente.</p>
 
           <div class="result-actions">
-            <button class="primary-btn" onclick="restartQuiz()">🔄 Jugar de nuevo</button>
-            <button class="secondary-btn" onclick="goHome()">🏠 Inicio</button>
+            <button class="primary-btn" onclick="restartQuiz()" data-i18n="🔄 Jugar de nuevo">🔄 Jugar de nuevo</button>
+            <button class="secondary-btn" onclick="goHome()" data-i18n="🏠 Inicio">🏠 Inicio</button>
           </div>
         </div>
       </section>
@@ -164,32 +173,32 @@
       <!-- EMPAREJA -->
       <section id="screen-match" class="screen">
         <div class="screen-top">
-          <button class="ghost-btn" onclick="goHome()">← Volver</button>
+          <button class="ghost-btn" onclick="goHome()" data-i18n="← Volver">← Volver</button>
           <div class="screen-title-wrap">
-            <h2>Empareja</h2>
-            <p>¿A qué categoría pertenece?</p>
+            <h2 data-i18n="Empareja">Empareja</h2>
+            <p data-i18n="¿A qué categoría pertenece?">¿A qué categoría pertenece?</p>
           </div>
         </div>
 
         <div id="match-game">
-          <button class="ghost-btn restart-btn" onclick="buildMatch()">↻ Reiniciar empareja</button>
+          <button class="ghost-btn restart-btn" onclick="buildMatch()" data-i18n="↻ Reiniciar empareja">↻ Reiniciar empareja</button>
           <div class="score-row">
             <div class="score-box">
               <span class="score-number" id="m-correct">0</span>
-              <span class="score-label">Correctas</span>
+              <span class="score-label" data-i18n="Correctas">Correctas</span>
             </div>
             <div class="score-box">
               <span class="score-number" id="m-wrong">0</span>
-              <span class="score-label">Incorrectas</span>
+              <span class="score-label" data-i18n="Incorrectas">Incorrectas</span>
             </div>
             <div class="score-box">
               <span class="score-number" id="m-total">0</span>
-              <span class="score-label">Respondidas</span>
+              <span class="score-label" data-i18n="Respondidas">Respondidas</span>
             </div>
           </div>
 
           <div class="match-card">
-            <p class="match-prompt">¿A qué categoría pertenece?</p>
+            <p class="match-prompt" data-i18n="¿A qué categoría pertenece?">¿A qué categoría pertenece?</p>
             <p id="m-progress"></p>
             <div class="match-item-display">
               <div class="match-emoji" id="m-emoji">🍎</div>
@@ -198,7 +207,7 @@
             <div id="m-options" class="match-options"></div>
             <div id="m-feedback" class="quiz-feedback" role="status" aria-atomic="true"></div>
             <div class="quiz-next-row">
-              <button id="m-next" class="primary-btn" onclick="nextMatchQuestion()" style="display:none">
+              <button id="m-next" class="primary-btn" onclick="nextMatchQuestion()" style="display:none" data-i18n="Siguiente →">
                 Siguiente →
               </button>
             </div>
@@ -207,40 +216,40 @@
 
         <div id="match-result" class="result-card" style="display:none">
           <div class="result-emoji" id="mr-emoji">🏆</div>
-          <h2 id="mr-title">¡Excelente!</h2>
+          <h2 id="mr-title" data-i18n="¡Excelente!">¡Excelente!</h2>
           <p id="mr-msg"></p>
           <div class="result-actions">
-            <button class="primary-btn" onclick="buildMatch()">🔄 Jugar de nuevo</button>
-            <button class="secondary-btn" onclick="goHome()">🏠 Inicio</button>
+            <button class="primary-btn" onclick="buildMatch()" data-i18n="🔄 Jugar de nuevo">🔄 Jugar de nuevo</button>
+            <button class="secondary-btn" onclick="goHome()" data-i18n="🏠 Inicio">🏠 Inicio</button>
           </div>
         </div>
       </section>
 
       <section id="screen-directions" class="screen">
         <div class="screen-top">
-          <button class="ghost-btn" onclick="goHome()">← Volver</button>
+          <button class="ghost-btn" onclick="goHome()" data-i18n="← Volver">← Volver</button>
           <div class="screen-title-wrap">
-            <h2>Sigue la instrucción</h2>
-            <p>El adulto lee y el niño toca las imágenes en el orden indicado.</p>
+            <h2 data-i18n="Sigue la instrucción">Sigue la instrucción</h2>
+            <p data-i18n="El adulto lee y el niño toca las imágenes en el orden indicado.">El adulto lee y el niño toca las imágenes en el orden indicado.</p>
           </div>
         </div>
 
         <div id="directions-setup" class="directions-setup">
           <div class="quiz-card">
-            <h3>Elige un nivel</h3>
-            <p class="adult-note">Para el adulto: comienza con un nivel que el niño pueda completar con éxito. Las edades son una orientación; ajusta según su lenguaje actual.</p>
+            <h3 data-i18n="Elige un nivel">Elige un nivel</h3>
+            <p class="adult-note" data-i18n="Para el adulto: comienza con un nivel que el niño pueda completar con éxito. Las edades son una orientación; ajusta según su lenguaje actual.">Para el adulto: comienza con un nivel que el niño pueda completar con éxito. Las edades son una orientación; ajusta según su lenguaje actual.</p>
             <div class="level-options">
               <button class="level-btn" onclick="startDirections(1)">
-                <strong>Nivel 1 · Una acción</strong>
-                <span>Referencia: 3–4 años o lenguaje emergente</span>
+                <strong data-i18n="Nivel 1 · Una acción">Nivel 1 · Una acción</strong>
+                <span data-i18n="Referencia: 3–4 años o lenguaje emergente">Referencia: 3–4 años o lenguaje emergente</span>
               </button>
               <button class="level-btn" onclick="startDirections(2)">
-                <strong>Nivel 2 · Dos pasos</strong>
-                <span>Referencia: 5–6 años</span>
+                <strong data-i18n="Nivel 2 · Dos pasos">Nivel 2 · Dos pasos</strong>
+                <span data-i18n="Referencia: 5–6 años">Referencia: 5–6 años</span>
               </button>
               <button class="level-btn" onclick="startDirections(3)">
-                <strong>Nivel 3 · Tres pasos</strong>
-                <span>Referencia: 7–8 años</span>
+                <strong data-i18n="Nivel 3 · Tres pasos">Nivel 3 · Tres pasos</strong>
+                <span data-i18n="Referencia: 7–8 años">Referencia: 7–8 años</span>
               </button>
             </div>
           </div>
@@ -248,37 +257,37 @@
 
         <div id="directions-game" style="display:none">
           <div class="directions-toolbar">
-            <button class="ghost-btn" onclick="showDirectionsSetup()">⚙ Cambiar nivel</button>
-            <button class="ghost-btn" onclick="restartDirections()">↻ Reiniciar práctica</button>
+            <button class="ghost-btn" onclick="showDirectionsSetup()" data-i18n="⚙ Cambiar nivel">⚙ Cambiar nivel</button>
+            <button class="ghost-btn" onclick="restartDirections()" data-i18n="↻ Reiniciar práctica">↻ Reiniciar práctica</button>
           </div>
           <div class="quiz-card">
             <p id="d-progress"></p>
             <div id="d-step-progress" class="step-progress" aria-label="Pasos completados"></div>
             <div class="adult-instruction">
-              <span>Para el adulto, lee en voz alta:</span>
+              <span data-i18n="Para el adulto, lee en voz alta:">Para el adulto, lee en voz alta:</span>
               <strong id="d-adult-instruction"></strong>
             </div>
             <div id="d-options" class="direction-options" role="group" aria-label="Imágenes para seguir la instrucción"></div>
             <div id="d-feedback" class="quiz-feedback" role="status" aria-atomic="true"></div>
             <div class="quiz-next-row">
-              <button id="d-next" class="primary-btn" onclick="nextDirectionQuestion()" style="display:none">Siguiente →</button>
+              <button id="d-next" class="primary-btn" onclick="nextDirectionQuestion()" style="display:none" data-i18n="Siguiente →">Siguiente →</button>
             </div>
           </div>
         </div>
 
         <div id="directions-result" class="result-card" style="display:none">
           <div class="result-emoji" aria-hidden="true">🌟</div>
-          <h2>¡Práctica completada!</h2>
-          <p>Terminaste seis instrucciones.</p>
+          <h2 data-i18n="¡Práctica completada!">¡Práctica completada!</h2>
+          <p data-i18n="Terminaste seis instrucciones.">Terminaste seis instrucciones.</p>
           <div class="adult-summary">
-            <h3>Resumen para el adulto</h3>
+            <h3 data-i18n="Resumen para el adulto">Resumen para el adulto</h3>
             <p id="dr-msg"></p>
-            <p>Este resumen describe la práctica de hoy; no es una evaluación ni un diagnóstico.</p>
+            <p data-i18n="Este resumen describe la práctica de hoy; no es una evaluación ni un diagnóstico.">Este resumen describe la práctica de hoy; no es una evaluación ni un diagnóstico.</p>
           </div>
           <div class="result-actions">
-            <button class="primary-btn" onclick="restartDirections()">🔄 Repetir nivel</button>
-            <button class="secondary-btn" onclick="showDirectionsSetup()">⚙ Elegir otro nivel</button>
-            <button class="secondary-btn" onclick="goHome()">🏠 Inicio</button>
+            <button class="primary-btn" onclick="restartDirections()" data-i18n="🔄 Repetir nivel">🔄 Repetir nivel</button>
+            <button class="secondary-btn" onclick="showDirectionsSetup()" data-i18n="⚙ Elegir otro nivel">⚙ Elegir otro nivel</button>
+            <button class="secondary-btn" onclick="goHome()" data-i18n="🏠 Inicio">🏠 Inicio</button>
           </div>
         </div>
       </section>
@@ -286,29 +295,29 @@
       <!-- LENGUAJE EXPRESIVO -->
       <section id="screen-expressive" class="screen">
         <div class="screen-top">
-          <button class="ghost-btn" onclick="goHome()">← Volver</button>
+          <button class="ghost-btn" onclick="goHome()" data-i18n="← Volver">← Volver</button>
           <div class="screen-title-wrap">
-            <h2>Describe y compara</h2>
-            <p>Practica vocabulario, atributos, funciones y semejanzas con el apoyo de un adulto.</p>
+            <h2 data-i18n="Describe y compara">Describe y compara</h2>
+            <p data-i18n="Practica vocabulario, atributos, funciones y semejanzas con el apoyo de un adulto.">Practica vocabulario, atributos, funciones y semejanzas con el apoyo de un adulto.</p>
           </div>
         </div>
 
         <div id="expressive-setup" class="directions-setup">
           <div class="quiz-card">
-            <h3>Elige cómo practicar</h3>
-            <p class="adult-note">Para el adulto: acepta respuestas correctas expresadas con las palabras del niño. Amplía su frase sin exigir que repita exactamente el modelo.</p>
+            <h3 data-i18n="Elige cómo practicar">Elige cómo practicar</h3>
+            <p class="adult-note" data-i18n="Para el adulto: acepta respuestas correctas expresadas con las palabras del niño. Amplía su frase sin exigir que repita exactamente el modelo.">Para el adulto: acepta respuestas correctas expresadas con las palabras del niño. Amplía su frase sin exigir que repita exactamente el modelo.</p>
             <div class="level-options expressive-levels">
               <button class="level-btn" onclick="startExpressive('name')">
-                <strong>Nombra · ¿Qué es?</strong>
-                <span>Referencia: 3–4 años o lenguaje emergente</span>
+                <strong data-i18n="Nombra · ¿Qué es?">Nombra · ¿Qué es?</strong>
+                <span data-i18n="Referencia: 3–4 años o lenguaje emergente">Referencia: 3–4 años o lenguaje emergente</span>
               </button>
               <button class="level-btn" onclick="startExpressive('describe')">
-                <strong>Describe · Dime dos cosas</strong>
-                <span>Referencia: 4–6 años</span>
+                <strong data-i18n="Describe · Dime dos cosas">Describe · Dime dos cosas</strong>
+                <span data-i18n="Referencia: 4–6 años">Referencia: 4–6 años</span>
               </button>
               <button class="level-btn" onclick="startExpressive('compare')">
-                <strong>Compara · Se parecen y se diferencian</strong>
-                <span>Referencia: 6–8 años</span>
+                <strong data-i18n="Compara · Se parecen y se diferencian">Compara · Se parecen y se diferencian</strong>
+                <span data-i18n="Referencia: 6–8 años">Referencia: 6–8 años</span>
               </button>
             </div>
           </div>
@@ -316,47 +325,47 @@
 
         <div id="expressive-game" style="display:none">
           <div class="directions-toolbar">
-            <button class="ghost-btn" onclick="showExpressiveSetup()">⚙ Cambiar nivel</button>
-            <button class="ghost-btn" onclick="restartExpressive()">↻ Reiniciar práctica</button>
+            <button class="ghost-btn" onclick="showExpressiveSetup()" data-i18n="⚙ Cambiar nivel">⚙ Cambiar nivel</button>
+            <button class="ghost-btn" onclick="restartExpressive()" data-i18n="↻ Reiniciar práctica">↻ Reiniciar práctica</button>
           </div>
           <div class="quiz-card expressive-card">
             <p id="e-progress"></p>
             <div class="adult-instruction">
-              <span>Para el adulto, pregunta:</span>
+              <span data-i18n="Para el adulto, pregunta:">Para el adulto, pregunta:</span>
               <strong id="e-prompt"></strong>
             </div>
             <div id="e-stage" class="expressive-stage" aria-live="polite"></div>
-            <button id="e-support-btn" class="secondary-btn support-toggle" onclick="showExpressiveSupport()">💡 Mostrar apoyo</button>
+            <button id="e-support-btn" class="secondary-btn support-toggle" onclick="showExpressiveSupport()" data-i18n="💡 Mostrar apoyo">💡 Mostrar apoyo</button>
             <div id="e-support" class="expressive-support" style="display:none" role="status"></div>
             <div class="outcome-panel">
-              <p>¿Cuánto apoyo necesitó?</p>
+              <p data-i18n="¿Cuánto apoyo necesitó?">¿Cuánto apoyo necesitó?</p>
               <div id="e-outcomes" class="outcome-options">
-                <button onclick="recordExpressiveOutcome('independent')">🌟 Lo dijo solo</button>
-                <button onclick="recordExpressiveOutcome('cue')">💡 Con una pista</button>
-                <button onclick="recordExpressiveOutcome('model')">🗣️ Repitió el modelo</button>
-                <button onclick="recordExpressiveOutcome('practice')">🌱 Necesita más práctica</button>
+                <button onclick="recordExpressiveOutcome('independent')" data-i18n="🌟 Lo dijo solo">🌟 Lo dijo solo</button>
+                <button onclick="recordExpressiveOutcome('cue')" data-i18n="💡 Con una pista">💡 Con una pista</button>
+                <button onclick="recordExpressiveOutcome('model')" data-i18n="🗣️ Repitió el modelo">🗣️ Repitió el modelo</button>
+                <button onclick="recordExpressiveOutcome('practice')" data-i18n="🌱 Necesita más práctica">🌱 Necesita más práctica</button>
               </div>
             </div>
             <div id="e-feedback" class="quiz-feedback" role="status" aria-atomic="true"></div>
             <div class="quiz-next-row">
-              <button id="e-next" class="primary-btn" onclick="nextExpressiveQuestion()" style="display:none">Siguiente →</button>
+              <button id="e-next" class="primary-btn" onclick="nextExpressiveQuestion()" style="display:none" data-i18n="Siguiente →">Siguiente →</button>
             </div>
           </div>
         </div>
 
         <div id="expressive-result" class="result-card" style="display:none">
           <div class="result-emoji" aria-hidden="true">💬</div>
-          <h2>¡Práctica completada!</h2>
-          <p>Completaron seis oportunidades de lenguaje expresivo.</p>
+          <h2 data-i18n="¡Práctica completada!">¡Práctica completada!</h2>
+          <p data-i18n="Completaron seis oportunidades de lenguaje expresivo.">Completaron seis oportunidades de lenguaje expresivo.</p>
           <div class="adult-summary">
-            <h3>Resumen para el adulto</h3>
+            <h3 data-i18n="Resumen para el adulto">Resumen para el adulto</h3>
             <p id="er-msg"></p>
-            <p>Este resumen describe el apoyo utilizado hoy; no es una evaluación ni un diagnóstico.</p>
+            <p data-i18n="Este resumen describe el apoyo utilizado hoy; no es una evaluación ni un diagnóstico.">Este resumen describe el apoyo utilizado hoy; no es una evaluación ni un diagnóstico.</p>
           </div>
           <div class="result-actions">
-            <button class="primary-btn" onclick="restartExpressive()">🔄 Repetir nivel</button>
-            <button class="secondary-btn" onclick="showExpressiveSetup()">⚙ Elegir otro nivel</button>
-            <button class="secondary-btn" onclick="goHome()">🏠 Inicio</button>
+            <button class="primary-btn" onclick="restartExpressive()" data-i18n="🔄 Repetir nivel">🔄 Repetir nivel</button>
+            <button class="secondary-btn" onclick="showExpressiveSetup()" data-i18n="⚙ Elegir otro nivel">⚙ Elegir otro nivel</button>
+            <button class="secondary-btn" onclick="goHome()" data-i18n="🏠 Inicio">🏠 Inicio</button>
           </div>
         </div>
       </section>
@@ -364,6 +373,9 @@
   </div>
 
   <script src="js/data.js"></script>
+  <script src="js/locales/en.js"></script>
+  <script src="js/locales/pt.js"></script>
+  <script src="js/i18n.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
