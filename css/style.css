@@ -1137,3 +1137,10 @@ button:disabled { cursor: default; }
   .expressive-visual { height: 110px; font-size: 4.6rem; }
   .outcome-options { grid-template-columns: 1fr; }
 }
+
+/* Language selector: usable on desktop and small touch screens. */
+.locale-control { position: relative; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 12px; margin-top: 12px; color: #243044; font-weight: 800; }
+.locale-control label { font-size: .9rem; }
+.locale-control select { min-height: 44px; padding: 8px 12px; border-radius: 12px; border: 2px solid #546b88; background: #fff; color: #243044; font: 800 1rem "Nunito", sans-serif; max-width: 100%; }
+.locale-control small { width: 100%; text-align: center; font-size: .78rem; font-weight: 700; }
+.locale-control select:focus-visible { outline: 3px solid #244fa3; outline-offset: 3px; }

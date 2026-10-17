@@ -23,6 +23,7 @@ function setup() {
     append(...children) { children.forEach(child => this.appendChild(child)); }
     replaceChildren() { this.children.forEach(child => { child.parentNode = null; }); this.children = []; }
     setAttribute(key, value) { this.attributes[key] = value; }
+    getAttribute(key) { return this.attributes[key] ?? null; }
     removeAttribute(key) { delete this.attributes[key]; }
     addEventListener(key, fn) { this.listeners[key] = fn; }
     focus() { this.focused = true; }
@@ -35,9 +36,11 @@ function setup() {
   const document = {
     hidden: false,
     getElementById: id => ids[id] || null,
+    documentElement: {lang:'es'},
     createElement: () => new Element(),
     addEventListener: (name, fn) => { listeners[name] = fn; },
     querySelectorAll: selector => {
+      if (selector === '[data-i18n]') return [];
       if (selector === '.nav-btn') return nav;
       if (selector === '.screen') return Object.entries(ids).filter(([id]) => id.startsWith('screen-')).map(([, el]) => el);
       if (selector === '.quiz-opt') return ids['q-options'].children;
@@ -52,6 +55,9 @@ function setup() {
     setTimeout: fn => { timers.set(++timerId, fn); return timerId; }, clearTimeout: id => timers.delete(id) });
   const run = source => vm.runInContext(source, context);
   run(fs.readFileSync(path.join(root, 'js/data.js'), 'utf8'));
+  run(fs.readFileSync(path.join(root, 'js/locales/en.js'), 'utf8'));
+  run(fs.readFileSync(path.join(root, 'js/locales/pt.js'), 'utf8'));
+  run(fs.readFileSync(path.join(root, 'js/i18n.js'), 'utf8'));
   run(fs.readFileSync(path.join(root, 'js/app.js'), 'utf8'));
   return { ids, run, timers, listeners, document };
 }
@@ -259,4 +265,31 @@ test('describe and compare reveals optional supports and records adult-observed 
   assert.match(ids['e-prompt'].textContent, /se parecen/);
   run('showExpressiveSupport()');
   assert.equal(ids['e-support'].children.length, 4);
+});
+
+
+test('translation dictionaries cover all 80 stable vocabulary IDs and 10 categories', () => {
+ const {run}=setup();
+ assert.equal(run('Object.keys(enLocale.items).length'),80);
+ assert.equal(run('Object.keys(ptLocale.items).length'),80);
+ assert.equal(run('categories.every(c=>enLocale.categories[c.id] && ptLocale.categories[c.id] && c.items.every(i=>enLocale.items[i.id] && ptLocale.items[i.id]))'),true);
+ assert.equal(run('expressiveProfiles.every(p=>enLocale.profiles[p.id] && ptLocale.profiles[p.id])'),true);
+ assert.equal(run('enLocale.comparePairs.length===expressiveComparePairs.length && ptLocale.comparePairs.length===expressiveComparePairs.length'),true);
+});
+
+test('language switching updates vocabulary, directions, profiles and resets quiz state',()=>{
+ const {run,ids}=setup();
+ run('setLanguage("en")');
+ assert.equal(ids['fc-word'].textContent,'Perro'); // no card selected yet
+ run('openFlashcards("animales")');
+ assert.equal(ids['fc-word'].textContent,'Dog');
+ assert.equal(run('categories[0].name'),'Animals');
+ assert.equal(run('directionInstruction([{id:"animales-perro",word:"Dog"}])'),'Tap the picture of the dog.');
+ run('showTab("quiz");selectAnswer(quizQuestions[0].correctIndex)');
+ assert.equal(run('qCorrect'),1);
+ run('setLanguage("pt")');
+ assert.equal(run('qCorrect'),0);
+ assert.equal(run('categories[0].items[0].word'),'Cachorro');
+ run('setLanguage("es"); openFlashcards("animales")');
+ assert.equal(ids['fc-word'].textContent,'Perro');
 });

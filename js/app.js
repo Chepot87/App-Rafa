@@ -57,7 +57,7 @@ function buildHome() {
     card.innerHTML = `
       <span class="emoji" aria-hidden="true">${cat.emoji}</span>
       <span class="cat-name">${cat.name}</span>
-      <span class="cat-count">${cat.items.length} palabras</span>
+      <span class="cat-count">${tf("wordCount", {count: cat.items.length})}</span>
     `;
     card.onclick = () => openFlashcards(cat.id);
     grid.appendChild(card);
@@ -144,7 +144,7 @@ function renderFlashcard() {
   const total = currentCat.items.length;
 
   document.getElementById("flashcard-category-title").textContent = currentCat.name;
-  document.getElementById("flashcard-category-subtitle").textContent = "Observa, nombra y repite";
+  document.getElementById("flashcard-category-subtitle").textContent = tf("flashSubtitle");
   document.getElementById("fc-num").textContent = `${fcIndex + 1} / ${total}`;
   renderVisual(document.getElementById("fc-emoji"), item);
   document.getElementById('fc-prev-btn').disabled = fcIndex === 0;
@@ -152,7 +152,7 @@ function renderFlashcard() {
   document.getElementById("fc-progress").style.width = `${((fcIndex + 1) / total) * 100}%`;
 
   const nextBtn = document.getElementById("fc-next-btn");
-  nextBtn.textContent = fcIndex === total - 1 ? "Finalizar" : "Siguiente →";
+  nextBtn.textContent = fcIndex === total - 1 ? tf("finish") : tf("next");
 
   const card = document.getElementById("flashcard");
   card.style.animation = "none";
@@ -229,8 +229,8 @@ function renderQuestion() {
   const q = quizQuestions[quizIndex];
   if (!q) return;
 
-  document.getElementById("q-question").textContent = "¿Cuál NO pertenece?";
-  document.getElementById("q-subtitle").textContent = `Pregunta ${quizIndex + 1} de ${quizQuestions.length} · Tema: ${q.mainCat}`;
+  document.getElementById("q-question").textContent = tf("quizQuestion");
+  document.getElementById("q-subtitle").textContent = tf("quizSubtitle", {number: quizIndex + 1, total: quizQuestions.length, category: categories.find(c => c.id === q.mainCatId).name});
   document.getElementById("q-feedback").textContent = "";
   document.getElementById("q-feedback").className = "quiz-feedback";
   document.getElementById("q-next").style.display = "none";
@@ -266,13 +266,13 @@ function selectAnswer(selectedIndex) {
 
   if (selectedIndex === q.correctIndex) {
     buttons[selectedIndex].classList.add("correct");
-    feedback.textContent = "¡Muy bien!";
+    feedback.textContent = tf("quizGood");
     feedback.className = "quiz-feedback correct";
     qCorrect++;
   } else {
     buttons[selectedIndex].classList.add("wrong");
     buttons[q.correctIndex].classList.add("correct");
-    feedback.textContent = `La respuesta correcta era ${q.options[q.correctIndex].word}`;
+    feedback.textContent = tf("quizWrong", {word:q.options[q.correctIndex].word});
     feedback.className = "quiz-feedback wrong";
     qWrong++;
   }
@@ -282,7 +282,7 @@ function selectAnswer(selectedIndex) {
   const nextBtn = document.getElementById("q-next");
   nextBtn.style.display = "inline-flex";
   nextBtn.textContent =
-    quizIndex === quizQuestions.length - 1 ? "Ver resultado" : "Siguiente →";
+    quizIndex === quizQuestions.length - 1 ? tf("seeResult") : tf("next");
   nextBtn.focus();
 }
 
@@ -313,23 +313,23 @@ function showResult() {
   const percent = Math.round((qCorrect / total) * 100);
 
   let emoji = "💪";
-  let title = "Buen intento";
+  let title = tf("resultTry");
 
   if (percent >= 90) {
     emoji = "🏆";
-    title = "¡Excelente!";
+    title = tf("resultExcellent");
   } else if (percent >= 70) {
     emoji = "🌟";
-    title = "¡Muy bien!";
+    title = tf("resultVeryGood");
   } else if (percent >= 50) {
     emoji = "😊";
-    title = "¡Vas bien!";
+    title = tf("resultGood");
   }
 
   document.getElementById("r-emoji").textContent = emoji;
   document.getElementById("r-title").textContent = title;
   document.getElementById("r-msg").textContent =
-    `Respondiste ${qCorrect} de ${total} correctamente.`;
+    tf("quizSummary", {correct:qCorrect,total});
   focusElement(document.getElementById("r-msg"));
 }
 
@@ -385,7 +385,7 @@ function renderMatchQuestion() {
   if (!q) return;
 
   renderVisual(document.getElementById("m-emoji"), q.item);
-  document.getElementById('m-progress').textContent = `Pregunta ${matchIndex + 1} de ${matchQuestions.length}`;
+  document.getElementById('m-progress').textContent = tf("matchQuestion", {number:matchIndex+1,total:matchQuestions.length});
   document.getElementById("m-word").textContent = q.item.word;
   document.getElementById("m-feedback").textContent = "";
   document.getElementById("m-feedback").className = "quiz-feedback";
@@ -419,12 +419,12 @@ function selectMatchAnswer(selectedId) {
   });
 
   if (selectedId === q.correctId) {
-    feedback.textContent = "¡Correcto! 🎉";
+    feedback.textContent = tf("matchGood");
     feedback.className = "quiz-feedback correct";
     mCorrect++;
   } else {
     const correctOpt = q.options.find((o) => o.id === q.correctId);
-    feedback.textContent = `Pertenece a: ${correctOpt.name}`;
+    feedback.textContent = tf("matchWrong", {category: correctOpt.name});
     feedback.className = "quiz-feedback wrong";
     mWrong++;
   }
@@ -434,7 +434,7 @@ function selectMatchAnswer(selectedId) {
   const nextBtn = document.getElementById("m-next");
   nextBtn.style.display = "inline-flex";
   nextBtn.textContent =
-    matchIndex === matchQuestions.length - 1 ? "Ver resultado" : "Siguiente →";
+    matchIndex === matchQuestions.length - 1 ? tf("seeResult") : tf("next");
   nextBtn.focus();
 }
 
@@ -465,23 +465,23 @@ function showMatchResult() {
   const percent = Math.round((mCorrect / total) * 100);
 
   let emoji = "💪";
-  let title = "¡Sigue practicando!";
+  let title = tf("matchTry");
 
   if (percent >= 90) {
     emoji = "🏆";
-    title = "¡Excelente!";
+    title = tf("resultExcellent");
   } else if (percent >= 70) {
     emoji = "🌟";
-    title = "¡Muy bien!";
+    title = tf("resultVeryGood");
   } else if (percent >= 50) {
     emoji = "😊";
-    title = "¡Vas bien!";
+    title = tf("resultGood");
   }
 
   document.getElementById("mr-emoji").textContent = emoji;
   document.getElementById("mr-title").textContent = title;
   document.getElementById("mr-msg").textContent =
-    `Respondiste ${mCorrect} de ${total} correctamente.`;
+    tf("quizSummary", {correct:mCorrect,total});
   focusElement(document.getElementById("mr-msg"));
 }
 
@@ -506,14 +506,14 @@ function directionVocabulary() {
 function directionInstruction(sequence) {
   const phrases = sequence.map(item => {
     const category = categories.find(cat => cat.items.some(candidate => candidate.id === item.id));
-    const name = item.word.toLocaleLowerCase('es');
-    return category && category.id === 'colores' ? `el color ${name}` : `la imagen de ${name}`;
+    const name = item.word.toLocaleLowerCase(currentLanguage);
+    return category && category.id === 'colores' ? tf("colorPhrase", {word:name}) : tf("imagePhrase", {word:name});
   });
-  if (phrases.length === 1) return `Toca ${phrases[0]}.`;
+  if (phrases.length === 1) return tf("directionOne",{first:phrases[0]});
   if (phrases.length === 2) {
-    return `Primero toca ${phrases[0]}. Después, ${phrases[1]}.`;
+    return tf("directionTwo",{first:phrases[0],second:phrases[1]});
   }
-  return `Primero toca ${phrases[0]}. Luego, ${phrases[1]}. Al final, ${phrases[2]}.`;
+  return tf("directionThree",{first:phrases[0],second:phrases[1],third:phrases[2]});
 }
 
 function generateDirectionQuestions(count, level) {
@@ -564,7 +564,7 @@ function renderDirectionQuestion() {
   directionHadSupport = false;
   const instruction = directionInstruction(question.sequence);
   document.getElementById('d-progress').textContent =
-    `Instrucción ${directionIndex + 1} de ${directionsQuestions.length} · Nivel ${directionsLevel}`;
+    tf("directionsProgress",{number:directionIndex+1,total:directionsQuestions.length,level:directionsLevel});
   document.getElementById('d-adult-instruction').textContent = instruction;
   document.getElementById('d-feedback').textContent = '';
   document.getElementById('d-feedback').className = 'quiz-feedback';
@@ -619,7 +619,7 @@ function selectDirectionItem(index) {
   if (selected.id !== expected.id) {
     directionHadSupport = true;
     resetDirectionAttempt();
-    feedback.textContent = 'Vamos a leer la instrucción otra vez y comenzar desde el principio.';
+    feedback.textContent = tf('directionsRetry');
     feedback.className = 'quiz-feedback';
     return;
   }
@@ -630,18 +630,18 @@ function selectDirectionItem(index) {
   directionStepIndex++;
   renderDirectionSteps();
   if (directionStepIndex < question.sequence.length) {
-    feedback.textContent = '¡Bien! Continúa con el próximo paso.';
+    feedback.textContent = tf('directionsContinue');
     return;
   }
 
   directionAnswered = true;
   if (directionHadSupport) directionsWithSupport++;
   else directionsFirstTry++;
-  feedback.textContent = '¡Muy bien! Seguiste toda la instrucción.';
+  feedback.textContent = tf('directionsWellDone');
   feedback.className = 'quiz-feedback correct';
   Array.from(document.getElementById('d-options').children).forEach(option => { option.disabled = true; });
   const next = document.getElementById('d-next');
-  next.textContent = directionIndex === directionsQuestions.length - 1 ? 'Ver resumen' : 'Siguiente →';
+  next.textContent = directionIndex === directionsQuestions.length - 1 ? tf('seeSummary') : tf('next');
   next.style.display = 'inline-flex';
   next.focus();
 }
@@ -656,7 +656,7 @@ function nextDirectionQuestion() {
   document.getElementById('directions-game').style.display = 'none';
   document.getElementById('directions-result').style.display = 'block';
   document.getElementById('dr-msg').textContent =
-    `Nivel ${directionsLevel}: ${directionsFirstTry} al primer intento y ${directionsWithSupport} con repetición o apoyo.`;
+    tf("directionsSummary",{level:directionsLevel, independent:directionsFirstTry,supported:directionsWithSupport});
   focusElement(document.getElementById('dr-msg'));
 }
 
@@ -688,7 +688,7 @@ function generateExpressiveQuestions(count, level) {
 }
 
 function expressiveLevelName(level) {
-  return { name: 'Nombra', describe: 'Describe', compare: 'Compara' }[level] || 'Nombra';
+  return { name: tf('expressiveName'), describe: tf('expressiveDescribe'), compare: tf('expressiveCompare') }[level] || tf('expressiveName');
 }
 
 function showExpressiveSetup() {
@@ -733,9 +733,9 @@ function createExpressiveVisual(item, showWord) {
 }
 
 function expressivePrompt(question) {
-  if (expressiveLevel === 'name') return '¿Qué es?';
-  if (expressiveLevel === 'describe') return `Dime dos cosas sobre ${question.item.word.toLocaleLowerCase('es')}.`;
-  return '¿En qué se parecen y en qué son diferentes?';
+  if (expressiveLevel === 'name') return tf('expressiveWhat');
+  if (expressiveLevel === 'describe') return tf('expressiveTell',{word:question.item.word.toLocaleLowerCase(currentLanguage)});
+  return tf('expressiveComparePrompt');
 }
 
 function renderExpressiveQuestion() {
@@ -744,7 +744,7 @@ function renderExpressiveQuestion() {
   expressiveAnswered = false;
   expressiveSupportShown = false;
   document.getElementById('e-progress').textContent =
-    `${expressiveLevelName(expressiveLevel)} · Oportunidad ${expressiveIndex + 1} de ${expressiveQuestions.length}`;
+    tf("expressiveProgress",{level:expressiveLevelName(expressiveLevel),number:expressiveIndex+1,total:expressiveQuestions.length});
   document.getElementById('e-prompt').textContent = expressivePrompt(question);
   document.getElementById('e-feedback').textContent = '';
   document.getElementById('e-feedback').className = 'quiz-feedback';
@@ -786,20 +786,20 @@ function showExpressiveSupport() {
   support.replaceChildren();
   const note = document.createElement('p');
   note.className = 'support-note';
-  note.textContent = 'Son ejemplos de apoyo; otras respuestas correctas también cuentan.';
+  note.textContent = tf('expressiveNote');
   support.appendChild(note);
   if (expressiveLevel === 'compare') {
-    addSupportLine(support, 'Se parecen', question.same);
-    addSupportLine(support, 'Son diferentes', question.different);
-    addSupportLine(support, 'Modelo', question.model);
+    addSupportLine(support, tf('expressiveSame'), question.same);
+    addSupportLine(support, tf('expressiveDifferent'), question.different);
+    addSupportLine(support, tf('expressiveModel'), question.model);
   } else {
-    addSupportLine(support, 'Categoría', `Es ${question.category}.`);
+    addSupportLine(support, tf('expressiveCategory'), tf('expressiveIs',{category:question.category}));
     if (expressiveLevel === 'describe') {
-      addSupportLine(support, 'Atributos', question.attributes.join(', '));
-      addSupportLine(support, 'Función', question.function);
-      addSupportLine(support, 'Lugar', question.location);
+      addSupportLine(support, tf('expressiveAttributes'), question.attributes.join(', '));
+      addSupportLine(support, tf('expressiveFunction'), question.function);
+      addSupportLine(support, tf('expressiveLocation'), question.location);
     }
-    addSupportLine(support, 'Modelo', question.model);
+    addSupportLine(support, tf('expressiveModel'), question.model);
   }
   support.style.display = 'block';
   document.getElementById('e-support-btn').style.display = 'none';
@@ -815,11 +815,11 @@ function recordExpressiveOutcome(outcome) {
   document.getElementById('e-support-btn').disabled = true;
   const feedback = document.getElementById('e-feedback');
   feedback.textContent = outcome === 'practice'
-    ? 'Anotado. Pueden modelar una frase corta y seguir practicando.'
-    : '¡Muy bien! Respuesta registrada para el resumen de hoy.';
+    ? tf('expressivePractice')
+    : tf('expressiveSaved');
   feedback.className = 'quiz-feedback correct';
   const next = document.getElementById('e-next');
-  next.textContent = expressiveIndex === expressiveQuestions.length - 1 ? 'Ver resumen' : 'Siguiente →';
+  next.textContent = expressiveIndex === expressiveQuestions.length - 1 ? tf('seeSummary') : tf('next');
   next.style.display = 'inline-flex';
   next.focus();
 }
@@ -834,8 +834,9 @@ function nextExpressiveQuestion() {
   document.getElementById('expressive-game').style.display = 'none';
   document.getElementById('expressive-result').style.display = 'block';
   document.getElementById('er-msg').textContent =
-    `${expressiveLevelName(expressiveLevel)}: ${expressiveCounts.independent} sin ayuda, ${expressiveCounts.cue} con una pista, ${expressiveCounts.model} repitiendo un modelo y ${expressiveCounts.practice} para seguir practicando.`;
+    tf("expressiveSummary",{level:expressiveLevelName(expressiveLevel),independent:expressiveCounts.independent,cue:expressiveCounts.cue,model:expressiveCounts.model,practice:expressiveCounts.practice});
   focusElement(document.getElementById('er-msg'));
 }
 
 buildHome();
+initializeLanguage();
