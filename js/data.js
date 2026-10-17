@@ -155,7 +155,7 @@ const categories = [
     emoji: "📍",
     items: [
       { id: "lugares-parque", word: "Parque", emoji: "🛝", image: "img/categories/lugares/parque.webp" },
-      { id: "lugares-cine", word: "Cine", emoji: "🎬", image: "img/categories/lugares/cine.webp" },
+      { id: "lugares-cine", word: "Cine", emoji: "🎬", image: "img/categories/lugares/cine-fixed.webp" },
       { id: "lugares-playa", word: "Playa", emoji: "🏖️", image: null },
       { id: "lugares-rio", word: "Río", emoji: "🏞️", image: null },
       { id: "lugares-hospital", word: "Hospital", emoji: "🏥", image: null },
