@@ -154,14 +154,14 @@ const categories = [
     name: "Lugares",
     emoji: "📍",
     items: [
-      { id: "lugares-parque", word: "Parque", emoji: "🛝", image: null },
-      { id: "lugares-cine", word: "Cine", emoji: "🎬", image: null },
+      { id: "lugares-parque", word: "Parque", emoji: "🛝", image: "img/categories/lugares/parque.webp" },
+      { id: "lugares-cine", word: "Cine", emoji: "🎬", image: "img/categories/lugares/cine.webp" },
       { id: "lugares-playa", word: "Playa", emoji: "🏖️", image: null },
       { id: "lugares-rio", word: "Río", emoji: "🏞️", image: null },
       { id: "lugares-hospital", word: "Hospital", emoji: "🏥", image: null },
       { id: "lugares-escuela", word: "Escuela", emoji: "🏫", image: null },
       { id: "lugares-aeropuerto", word: "Aeropuerto", emoji: "🛫", image: null },
-      { id: "lugares-restaurante", word: "Restaurante", emoji: "🍽️", image: null }
+      { id: "lugares-restaurante", word: "Restaurante", emoji: "🍽️", image: "img/categories/lugares/restaurante.webp" }
     ]
   }
 ];
