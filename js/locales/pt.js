@@ -3,7 +3,7 @@ const ptLocale = {
   categories: {
     animales:"Animais", frutas:"Frutas", ropa:"Roupas", vehiculos:"Veículos",
     comida:"Alimentos", cuerpo:"Partes do corpo", colores:"Cores", juguetes:"Brinquedos",
-    escuela:"Materiais escolares", naturaleza:"Natureza"
+    escuela:"Materiais escolares", naturaleza:"Natureza", lugares: "Lugares"
   },
   items: {
     "animales-perro":"Cachorro", "animales-gato":"Gato", "animales-vaca":"Vaca",
@@ -35,7 +35,15 @@ const ptLocale = {
     "escuela-borrador":"Borracha", "escuela-marcador":"Canetinha",
     "naturaleza-arbol":"Árvore", "naturaleza-flor":"Flor", "naturaleza-sol":"Sol",
     "naturaleza-luna":"Lua", "naturaleza-lluvia":"Chuva", "naturaleza-nube":"Nuvem",
-    "naturaleza-montana":"Montanha", "naturaleza-rio":"Rio"
+    "naturaleza-montana":"Montanha", "naturaleza-rio":"Rio",
+    "lugares-parque": "Parque",
+    "lugares-cine": "Cinema",
+    "lugares-playa": "Praia",
+    "lugares-rio": "Rio",
+    "lugares-hospital": "Hospital",
+    "lugares-escuela": "Escola",
+    "lugares-aeropuerto": "Aeroporto",
+    "lugares-restaurante": "Restaurante"
   },
   ui: {
     "Activa JavaScript para utilizar las actividades de App Rafa.":"Ative o JavaScript para usar as atividades do App Rafa.",
@@ -152,7 +160,10 @@ const ptLocale = {
     "juguetes-rompecabezas": {category:"brinquedo",attributes:["tem várias peças","forma uma imagem","é preciso encaixar as peças"],function:"serve para brincar e resolver problemas",location:"é montado em uma mesa ou no chão",model:"O quebra-cabeça tem peças que juntamos para formar uma imagem."},
     "escuela-lapiz": {category:"material escolar",attributes:["é comprido e fino","tem ponta","pode ser apagado"],function:"serve para escrever e desenhar",location:"é usado na escola ou em casa",model:"O lápis é um material escolar usado para escrever e desenhar."},
     "escuela-libro": {category:"material escolar",attributes:["tem páginas","tem capa","pode ter palavras e imagens"],function:"serve para ler e aprender",location:"fica na escola, biblioteca ou em casa",model:"O livro tem páginas e nos ajuda a ler e aprender."},
-    "escuela-mochila": {category:"material escolar",attributes:["tem alças","pode ter bolsos","é levada nas costas"],function:"serve para guardar e levar materiais",location:"é usada para ir à escola",model:"A mochila serve para levar os materiais escolares."}
+    "escuela-mochila": {category:"material escolar",attributes:["tem alças","pode ter bolsos","é levada nas costas"],function:"serve para guardar e levar materiais",location:"é usada para ir à escola",model:"A mochila serve para levar os materiais escolares."},
+    "lugares-parque": {category:"lugar",attributes:["fica ao ar livre","pode ter árvores","pode ter brinquedos"],function:"serve para brincar, caminhar e passar tempo fora de casa",location:"pode ficar no bairro ou na cidade",model:"O parque é um lugar ao ar livre onde podemos brincar e caminhar."},
+    "lugares-playa": {category:"lugar",attributes:["tem areia","fica ao lado do mar","tem ondas"],function:"serve para brincar, caminhar e descansar",location:"fica na beira do mar",model:"A praia é um lugar com areia ao lado do mar."},
+    "lugares-hospital": {category:"lugar",attributes:["tem salas de atendimento","tem profissionais de saúde","atende pessoas que precisam de cuidados"],function:"serve para cuidar da saúde das pessoas",location:"pode ficar na cidade ou comunidade",model:"O hospital é um lugar onde as pessoas recebem cuidados de saúde."}
   },
   comparePairs: [
     {same:"Os dois são animais com quatro patas e pelos.",different:"O cachorro late e o gato mia.",model:"O cachorro e o gato são animais, mas fazem sons diferentes."},
@@ -162,6 +173,7 @@ const ptLocale = {
     {same:"Os dois são alimentos.",different:"A pizza pode ser segurada com a mão e a sopa é comida com colher.",model:"Os dois são alimentos, mas comemos de formas diferentes."},
     {same:"Os dois são partes do corpo que devemos cuidar.",different:"Os olhos servem para enxergar e os dentes para mastigar.",model:"Olhos e dentes são partes do corpo, mas têm funções diferentes."},
     {same:"Os dois são brinquedos.",different:"A bola rola e os blocos são empilhados.",model:"Os dois servem para brincar, mas brincamos de maneiras diferentes."},
-    {same:"Os dois são materiais usados para aprender.",different:"Com o lápis escrevemos e o livro lemos.",model:"Os dois são usados na escola, mas têm funções diferentes."}
+    {same:"Os dois são materiais usados para aprender.",different:"Com o lápis escrevemos e o livro lemos.",model:"Os dois são usados na escola, mas têm funções diferentes."},
+    {same:"Os dois são lugares ao ar livre onde podemos nos divertir.",different:"O parque pode ter brinquedos e a praia tem areia à beira-mar.",model:"O parque e a praia são lugares ao ar livre, mas a praia tem areia e mar."}
   ]
 };
