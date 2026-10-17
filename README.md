@@ -6,7 +6,7 @@ Aplicación web en español para practicar categorías semánticas y vocabulario
 
 Abre `index.html` en un navegador moderno. Para probar mediante HTTP, utiliza el servidor estático de tu editor desde la raíz del proyecto. No hace falta instalar dependencias de la aplicación.
 
-- Inicio: 10 categorías con 8 palabras cada una.
+- Inicio: 11 categorías con 8 palabras cada una (88 palabras en total).
 - Tarjetas: anterior/siguiente para observar, nombrar y repetir con el acompañamiento de un adulto. Finalizar regresa a Inicio.
 - Quiz: 10 preguntas para identificar el elemento que no pertenece.
 - Empareja: 12 preguntas para elegir la categoría de una palabra.
@@ -53,3 +53,7 @@ Consulta `docs/project-notes.md` para las comprobaciones pendientes antes de la 
 El selector de la cabecera ofrece español (predeterminado), inglés y portugués brasileño. Cambiar de idioma reinicia las actividades para evitar mezclar partidas. La preferencia se guarda localmente cuando el navegador permite localStorage. Las traducciones se mantienen sin servicio externo ni conexión en `js/locales/en.js` y `js/locales/pt.js`; `js/i18n.js` conserva las etiquetas canónicas en español y traduce preguntas, instrucciones y apoyos.
 
 Las traducciones son un punto de partida lingüístico y deben revisarse con un profesional del habla y lenguaje para cada idioma antes de emplearlas en terapia. La app no utiliza voz sintética.
+
+## Lugares
+
+Categoría con parque, cine, playa, río, hospital, escuela, aeropuerto y restaurante. Disponible en tarjetas, quiz, empareja e instrucciones. Contiene tres perfiles para describir y una comparación parque/playa en español, inglés y portugués brasileño. Se utilizan emojis y etiquetas accesibles sin recursos externos. Los pares de categorías ambiguos Lugares/Naturaleza y Lugares/Escuela se excluyen como distractores del quiz.
