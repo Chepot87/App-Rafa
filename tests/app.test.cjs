@@ -64,7 +64,7 @@ function setup() {
 
 test('all vocabulary has unique IDs; generated questions have one distinct answer', () => {
   const { run } = setup();
-  assert.equal(run('new Set(categories.flatMap(c => c.items.map(i => i.id))).size'), 80);
+  assert.equal(run('new Set(categories.flatMap(c => c.items.map(i => i.id))).size'), 88);
   assert.equal(run(`generateQuizQuestions(20000).every(q =>
     q.options.length === 4 && new Set(q.options.map(i => i.word + i.emoji)).size === 4 &&
     distinctCategories(categories.find(c => c.id === q.mainCatId), categories.find(c => c.id === q.oddCatId)) &&
@@ -77,7 +77,7 @@ test('all vocabulary has unique IDs; generated questions have one distinct answe
 
 test('home, all flashcards, previous boundary and finish', () => {
   const { ids, run } = setup();
-  assert.equal(ids['home-grid'].children.length, 10);
+  assert.equal(ids['home-grid'].children.length, 11);
   run("openFlashcards('frutas'); fcPrev()");
   assert.equal(ids['fc-word'].textContent, 'Manzana');
   assert.equal(ids['fc-prev-btn'].disabled, true);
@@ -268,10 +268,10 @@ test('describe and compare reveals optional supports and records adult-observed 
 });
 
 
-test('translation dictionaries cover all 80 stable vocabulary IDs and 10 categories', () => {
+test('translation dictionaries cover all 88 stable vocabulary IDs and 11 categories', () => {
  const {run}=setup();
- assert.equal(run('Object.keys(enLocale.items).length'),80);
- assert.equal(run('Object.keys(ptLocale.items).length'),80);
+ assert.equal(run('Object.keys(enLocale.items).length'),88);
+ assert.equal(run('Object.keys(ptLocale.items).length'),88);
  assert.equal(run('categories.every(c=>enLocale.categories[c.id] && ptLocale.categories[c.id] && c.items.every(i=>enLocale.items[i.id] && ptLocale.items[i.id]))'),true);
  assert.equal(run('expressiveProfiles.every(p=>enLocale.profiles[p.id] && ptLocale.profiles[p.id])'),true);
  assert.equal(run('enLocale.comparePairs.length===expressiveComparePairs.length && ptLocale.comparePairs.length===expressiveComparePairs.length'),true);
@@ -292,4 +292,26 @@ test('language switching updates vocabulary, directions, profiles and resets qui
  assert.equal(run('categories[0].items[0].word'),'Cachorro');
  run('setLanguage("es"); openFlashcards("animales")');
  assert.equal(ids['fc-word'].textContent,'Perro');
+});
+
+test('Lugares has eight entries translated in three languages with safe distractors', () => {
+ const {run,ids}=setup();
+ assert.equal(run('categories.length'),11);
+ assert.equal(run("categories.find(c=>c.id==='lugares').items.length"),8);
+ assert.equal(run("!distinctCategories(categories.find(c=>c.id==='lugares'),categories.find(c=>c.id==='naturaleza'))"),true);
+ assert.equal(run("!distinctCategories(categories.find(c=>c.id==='lugares'),categories.find(c=>c.id==='escuela'))"),true);
+ for(const [lang,name,words] of [
+  ['es','Lugares',['Parque','Cine','Playa','Río','Hospital','Escuela','Aeropuerto','Restaurante']],
+  ['en','Places',['Park','Movie theater','Beach','River','Hospital','School','Airport','Restaurant']],
+  ['pt','Lugares',['Parque','Cinema','Praia','Rio','Hospital','Escola','Aeroporto','Restaurante']]
+ ]) {
+  run('setLanguage('+JSON.stringify(lang)+'); openFlashcards("lugares")');
+  assert.equal(run('currentCat.name'),name);
+  assert.equal(ids['fc-word'].textContent,words[0]);
+  assert.equal(run('currentCat.items.map(i=>i.word).join("|")'),words.join('|'));
+  assert.equal(run("generateQuizQuestions(500).every(q=>q.options.length===4&&new Set(q.options.map(i=>i.word+'|'+i.emoji)).size===4)"),true);
+  assert.equal(run("generateMatchQuestions(200).every(q=>q.options.length===4&&new Set(q.options.map(i=>i.id)).size===4)"),true);
+  assert.equal(run("expressiveProfiles.filter(p=>p.id.startsWith('lugares-')).length"),3);
+  assert.equal(run("expressiveComparePairs.some(p=>p.ids[0]==='lugares-parque'&&p.ids[1]==='lugares-playa')"),true);
+ }
 });

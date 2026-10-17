@@ -3,7 +3,7 @@ const enLocale = {
   categories: {
     animales: "Animals", frutas: "Fruits", ropa: "Clothing", vehiculos: "Vehicles",
     comida: "Food", cuerpo: "Body parts", colores: "Colors", juguetes: "Toys",
-    escuela: "School supplies", naturaleza: "Nature"
+    escuela: "School supplies", naturaleza: "Nature", lugares: "Places"
   },
   items: {
     "animales-perro": "Dog", "animales-gato": "Cat", "animales-vaca": "Cow",
@@ -39,7 +39,15 @@ const enLocale = {
     "naturaleza-arbol": "Tree", "naturaleza-flor": "Flower", "naturaleza-sol": "Sun",
     "naturaleza-luna": "Moon", "naturaleza-lluvia": "Rain",
     "naturaleza-nube": "Cloud", "naturaleza-montana": "Mountain",
-    "naturaleza-rio": "River"
+    "naturaleza-rio": "River",
+    "lugares-parque": "Park",
+    "lugares-cine": "Movie theater",
+    "lugares-playa": "Beach",
+    "lugares-rio": "River",
+    "lugares-hospital": "Hospital",
+    "lugares-escuela": "School",
+    "lugares-aeropuerto": "Airport",
+    "lugares-restaurante": "Restaurant"
   },
   ui: {
     "Activa JavaScript para utilizar las actividades de App Rafa.": "Enable JavaScript to use App Rafa activities.",
@@ -157,7 +165,10 @@ const enLocale = {
     "juguetes-rompecabezas": {category:"toy",attributes:["has several pieces","makes a picture","requires matching pieces"],function:"is used to play and solve problems",location:"is put together on a table or floor",model:"A puzzle has pieces we fit together to make a picture."},
     "escuela-lapiz": {category:"school supply",attributes:["is long and thin","has a point","can be erased"],function:"is used to write and draw",location:"is used at school or home",model:"A pencil is a school supply we use to write and draw."},
     "escuela-libro": {category:"school supply",attributes:["has pages","has a cover","may have words and pictures"],function:"is used to read and learn",location:"is found at school, in a library, or at home",model:"A book has pages and helps us read and learn."},
-    "escuela-mochila": {category:"school supply",attributes:["has straps","may have pockets","is carried on the back"],function:"carries supplies",location:"is used to go to school",model:"A backpack carries our school supplies."}
+    "escuela-mochila": {category:"school supply",attributes:["has straps","may have pockets","is carried on the back"],function:"carries supplies",location:"is used to go to school",model:"A backpack carries our school supplies."},
+    "lugares-parque": {category:"place",attributes:["is outdoors","may have trees","may have playground equipment"],function:"is a place to play, walk, and spend time outside",location:"may be in a neighborhood or city",model:"A park is an outdoor place where we can play and walk."},
+    "lugares-playa": {category:"place",attributes:["has sand","is next to the sea","has waves"],function:"is a place to play, walk, and relax",location:"is along the seashore",model:"A beach is a sandy place next to the sea."},
+    "lugares-hospital": {category:"place",attributes:["has rooms for patient care","has healthcare workers","helps people who need care"],function:"helps people care for their health",location:"can be in a town or city",model:"A hospital is a place where people receive healthcare."}
   },
   comparePairs: [
     {same:"Both are furry animals with four legs.",different:"The dog barks and the cat meows.",model:"Dogs and cats are both animals, but they make different sounds."},
@@ -167,6 +178,7 @@ const enLocale = {
     {same:"Both are foods.",different:"Pizza can be held, while soup is eaten with a spoon.",model:"Both are foods, but we eat them in different ways."},
     {same:"Both are body parts we need to care for.",different:"Eyes help us see and teeth help us chew.",model:"Eyes and teeth are body parts, but they do different jobs."},
     {same:"Both are toys.",different:"Balls roll and blocks can be stacked.",model:"Both are toys, but we play with them in different ways."},
-    {same:"Both are school supplies used for learning.",different:"We write with a pencil and read a book.",model:"Both are used at school, but have different jobs."}
+    {same:"Both are school supplies used for learning.",different:"We write with a pencil and read a book.",model:"Both are used at school, but have different jobs."},
+    {same:"Both are outdoor places where people can have fun.",different:"A park may have playground equipment; a beach has sand next to the sea.",model:"Parks and beaches are outdoor places, but beaches have sand by the sea."}
   ]
 };

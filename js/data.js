@@ -148,6 +148,21 @@ const categories = [
       { id: "naturaleza-montana", word: "Montaña", emoji: "⛰️", image: null },
       { id: "naturaleza-rio", word: "Río", emoji: "🏞️", image: null }
     ]
+  },
+  {
+    id: "lugares",
+    name: "Lugares",
+    emoji: "📍",
+    items: [
+      { id: "lugares-parque", word: "Parque", emoji: "🛝", image: null },
+      { id: "lugares-cine", word: "Cine", emoji: "🎬", image: null },
+      { id: "lugares-playa", word: "Playa", emoji: "🏖️", image: null },
+      { id: "lugares-rio", word: "Río", emoji: "🏞️", image: null },
+      { id: "lugares-hospital", word: "Hospital", emoji: "🏥", image: null },
+      { id: "lugares-escuela", word: "Escuela", emoji: "🏫", image: null },
+      { id: "lugares-aeropuerto", word: "Aeropuerto", emoji: "🛫", image: null },
+      { id: "lugares-restaurante", word: "Restaurante", emoji: "🍽️", image: null }
+    ]
   }
 ];
 
@@ -155,7 +170,8 @@ const categories = [
 const overlappingCategories = [
  ['frutas','comida'], ['animales','comida'], ['animales','naturaleza'],
  ['frutas','naturaleza'], ['vehiculos','juguetes'], ['animales','juguetes'],
- ['escuela','juguetes'], ['frutas','colores']
+ ['escuela','juguetes'], ['frutas','colores'],
+  ['lugares','naturaleza'], ['lugares','escuela']
 ];
 
 // Initial expressive-language set. These are examples for adult cueing, not an
@@ -191,7 +207,10 @@ const expressiveProfiles = [
 
   { id: 'escuela-lapiz', category: 'material escolar', attributes: ['es largo y delgado', 'tiene punta', 'se puede borrar'], function: 'sirve para escribir y dibujar', location: 'se usa en la escuela o en casa', model: 'El lápiz es un material escolar que sirve para escribir y dibujar.' },
   { id: 'escuela-libro', category: 'material escolar', attributes: ['tiene páginas', 'tiene una portada', 'puede tener palabras e imágenes'], function: 'sirve para leer y aprender', location: 'se encuentra en la escuela, biblioteca o casa', model: 'El libro tiene páginas y sirve para leer y aprender.' },
-  { id: 'escuela-mochila', category: 'material escolar', attributes: ['tiene tirantes', 'puede tener bolsillos', 'se lleva en la espalda'], function: 'sirve para guardar y llevar materiales', location: 'se usa para ir a la escuela', model: 'La mochila sirve para llevar los materiales de la escuela.' }
+  { id: 'escuela-mochila', category: 'material escolar', attributes: ['tiene tirantes', 'puede tener bolsillos', 'se lleva en la espalda'], function: 'sirve para guardar y llevar materiales', location: 'se usa para ir a la escuela', model: 'La mochila sirve para llevar los materiales de la escuela.' },
+  { id: 'lugares-parque', category: 'lugar', attributes: ['está al aire libre', 'puede tener árboles', 'puede tener columpios o juegos'], function: 'sirve para jugar, caminar y pasar tiempo afuera', location: 'puede estar en el vecindario o la ciudad', model: 'El parque es un lugar al aire libre donde podemos jugar y caminar.' },
+  { id: 'lugares-playa', category: 'lugar', attributes: ['tiene arena', 'está junto al mar', 'tiene olas'], function: 'sirve para jugar, caminar y descansar', location: 'está a la orilla del mar', model: 'La playa es un lugar con arena al lado del mar.' },
+  { id: 'lugares-hospital', category: 'lugar', attributes: ['tiene salas de atención', 'trabajan profesionales de la salud', 'atiende a personas que necesitan ayuda'], function: 'sirve para cuidar la salud de las personas', location: 'puede estar en una ciudad o comunidad', model: 'El hospital es un lugar donde ayudan a las personas a cuidar su salud.' }
 ];
 
 const expressiveComparePairs = [
@@ -202,5 +221,6 @@ const expressiveComparePairs = [
   { ids: ['comida-pizza', 'comida-sopa'], same: 'Las dos son comidas.', different: 'La pizza se puede agarrar y la sopa se come con cuchara.', model: 'Las dos son comidas, pero se comen de maneras diferentes.' },
   { ids: ['cuerpo-ojos', 'cuerpo-dientes'], same: 'Los dos son partes del cuerpo que debemos cuidar.', different: 'Los ojos sirven para ver y los dientes para masticar.', model: 'Los ojos y los dientes son partes del cuerpo, pero tienen funciones diferentes.' },
   { ids: ['juguetes-pelota', 'juguetes-bloques'], same: 'Los dos son juguetes.', different: 'La pelota rueda y los bloques se apilan.', model: 'Los dos sirven para jugar, pero hacemos cosas diferentes con cada uno.' },
-  { ids: ['escuela-lapiz', 'escuela-libro'], same: 'Los dos son materiales que usamos para aprender.', different: 'Con el lápiz escribimos y el libro lo leemos.', model: 'Los dos se usan en la escuela, pero tienen funciones diferentes.' }
+  { ids: ['escuela-lapiz', 'escuela-libro'], same: 'Los dos son materiales que usamos para aprender.', different: 'Con el lápiz escribimos y el libro lo leemos.', model: 'Los dos se usan en la escuela, pero tienen funciones diferentes.' },
+  { ids: ['lugares-parque', 'lugares-playa'], same: 'Los dos son lugares al aire libre donde podemos divertirnos.', different: 'El parque puede tener columpios y la playa tiene arena junto al mar.', model: 'El parque y la playa son lugares al aire libre, pero en la playa hay arena y mar.' }
 ];
