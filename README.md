@@ -47,3 +47,9 @@ Google Fonts se carga por Internet. Si no está disponible, se usan las fuentes 
 Con Node.js instalado, ejecuta `node --test tests/app.test.cjs`. Las pruebas no instalan paquetes y comprueban generación, puntuación, navegación lógica, lenguaje expresivo, ausencia de síntesis de voz e imágenes de reserva. No sustituyen las pruebas visuales y táctiles en dispositivos reales.
 
 Consulta `docs/project-notes.md` para las comprobaciones pendientes antes de la entrega. Para publicar, sirve estos archivos en un alojamiento estático HTTPS; no se ha publicado ninguna versión desde esta revisión.
+
+## Idiomas
+
+El selector de la cabecera ofrece español (predeterminado), inglés y portugués brasileño. Cambiar de idioma reinicia las actividades para evitar mezclar partidas. La preferencia se guarda localmente cuando el navegador permite localStorage. Las traducciones se mantienen sin servicio externo ni conexión en `js/locales/en.js` y `js/locales/pt.js`; `js/i18n.js` conserva las etiquetas canónicas en español y traduce preguntas, instrucciones y apoyos.
+
+Las traducciones son un punto de partida lingüístico y deben revisarse con un profesional del habla y lenguaje para cada idioma antes de emplearlas en terapia. La app no utiliza voz sintética.
