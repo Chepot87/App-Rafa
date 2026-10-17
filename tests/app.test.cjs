@@ -284,7 +284,7 @@ test('language switching updates vocabulary, directions, profiles and resets qui
  run('openFlashcards("animales")');
  assert.equal(ids['fc-word'].textContent,'Dog');
  assert.equal(run('categories[0].name'),'Animals');
- assert.equal(run('directionInstruction([{id:"animales-perro",word:"Dog"}])'),'Tap the picture of dog.');
+ assert.equal(run('directionInstruction([{id:"animales-perro",word:"Dog"}])'),'Tap the picture of the dog.');
  run('showTab("quiz");selectAnswer(quizQuestions[0].correctIndex)');
  assert.equal(run('qCorrect'),1);
  run('setLanguage("pt")');
