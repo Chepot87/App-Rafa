@@ -320,7 +320,7 @@ function showResult() {
     title = tf("resultExcellent");
   } else if (percent >= 70) {
     emoji = "🌟";
-    title = tf("quizGood");
+    title = tf("resultVeryGood");
   } else if (percent >= 50) {
     emoji = "😊";
     title = tf("resultGood");
@@ -472,7 +472,7 @@ function showMatchResult() {
     title = tf("resultExcellent");
   } else if (percent >= 70) {
     emoji = "🌟";
-    title = tf("quizGood");
+    title = tf("resultVeryGood");
   } else if (percent >= 50) {
     emoji = "😊";
     title = tf("resultGood");
@@ -789,7 +789,7 @@ function showExpressiveSupport() {
   note.textContent = tf('expressiveNote');
   support.appendChild(note);
   if (expressiveLevel === 'compare') {
-    addSupportLine(support, 'Se parecen', question.same);
+    addSupportLine(support, tf('expressiveSame'), question.same);
     addSupportLine(support, tf('expressiveDifferent'), question.different);
     addSupportLine(support, tf('expressiveModel'), question.model);
   } else {
