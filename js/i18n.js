@@ -104,6 +104,7 @@ function setLanguage(language) {
  matchQuestions=[];matchIndex=0;mCorrect=0;mWrong=0;matchAnswered=false;
  directionsQuestions=[];directionIndex=0;directionAnswered=false;
  expressiveQuestions=[];expressiveIndex=0;expressiveAnswered=false;
+ if(typeof resetActions === 'function')resetActions();
  currentCat=null;fcIndex=0;
  for(const name of ['quiz','match','directions','expressive']) {
    const game=document.getElementById(name === 'quiz' ? 'quiz-game' : name==='match' ? 'match-game' : name+'-game');
@@ -123,5 +124,5 @@ function initializeLanguage(){
  let language='es';
  try{if(typeof localStorage!=='undefined')language=localStorage.getItem('rafa-language')||'es';}catch(_){}
  if(language!=='es')setLanguage(language);
- else translatePage('es');
+ else { translatePage('es'); resetActions(); }
 }

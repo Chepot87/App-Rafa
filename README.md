@@ -57,3 +57,9 @@ Las traducciones son un punto de partida lingüístico y deben revisarse con un 
 ## Lugares
 
 Categoría con parque, cine, playa, río, hospital, escuela, aeropuerto y restaurante. Disponible en tarjetas, quiz, empareja e instrucciones. Contiene tres perfiles para describir y una comparación parque/playa en español, inglés y portugués brasileño. Se utilizan emojis y etiquetas accesibles sin recursos externos. Los pares de categorías ambiguos Lugares/Naturaleza y Lugares/Escuela se excluyen como distractores del quiz.
+
+## ¿Quién hace qué?
+
+La pestaña Acciones practica expresión oral y morfosintaxis con seis escenas ilustradas: leer, patear, regar, pintar, lavar las manos y construir. Ofrece tres niveles (acción, quién + acción y oración ampliada), sesiones de tres o seis oportunidades y selección de una acción o todas. El adulto puede mostrar dos opciones o un modelo; se aceptan gestos, selecciones y lenguaje espontáneo. El resumen cuenta el apoyo utilizado, sin evaluar pronunciación ni progreso clínico. Mostrar un apoyo impide contabilizar esa oportunidad como independiente. Disponible en español, inglés y portugués.
+
+El contenido, las escenas vectoriales locales y el comportamiento se mantienen en `js/actions.js` e `img/actions/`. Cambiar de idioma reinicia la actividad; navegar entre pestañas conserva la práctica actual. No se graba voz ni se almacenan resultados del niño. Ver [ficha de la actividad](docs/actions-activity.md).

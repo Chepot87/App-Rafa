@@ -31,11 +31,14 @@ function setup() {
   }
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
   const ids = Object.fromEntries([...html.matchAll(/id="([^"]+)"/g)].map(m => [m[1], new Element()]));
-  const nav = Array.from({ length: 6 }, () => new Element());
+  const nav = Array.from({ length: 7 }, () => new Element());
   const listeners = {};
   const document = {
     hidden: false,
-    getElementById: id => ids[id] || null,
+    getElementById: id => {
+      const find = el => el.id === id ? el : el.children.map(find).find(Boolean);
+      return ids[id] || Object.values(ids).map(find).find(Boolean) || null;
+    },
     documentElement: {lang:'es'},
     createElement: () => new Element(),
     addEventListener: (name, fn) => { listeners[name] = fn; },
@@ -58,6 +61,7 @@ function setup() {
   run(fs.readFileSync(path.join(root, 'js/locales/en.js'), 'utf8'));
   run(fs.readFileSync(path.join(root, 'js/locales/pt.js'), 'utf8'));
   run(fs.readFileSync(path.join(root, 'js/i18n.js'), 'utf8'));
+  run(fs.readFileSync(path.join(root, 'js/actions.js'), 'utf8'));
   run(fs.readFileSync(path.join(root, 'js/app.js'), 'utf8'));
   return { ids, run, timers, listeners, document };
 }
@@ -218,8 +222,8 @@ test('three-step directions expose four choices and a complete adult prompt', ()
 
 test('expressive-language content resolves to the vocabulary and creates unique sessions', () => {
   const { run } = setup();
-  assert.equal(run('expressiveProfiles.length'), 24);
-  assert.equal(run('new Set(expressiveProfiles.map(profile => profile.id)).size'), 24);
+  assert.equal(run('expressiveProfiles.length'), 27);
+  assert.equal(run('new Set(expressiveProfiles.map(profile => profile.id)).size'), 27);
   assert.equal(run(`expressiveProfiles.every(profile =>
     vocabularyItemById(profile.id) && profile.category && profile.attributes.length >= 3 &&
     profile.function && profile.location && profile.model)`), true);
@@ -280,7 +284,7 @@ test('translation dictionaries cover all 88 stable vocabulary IDs and 11 categor
 test('language switching updates vocabulary, directions, profiles and resets quiz state',()=>{
  const {run,ids}=setup();
  run('setLanguage("en")');
- assert.equal(ids['fc-word'].textContent,'Perro'); // no card selected yet
+ assert.equal(run('currentCat'),null); // no card selected yet
  run('openFlashcards("animales")');
  assert.equal(ids['fc-word'].textContent,'Dog');
  assert.equal(run('categories[0].name'),'Animals');
@@ -314,4 +318,40 @@ test('Lugares has eight entries translated in three languages with safe distract
   assert.equal(run("expressiveProfiles.filter(p=>p.id.startsWith('lugares-')).length"),3);
   assert.equal(run("expressiveComparePairs.some(p=>p.ids[0]==='lugares-parque'&&p.ids[1]==='lugares-playa')"),true);
  }
+});
+
+
+test('actions cover every locale and all three levels with real scene assets',()=>{
+ const {run}=setup();
+ for(const lang of ['es','en','pt']) {
+  run('setLanguage('+JSON.stringify(lang)+');showTab("actions")');
+  assert.equal(run('actionText().scenes.length'),6);
+  assert.equal(run('actionText().scenes.every(s=>s.length===6 && s.every(Boolean))'),true);
+  for(let level=1;level<=3;level++) {
+   run('startActions('+level+')');
+   assert.equal(run('actionState.questions.length'),6);
+   assert.equal(run('new Set(actionState.questions.map(s=>s[0])).size'),6);
+   const assets=JSON.parse(run('JSON.stringify(actionState.questions.map(s=>s[0]))'));
+   assets.forEach(id=>assert.ok(fs.existsSync(path.join(root,'img/actions',id+'.svg'))));
+  }
+ }
+});
+test('actions guard scoring and navigation, track revealed support, resume and reset by language',()=>{
+ const {run,document}=setup();run('showTab("actions");startActions(3);nextAction()');
+ assert.equal(run('actionState.index'),0);
+ const findButtons=()=>document.getElementById('screen-actions').children.flatMap(function walk(e){return [e,...e.children.flatMap(walk)];});
+ findButtons().find(b=>b.textContent==='Mostrar modelo').onclick();
+ run('recordActionOutcome(0);recordActionOutcome(0)');
+ assert.equal(run('actionState.counts[2]'),1);
+ run('showTab("home");nextAction();showTab("actions")');
+ assert.equal(run('actionState.index'),0);
+ run('nextAction();for(let i=1;i<6;i++){recordActionOutcome(i===5?3:0);nextAction();}nextAction()');
+ assert.equal(run('actionState.counts.reduce((a,b)=>a+b,0)'),6);
+ assert.ok(document.getElementById('action-summary'));
+ run('setLanguage("en")');assert.equal(run('actionState.questions.length'),0);
+ assert.equal(document.getElementById('actions-nav').textContent,'Actions');
+ run('actionState.count=3;actionState.scene="read";showTab("actions");startActions(1)');
+ assert.equal(run('actionState.questions.length'),3);
+ assert.equal(run('actionState.questions.every(s=>s[0]==="read")'),true);
+ run('recordActionOutcome(7)');assert.equal(run('actionState.answered'),false);
 });

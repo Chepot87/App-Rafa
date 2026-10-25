@@ -71,7 +71,8 @@ function setActiveNav(tab) {
     quiz: 2,
     match: 3,
     directions: 4,
-    expressive: 5
+    expressive: 5,
+    actions: 6
   };
 
   document.querySelectorAll(".nav-btn").forEach((btn) => {
