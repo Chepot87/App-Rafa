@@ -129,8 +129,9 @@ test('quiz and matching scores, duplicate-answer guards, resume, results and rep
 test('local HTML asset references resolve after the folder move', () => {
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
   const refs = [...html.matchAll(/(?:src|href)="([^"]+)"/g)].map(m => m[1]).filter(ref => !/^https?:/.test(ref));
-  for (const ref of refs) assert.ok(fs.existsSync(path.join(root, ref)), ref);
+  for (const ref of refs) assert.ok(fs.existsSync(path.join(root, ref.split(/[?#]/)[0])), ref);
   assert.ok(html.indexOf('js/data.js') < html.indexOf('js/app.js'));
+  assert.ok(refs.filter(ref=>/^(js|css)\//.test(ref)).every(ref=>ref.endsWith('?v=actions-1'))); 
 });
 
 test('images fall back on failure; stale image errors cannot overwrite the next word', () => {
