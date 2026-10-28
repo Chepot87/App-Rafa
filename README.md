@@ -48,6 +48,12 @@ Con Node.js instalado, ejecuta `node --test tests/app.test.cjs`. Las pruebas no 
 
 Consulta `docs/project-notes.md` para las comprobaciones pendientes antes de la entrega. Para publicar, sirve estos archivos en un alojamiento estático HTTPS; no se ha publicado ninguna versión desde esta revisión.
 
+## Iconos y vista previa al compartir
+
+`index.html` incluye favicon, icono de Apple, descripción y metadatos Open Graph y Twitter. Los iconos reutilizan el logo de la app; `img/branding/social-preview.png` es la tarjeta de 1200 × 630 píxeles.
+
+La URL pública configurada es `https://chepot87.github.io/App-Rafa/`, con URLs HTTPS absolutas para `og:image`, `twitter:image`, `og:url` y el enlace canónico. Si cambia el alojamiento, actualiza esas direcciones en `index.html`. Las plataformas de mensajería leen el HTML inicial y pueden conservar vistas previas en caché. La comprobación real al compartir queda pendiente de publicar los archivos.
+
 ## Idiomas
 
 El selector de la cabecera ofrece español (predeterminado), inglés y portugués brasileño. Cambiar de idioma reinicia las actividades para evitar mezclar partidas. La preferencia se guarda localmente cuando el navegador permite localStorage. Las traducciones se mantienen sin servicio externo ni conexión en `js/locales/en.js` y `js/locales/pt.js`; `js/i18n.js` conserva las etiquetas canónicas en español y traduce preguntas, instrucciones y apoyos.
